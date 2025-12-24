@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 /**
  * Generate and download a PDF receipt for an order
@@ -134,7 +134,8 @@ export const generateReceipt = async (order, isAdmin = false) => {
         `Rs.${(item.subtotal || 0).toLocaleString('en-IN')}`
       ]);
       
-      doc.autoTable({
+      // Use autoTable function (jspdf-autotable 5.x syntax)
+      autoTable(doc, {
         head: tableHeaders,
         body: tableData,
         startY: tableStartY,
@@ -161,8 +162,8 @@ export const generateReceipt = async (order, isAdmin = false) => {
         margin: { left: 14, right: 14 }
       });
       
-      // Totals Section
-      const finalY = doc.lastAutoTable.finalY + 10;
+      // Totals Section - get finalY from the doc's previous table
+      const finalY = (doc.lastAutoTable?.finalY || tableStartY + 50) + 10;
       
       // Total box
       const boxWidth = 65;
