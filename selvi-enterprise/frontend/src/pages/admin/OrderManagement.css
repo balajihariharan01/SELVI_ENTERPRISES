@@ -1,0 +1,321 @@
+.order-management {
+  max-width: 1200px;
+}
+
+.page-title {
+  margin-bottom: 2.5rem;
+}
+
+.page-title h1 {
+  margin-bottom: 0.35rem;
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-title p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* Order Stats */
+.order-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 14px;
+  padding: 1.5rem;
+  text-align: center;
+  border-left: 5px solid var(--primary);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  min-width: 0; /* Prevent overflow */
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card.pending { 
+  border-left-color: #f59e0b; 
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+.stat-card.processing { 
+  border-left-color: var(--primary); 
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+}
+.stat-card.delivered { 
+  border-left-color: var(--success); 
+  background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%);
+}
+
+.stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+/* Customer Cell */
+.customer-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.customer-cell small {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+/* Status */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+  font-weight: 700;
+}
+
+.status-badge.pending { 
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); 
+  color: #92400e; 
+}
+.status-badge.confirmed { 
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); 
+  color: #1e40af; 
+}
+.status-badge.processing { 
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); 
+  color: #4338ca; 
+}
+.status-badge.shipped { 
+  background: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%); 
+  color: #0e7490; 
+}
+.status-badge.delivered { 
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); 
+  color: #166534; 
+}
+.status-badge.cancelled { 
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); 
+  color: #991b1b; 
+}
+
+.status-select {
+  padding: 0.45rem 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  background: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.status-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.action-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.action-btn.view:hover {
+  background: var(--primary-gradient);
+  border-color: var(--primary);
+  color: white;
+  transform: scale(1.1);
+}
+
+.action-btn.download {
+  color: #059669;
+}
+
+.action-btn.download:hover {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-color: #059669;
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Modal */
+.order-modal {
+  max-width: 750px;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.order-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.info-section {
+  margin-bottom: 1.75rem;
+}
+
+.info-section h3 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid #eef2ff;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.info-section p {
+  margin-bottom: 0.6rem;
+  color: var(--text-primary);
+}
+
+/* Items Table */
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.items-table th,
+.items-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.items-table th {
+  background: #f8fafc;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+/* Order Totals */
+.order-totals {
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.total-row.grand {
+  border-top: 1px solid var(--border-color);
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.modal-actions .btn-secondary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-actions .btn-secondary:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.status-update {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.modal-actions label {
+  font-weight: 500;
+}
+
+.modal-actions .form-select {
+  flex: 1;
+  max-width: 200px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .order-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .order-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .order-info-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+}

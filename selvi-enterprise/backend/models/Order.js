@@ -1,0 +1,132 @@
+const mongoose = require('mongoose');
+
+const orderItemSchema = new mongoose.Schema({
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product',
+    required: true
+  },
+  productName: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1
+  },
+  unit: {
+    type: String,
+    required: true
+  },
+  subtotal: {
+    type: Number,
+    required: true
+  }
+});
+
+const orderSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  orderNumber: {
+    type: String,
+    unique: true
+  },
+  items: [orderItemSchema],
+  totalAmount: {
+    type: Number,
+    required: true,
+    min: 0
+  },
+  shippingAddress: {
+    name: {
+      type: String,
+      required: true
+    },
+    phone: {
+      type: String,
+      required: true
+    },
+    street: {
+      type: String,
+      required: true
+    },
+    city: {
+      type: String,
+      required: true
+    },
+    state: {
+      type: String,
+      required: true
+    },
+    pincode: {
+      type: String,
+      required: true
+    }
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['cod', 'online', 'credit'],
+    default: 'cod'
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['pending', 'paid', 'failed'],
+    default: 'pending'
+  },
+  orderStatus: {
+    type: String,
+    enum: ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'],
+    default: 'pending'
+  },
+  notes: {
+    type: String,
+    maxlength: 500
+  },
+  adminNotes: {
+    type: String,
+    maxlength: 500
+  },
+  statusHistory: [{
+    status: String,
+    updatedAt: {
+      type: Date,
+      default: Date.now
+    },
+    updatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  }],
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+// Generate order number before saving
+orderSchema.pre('save', async function(next) {
+  if (!this.orderNumber) {
+    const date = new Date();
+    const year = date.getFullYear().toString().slice(-2);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    this.orderNumber = `SE${year}${month}${day}${random}`;
+  }
+  this.updatedAt = Date.now();
+  next();
+});
+
+module.exports = mongoose.model('Order', orderSchema);
