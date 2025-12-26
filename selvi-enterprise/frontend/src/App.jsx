@@ -5,6 +5,7 @@ import { useIsMobile } from './hooks/useMediaQuery'
 // Layouts
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
+import ScrollToTop from './components/common/ScrollToTop'
 
 // Public Pages
 import Home from './pages/Home'
@@ -13,6 +14,8 @@ import Products from './pages/Products'
 import ProductDetail from './pages/ProductDetail'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 // User Pages
 import Cart from './pages/user/Cart'
@@ -43,6 +46,9 @@ function App() {
 
   return (
     <div className="app">
+      {/* Global scroll to top on route change */}
+      <ScrollToTop />
+      
       {/* Mobile SPA View - Only on home page */}
       {showMobileSPA ? (
         <MobileHome />
@@ -59,6 +65,8 @@ function App() {
               <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password/:token" element={<ResetPassword />} />
 
               {/* Protected User Routes */}
               <Route path="/cart" element={
@@ -94,6 +102,7 @@ function App() {
                 </AdminRoute>
               }>
                 <Route index element={<Dashboard />} />
+                <Route path="dashboard" element={<Dashboard />} />
                 <Route path="products" element={<ProductManagement />} />
                 <Route path="orders" element={<OrderManagement />} />
                 <Route path="customers" element={<CustomerRecords />} />

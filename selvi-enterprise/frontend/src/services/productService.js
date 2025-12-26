@@ -13,6 +13,12 @@ export const productService = {
     return response.data;
   },
 
+  // Get product options (categories and units)
+  getProductOptions: async () => {
+    const response = await api.get('/products/meta/options');
+    return response.data;
+  },
+
   // Admin: Get all products including inactive
   getAllProductsAdmin: async () => {
     const response = await api.get('/products/admin/all');

@@ -6,6 +6,8 @@ const {
   getAllUsers,
   getUser,
   deleteUser,
+  deactivateUser,
+  reactivateUser,
   getFrequentBuyers,
   getCustomers
 } = require('../controllers/userController');
@@ -18,5 +20,7 @@ router.get('/customers', getCustomers);
 router.get('/frequent-buyers', getFrequentBuyers);
 router.get('/:id', getUser);
 router.delete('/:id', deleteUser);
+router.put('/:id/deactivate', deactivateUser);
+router.put('/:id/reactivate', reactivateUser);
 
 module.exports = router;

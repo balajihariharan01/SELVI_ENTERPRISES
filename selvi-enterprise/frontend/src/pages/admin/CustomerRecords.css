@@ -251,3 +251,189 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* Customer Actions */
+.customer-actions {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid #eef2ff;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-deactivate {
+  color: #dc2626 !important;
+  border-color: #dc2626 !important;
+}
+
+.btn-deactivate:hover {
+  background: #dc2626 !important;
+  color: white !important;
+}
+
+.btn-reactivate {
+  color: #16a34a !important;
+  border-color: #16a34a !important;
+}
+
+.btn-reactivate:hover {
+  background: #16a34a !important;
+  color: white !important;
+}
+
+/* Status Badge */
+.customer-status-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.customer-status-badge.inactive {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.customer-card {
+  position: relative;
+}
+
+/* Table Status Badge */
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status-badge.inactive {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* Inactive Row */
+.inactive-row {
+  background: #fef2f2;
+}
+
+/* Action Buttons */
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.action-btn.deactivate {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.action-btn.deactivate:hover {
+  background: #dc2626;
+  color: white;
+}
+
+.action-btn.reactivate {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.action-btn.reactivate:hover {
+  background: #16a34a;
+  color: white;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+}
+
+.modal-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.modal-icon.warning {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.modal-content h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.modal-content p {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.modal-actions .btn {
+  min-width: 100px;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: white;
+  border: none;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+.btn-success {
+  background: #16a34a;
+  color: white;
+  border: none;
+}
+
+.btn-success:hover {
+  background: #15803d;
+}

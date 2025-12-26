@@ -378,3 +378,24 @@
   border-radius: 8px;
   object-fit: contain;
 }
+
+/* Checkbox Label Styling */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.form-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.checkbox-label span {
+  font-size: 0.95rem;
+}

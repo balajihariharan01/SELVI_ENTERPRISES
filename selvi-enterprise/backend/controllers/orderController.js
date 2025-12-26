@@ -525,3 +525,119 @@ exports.getDashboardStats = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Get revenue analytics with date filter (Admin)
+// @route   GET /api/orders/admin/revenue
+// @access  Private/Admin
+exports.getRevenueAnalytics = async (req, res, next) => {
+  try {
+    const { startDate, endDate, period } = req.query;
+
+    let dateFilter = {};
+    let periodLabel = 'All Time';
+
+    // Handle date filtering
+    if (startDate || endDate) {
+      dateFilter.createdAt = {};
+      if (startDate) {
+        dateFilter.createdAt.$gte = new Date(startDate);
+        dateFilter.createdAt.$gte.setHours(0, 0, 0, 0);
+      }
+      if (endDate) {
+        dateFilter.createdAt.$lte = new Date(endDate);
+        dateFilter.createdAt.$lte.setHours(23, 59, 59, 999);
+      }
+      periodLabel = `${startDate || 'Start'} to ${endDate || 'Present'}`;
+    } else if (period) {
+      const now = new Date();
+      
+      switch (period) {
+        case 'today':
+          const today = new Date(now);
+          today.setHours(0, 0, 0, 0);
+          dateFilter.createdAt = { $gte: today };
+          periodLabel = 'Today';
+          break;
+        case 'week':
+          const weekAgo = new Date(now);
+          weekAgo.setDate(weekAgo.getDate() - 7);
+          dateFilter.createdAt = { $gte: weekAgo };
+          periodLabel = 'Last 7 Days';
+          break;
+        case 'month':
+          const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+          dateFilter.createdAt = { $gte: monthStart };
+          periodLabel = 'This Month';
+          break;
+        case 'year':
+          const yearStart = new Date(now.getFullYear(), 0, 1);
+          dateFilter.createdAt = { $gte: yearStart };
+          periodLabel = 'This Year';
+          break;
+        default:
+          break;
+      }
+    }
+
+    // Fetch orders with date filter
+    // Only consider successfully paid and delivered/confirmed orders for revenue
+    const revenueOrders = await Order.find({
+      ...dateFilter,
+      orderStatus: { $in: ['confirmed', 'processing', 'shipped', 'delivered'] },
+      paymentStatus: { $in: ['paid', 'pending'] } // Exclude failed payments
+    });
+
+    // Calculate metrics
+    const totalRevenue = revenueOrders.reduce((sum, o) => sum + o.totalAmount, 0);
+    const totalOrders = revenueOrders.length;
+    const averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+
+    // Payment method breakdown
+    const paymentBreakdown = {
+      cod: revenueOrders.filter(o => o.paymentMethod === 'cod').reduce((sum, o) => sum + o.totalAmount, 0),
+      online: revenueOrders.filter(o => o.paymentMethod === 'online').reduce((sum, o) => sum + o.totalAmount, 0),
+      upi: revenueOrders.filter(o => o.paymentMethod === 'upi').reduce((sum, o) => sum + o.totalAmount, 0)
+    };
+
+    // Status breakdown
+    const statusBreakdown = {
+      confirmed: revenueOrders.filter(o => o.orderStatus === 'confirmed').length,
+      processing: revenueOrders.filter(o => o.orderStatus === 'processing').length,
+      shipped: revenueOrders.filter(o => o.orderStatus === 'shipped').length,
+      delivered: revenueOrders.filter(o => o.orderStatus === 'delivered').length
+    };
+
+    // Daily revenue for the period (for charts)
+    const dailyRevenue = await Order.aggregate([
+      { 
+        $match: { 
+          ...dateFilter, 
+          orderStatus: { $in: ['confirmed', 'processing', 'shipped', 'delivered'] }
+        } 
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+          revenue: { $sum: '$totalAmount' },
+          orders: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    res.json({
+      success: true,
+      period: periodLabel,
+      analytics: {
+        totalRevenue,
+        totalOrders,
+        averageOrderValue: Math.round(averageOrderValue),
+        paymentBreakdown,
+        statusBreakdown,
+        dailyRevenue
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};

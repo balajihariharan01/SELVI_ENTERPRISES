@@ -25,9 +25,21 @@ export const userService = {
     return response.data;
   },
 
-  // Admin: Delete user
+  // Admin: Delete user (hard delete)
   deleteUser: async (id) => {
     const response = await api.delete(`/users/${id}`);
+    return response.data;
+  },
+
+  // Admin: Deactivate user (soft delete)
+  deactivateUser: async (id) => {
+    const response = await api.put(`/users/${id}/deactivate`);
+    return response.data;
+  },
+
+  // Admin: Reactivate user
+  reactivateUser: async (id) => {
+    const response = await api.put(`/users/${id}/reactivate`);
     return response.data;
   }
 };

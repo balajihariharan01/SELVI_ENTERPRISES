@@ -56,7 +56,7 @@ exports.getUser = async (req, res, next) => {
   }
 };
 
-// @desc    Delete user (Admin)
+// @desc    Delete user (Admin) - Hard delete
 // @route   DELETE /api/users/:id
 // @access  Private/Admin
 exports.deleteUser = async (req, res, next) => {
@@ -82,6 +82,78 @@ exports.deleteUser = async (req, res, next) => {
     res.json({
       success: true,
       message: 'User deleted successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Deactivate user (Admin) - Soft delete
+// @route   PUT /api/users/:id/deactivate
+// @access  Private/Admin
+exports.deactivateUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    if (user.role === 'admin') {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot deactivate admin user'
+      });
+    }
+
+    // Check for active orders
+    const activeOrders = await Order.countDocuments({
+      user: req.params.id,
+      orderStatus: { $in: ['pending', 'confirmed', 'processing', 'shipped'] }
+    });
+
+    if (activeOrders > 0) {
+      return res.status(400).json({
+        success: false,
+        message: `Cannot deactivate customer with ${activeOrders} active order(s). Please complete or cancel all active orders first.`
+      });
+    }
+
+    user.isActive = false;
+    await user.save({ validateBeforeSave: false });
+
+    res.json({
+      success: true,
+      message: 'Customer account deactivated successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Reactivate user (Admin)
+// @route   PUT /api/users/:id/reactivate
+// @access  Private/Admin
+exports.reactivateUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    user.isActive = true;
+    await user.save({ validateBeforeSave: false });
+
+    res.json({
+      success: true,
+      message: 'Customer account reactivated successfully'
     });
   } catch (error) {
     next(error);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FiSearch, FiUser, FiShoppingBag, FiMail, FiPhone } from 'react-icons/fi';
+import { FiSearch, FiUser, FiShoppingBag, FiMail, FiPhone, FiUserX, FiUserCheck, FiAlertTriangle } from 'react-icons/fi';
 import userService from '../../services/userService';
 import toast from 'react-hot-toast';
 import './CustomerRecords.css';
@@ -8,6 +8,10 @@ const CustomerRecords = () => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [actionType, setActionType] = useState(''); // 'deactivate' or 'delete'
+  const [actionLoading, setActionLoading] = useState(false);
   const [stats, setStats] = useState({
     total: 0,
     activeThisMonth: 0,
@@ -32,6 +36,37 @@ const CustomerRecords = () => {
       toast.error('Failed to load customers');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAction = (customer, type) => {
+    setSelectedCustomer(customer);
+    setActionType(type);
+    setShowConfirmModal(true);
+  };
+
+  const confirmAction = async () => {
+    if (!selectedCustomer) return;
+    
+    setActionLoading(true);
+    try {
+      if (actionType === 'deactivate') {
+        await userService.deactivateUser(selectedCustomer._id);
+        toast.success('Customer account deactivated successfully');
+      } else if (actionType === 'reactivate') {
+        await userService.reactivateUser(selectedCustomer._id);
+        toast.success('Customer account reactivated successfully');
+      } else if (actionType === 'delete') {
+        await userService.deleteUser(selectedCustomer._id);
+        toast.success('Customer deleted permanently');
+      }
+      fetchCustomers(); // Refresh list
+    } catch (error) {
+      toast.error(error.response?.data?.message || `Failed to ${actionType} customer`);
+    } finally {
+      setActionLoading(false);
+      setShowConfirmModal(false);
+      setSelectedCustomer(null);
     }
   };
 
@@ -148,6 +183,28 @@ const CustomerRecords = () => {
                 📍 {customer.address.city}, {customer.address.state}
               </div>
             )}
+            <div className="customer-actions">
+              {customer.isActive !== false ? (
+                <button 
+                  className="btn btn-outline btn-sm btn-deactivate"
+                  onClick={() => handleAction(customer, 'deactivate')}
+                  title="Deactivate customer account"
+                >
+                  <FiUserX size={14} /> Deactivate
+                </button>
+              ) : (
+                <button 
+                  className="btn btn-outline btn-sm btn-reactivate"
+                  onClick={() => handleAction(customer, 'reactivate')}
+                  title="Reactivate customer account"
+                >
+                  <FiUserCheck size={14} /> Reactivate
+                </button>
+              )}
+            </div>
+            {customer.isActive === false && (
+              <div className="customer-status-badge inactive">Inactive</div>
+            )}
           </div>
         ))}
       </div>
@@ -172,12 +229,14 @@ const CustomerRecords = () => {
                 <th>Phone</th>
                 <th>Orders</th>
                 <th>Total Spent</th>
+                <th>Status</th>
                 <th>Joined</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredCustomers.map(customer => (
-                <tr key={customer._id}>
+                <tr key={customer._id} className={customer.isActive === false ? 'inactive-row' : ''}>
                   <td>
                     <div className="table-customer">
                       <div className="avatar-small">
@@ -190,13 +249,92 @@ const CustomerRecords = () => {
                   <td>{customer.phone || '-'}</td>
                   <td>{customer.orderCount || 0}</td>
                   <td>₹{(customer.totalSpent || 0).toLocaleString()}</td>
+                  <td>
+                    <span className={`status-badge ${customer.isActive !== false ? 'active' : 'inactive'}`}>
+                      {customer.isActive !== false ? 'Active' : 'Inactive'}
+                    </span>
+                  </td>
                   <td>{formatDate(customer.createdAt)}</td>
+                  <td>
+                    {customer.isActive !== false ? (
+                      <button 
+                        className="action-btn deactivate"
+                        onClick={() => handleAction(customer, 'deactivate')}
+                        title="Deactivate"
+                      >
+                        <FiUserX size={16} />
+                      </button>
+                    ) : (
+                      <button 
+                        className="action-btn reactivate"
+                        onClick={() => handleAction(customer, 'reactivate')}
+                        title="Reactivate"
+                      >
+                        <FiUserCheck size={16} />
+                      </button>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <div className="modal-overlay" onClick={() => setShowConfirmModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="modal-icon warning">
+              <FiAlertTriangle size={32} />
+            </div>
+            <h3>
+              {actionType === 'deactivate' && 'Deactivate Customer?'}
+              {actionType === 'reactivate' && 'Reactivate Customer?'}
+              {actionType === 'delete' && 'Delete Customer Permanently?'}
+            </h3>
+            <p>
+              {actionType === 'deactivate' && (
+                <>
+                  Are you sure you want to deactivate <strong>{selectedCustomer?.name}</strong>'s account? 
+                  They will no longer be able to login, but their order history will be preserved.
+                </>
+              )}
+              {actionType === 'reactivate' && (
+                <>
+                  Are you sure you want to reactivate <strong>{selectedCustomer?.name}</strong>'s account?
+                  They will be able to login again.
+                </>
+              )}
+              {actionType === 'delete' && (
+                <>
+                  This action cannot be undone. Are you sure you want to permanently delete 
+                  <strong> {selectedCustomer?.name}</strong>?
+                </>
+              )}
+            </p>
+            <div className="modal-actions">
+              <button 
+                className="btn btn-outline"
+                onClick={() => setShowConfirmModal(false)}
+                disabled={actionLoading}
+              >
+                Cancel
+              </button>
+              <button 
+                className={`btn ${actionType === 'reactivate' ? 'btn-success' : 'btn-danger'}`}
+                onClick={confirmAction}
+                disabled={actionLoading}
+              >
+                {actionLoading ? 'Processing...' : (
+                  actionType === 'deactivate' ? 'Deactivate' : 
+                  actionType === 'reactivate' ? 'Reactivate' : 'Delete'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,5 +1,31 @@
 const mongoose = require('mongoose');
 
+// SIMPLE CATEGORY LIST - Only 3 categories
+const PRODUCT_CATEGORIES = [
+  'cement',
+  'steel',
+  'others'
+];
+
+// Unit list for construction materials
+const PRODUCT_UNITS = [
+  'bags',
+  'kg',
+  'tons',
+  'pieces',
+  'rods',
+  'bundles',
+  'loads',
+  'cft',
+  'sqft',
+  'meters',
+  'feet',
+  'liters',
+  'boxes',
+  'sets',
+  'numbers'
+];
+
 const productSchema = new mongoose.Schema({
   productName: {
     type: String,
@@ -10,8 +36,19 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
     required: [true, 'Please provide product category'],
-    enum: ['cement', 'steel', 'other'],
-    lowercase: true
+    lowercase: true,
+    validate: {
+      validator: function(v) {
+        // Allow any category - flexible system
+        return v && v.trim().length > 0;
+      },
+      message: 'Category cannot be empty'
+    }
+  },
+  subcategory: {
+    type: String,
+    trim: true,
+    default: ''
   },
   brand: {
     type: String,
@@ -21,6 +58,10 @@ const productSchema = new mongoose.Schema({
   description: {
     type: String,
     maxlength: [500, 'Description cannot exceed 500 characters']
+  },
+  specifications: {
+    type: String,
+    maxlength: [1000, 'Specifications cannot exceed 1000 characters']
   },
   price: {
     type: Number,
@@ -36,8 +77,15 @@ const productSchema = new mongoose.Schema({
   unit: {
     type: String,
     required: [true, 'Please provide unit of measurement'],
-    enum: ['bags', 'kg', 'tons', 'pieces', 'rods', 'bundles'],
-    default: 'bags'
+    lowercase: true,
+    validate: {
+      validator: function(v) {
+        // Allow any unit - flexible system
+        return v && v.trim().length > 0;
+      },
+      message: 'Unit cannot be empty'
+    },
+    default: 'pieces'
   },
   minOrderQuantity: {
     type: Number,
@@ -48,15 +96,26 @@ const productSchema = new mongoose.Schema({
     type: String,
     default: 'default-product.jpg'
   },
+  images: [{
+    type: String
+  }],
   status: {
     type: String,
     enum: ['active', 'inactive'],
     default: 'active'
   },
+  featured: {
+    type: Boolean,
+    default: false
+  },
   lowStockThreshold: {
     type: Number,
     default: 10
   },
+  tags: [{
+    type: String,
+    trim: true
+  }],
   createdAt: {
     type: Date,
     default: Date.now
@@ -66,6 +125,16 @@ const productSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+// Static method to get all available categories
+productSchema.statics.getCategories = function() {
+  return PRODUCT_CATEGORIES;
+};
+
+// Static method to get all available units
+productSchema.statics.getUnits = function() {
+  return PRODUCT_UNITS;
+};
 
 // Update timestamp on save
 productSchema.pre('save', function(next) {

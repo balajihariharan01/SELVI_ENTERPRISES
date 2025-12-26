@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiUser, FiMail, FiPhone, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
+import { FcGoogle } from 'react-icons/fc';
+import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import './Auth.css';
@@ -15,9 +17,21 @@ const Register = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
-  const { register } = useAuth();
+  const { register, googleLogin, isAuthenticated, isAdmin } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (isAdmin) {
+        navigate('/admin/dashboard', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
+    }
+  }, [isAuthenticated, isAdmin, navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -54,6 +68,43 @@ const Register = () => {
     }
   };
 
+  // Google OAuth - Same handler as Login page
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setGoogleLoading(true);
+    try {
+      console.log('Google credential received:', credentialResponse.credential ? 'Yes' : 'No');
+      
+      if (!credentialResponse.credential) {
+        throw new Error('No credential received from Google');
+      }
+      
+      const response = await googleLogin(credentialResponse.credential);
+      console.log('Google signup response:', response);
+      
+      toast.success('Google sign-up successful!');
+      
+      // STRICT Role-based redirect
+      if (response.user.role === 'admin') {
+        navigate('/admin/dashboard', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
+    } catch (error) {
+      console.error('Google sign-up error:', error);
+      console.error('Error response:', error.response?.data);
+      
+      const errorMessage = error.response?.data?.message || error.message || 'Google sign-up failed';
+      toast.error(errorMessage);
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+
+  const handleGoogleError = (error) => {
+    console.error('Google OAuth error:', error);
+    toast.error('Google sign-up failed. Please check your browser console for details.');
+  };
+
   return (
     <div className="auth-page">
       <div className="auth-container">
@@ -66,19 +117,47 @@ const Register = () => {
           <p>Register to start ordering construction materials</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="auth-form">
+        {/* Google Sign Up Button */}
+        <div className="google-auth-section">
+          <div className={`google-btn-wrapper ${googleLoading ? 'loading' : ''}`}>
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+              useOneTap={false}
+              theme="outline"
+              size="large"
+              width="100%"
+              text="continue_with"
+              shape="rectangular"
+            />
+          </div>
+          {googleLoading && (
+            <div className="google-loading">
+              <span>Signing up with Google...</span>
+            </div>
+          )}
+        </div>
+
+        <div className="auth-divider">
+          <span>or register with email</span>
+        </div>
+
+        <form onSubmit={handleSubmit} className="auth-form" autoComplete="off">
           <div className="form-group">
             <label className="form-label">Full Name</label>
             <div className="input-icon">
               <FiUser />
               <input
                 type="text"
-                name="name"
+                name="register-name"
+                id="register-name"
                 value={formData.name}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="Enter your full name"
                 className="form-input"
                 required
+                autoComplete="off"
+                data-form-type="other"
               />
             </div>
           </div>
@@ -89,12 +168,18 @@ const Register = () => {
               <FiMail />
               <input
                 type="email"
-                name="email"
+                name="register-email"
+                id="register-email"
                 value={formData.email}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="Enter your email"
                 className="form-input"
                 required
+                autoComplete="new-email"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
+                data-form-type="other"
               />
             </div>
           </div>
@@ -105,14 +190,17 @@ const Register = () => {
               <FiPhone />
               <input
                 type="tel"
-                name="phone"
+                name="register-phone"
+                id="register-phone"
                 value={formData.phone}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 placeholder="Enter 10-digit phone number"
                 className="form-input"
                 maxLength={10}
                 pattern="[0-9]{10}"
                 required
+                autoComplete="off"
+                data-form-type="other"
               />
             </div>
           </div>
@@ -123,13 +211,16 @@ const Register = () => {
               <FiLock />
               <input
                 type={showPassword ? 'text' : 'password'}
-                name="password"
+                name="register-password"
+                id="register-password"
                 value={formData.password}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 placeholder="Create a password"
                 className="form-input"
                 minLength={6}
                 required
+                autoComplete="new-password"
+                data-form-type="other"
               />
               <button
                 type="button"
@@ -147,13 +238,16 @@ const Register = () => {
               <FiLock />
               <input
                 type={showPassword ? 'text' : 'password'}
-                name="confirmPassword"
+                name="register-confirm-password"
+                id="register-confirm-password"
                 value={formData.confirmPassword}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 placeholder="Confirm your password"
                 className="form-input"
                 minLength={6}
                 required
+                autoComplete="new-password"
+                data-form-type="other"
               />
             </div>
           </div>

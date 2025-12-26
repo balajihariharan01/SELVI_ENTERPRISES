@@ -5,6 +5,31 @@ import ImageUploader from '../../components/admin/ImageUploader';
 import toast from 'react-hot-toast';
 import './ProductManagement.css';
 
+// SIMPLE CATEGORIES - Only 3 options
+const DEFAULT_CATEGORIES = [
+  { value: 'cement', label: 'Cement' },
+  { value: 'steel', label: 'Steel' },
+  { value: 'others', label: 'Others' }
+];
+
+const DEFAULT_UNITS = [
+  { value: 'bags', label: 'Bags' },
+  { value: 'kg', label: 'KG' },
+  { value: 'tons', label: 'Tons' },
+  { value: 'pieces', label: 'Pieces' },
+  { value: 'rods', label: 'Rods' },
+  { value: 'bundles', label: 'Bundles' },
+  { value: 'loads', label: 'Loads' },
+  { value: 'cft', label: 'CFT (Cubic Feet)' },
+  { value: 'sqft', label: 'Sq.Ft' },
+  { value: 'meters', label: 'Meters' },
+  { value: 'feet', label: 'Feet' },
+  { value: 'liters', label: 'Liters' },
+  { value: 'boxes', label: 'Boxes' },
+  { value: 'sets', label: 'Sets' },
+  { value: 'numbers', label: 'Numbers' }
+];
+
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
   const [stats, setStats] = useState(null);
@@ -13,21 +38,29 @@ const ProductManagement = () => {
   const [filterCategory, setFilterCategory] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+  const [units, setUnits] = useState(DEFAULT_UNITS);
+  const [customCategory, setCustomCategory] = useState('');
+  const [customUnit, setCustomUnit] = useState('');
   const [formData, setFormData] = useState({
     productName: '',
     category: 'cement',
+    subcategory: '',
     brand: '',
     description: '',
+    specifications: '',
     price: '',
     stockQuantity: '',
     unit: 'bags',
     minOrderQuantity: 1,
     status: 'active',
-    image: ''
+    image: '',
+    featured: false
   });
 
   useEffect(() => {
     fetchProducts();
+    fetchProductOptions();
   }, []);
 
   const fetchProducts = async () => {
@@ -41,6 +74,13 @@ const ProductManagement = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchProductOptions = async () => {
+    // Use only the default simple categories - Cement, Steel, Others
+    // No need to fetch from server - admin controls are fixed
+    setCategories(DEFAULT_CATEGORIES);
+    setUnits(DEFAULT_UNITS);
   };
 
   const handleInputChange = (e) => {
@@ -73,14 +113,17 @@ const ProductManagement = () => {
     setFormData({
       productName: product.productName,
       category: product.category,
+      subcategory: product.subcategory || '',
       brand: product.brand,
       description: product.description || '',
+      specifications: product.specifications || '',
       price: product.price,
       stockQuantity: product.stockQuantity,
       unit: product.unit,
       minOrderQuantity: product.minOrderQuantity,
       status: product.status,
-      image: product.image || ''
+      image: product.image || '',
+      featured: product.featured || false
     });
     setShowModal(true);
   };
@@ -101,17 +144,22 @@ const ProductManagement = () => {
 
   const resetForm = () => {
     setEditingProduct(null);
+    setCustomCategory('');
+    setCustomUnit('');
     setFormData({
       productName: '',
       category: 'cement',
+      subcategory: '',
       brand: '',
       description: '',
+      specifications: '',
       price: '',
       stockQuantity: '',
       unit: 'bags',
       minOrderQuantity: 1,
       status: 'active',
-      image: ''
+      image: '',
+      featured: false
     });
   };
 
@@ -184,8 +232,9 @@ const ProductManagement = () => {
           className="filter-select"
         >
           <option value="">All Categories</option>
-          <option value="cement">Cement</option>
-          <option value="steel">Steel</option>
+          {categories.map(cat => (
+            <option key={cat.value} value={cat.value}>{cat.label}</option>
+          ))}
         </select>
       </div>
 
@@ -303,9 +352,9 @@ const ProductManagement = () => {
                     className="form-select"
                     required
                   >
-                    <option value="cement">Cement</option>
-                    <option value="steel">Steel</option>
-                    <option value="other">Other</option>
+                    {categories.map(cat => (
+                      <option key={cat.value} value={cat.value}>{cat.label}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="form-group">
@@ -317,13 +366,24 @@ const ProductManagement = () => {
                     className="form-select"
                     required
                   >
-                    <option value="bags">Bags</option>
-                    <option value="kg">KG</option>
-                    <option value="tons">Tons</option>
-                    <option value="pieces">Pieces</option>
-                    <option value="rods">Rods</option>
-                    <option value="bundles">Bundles</option>
+                    {units.map(unit => (
+                      <option key={unit.value} value={unit.value}>{unit.label}</option>
+                    ))}
                   </select>
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label className="form-label">Subcategory</label>
+                  <input
+                    type="text"
+                    name="subcategory"
+                    value={formData.subcategory}
+                    onChange={handleInputChange}
+                    className="form-input"
+                    placeholder="e.g., TMT Bars, OPC 53 Grade"
+                  />
                 </div>
               </div>
 
@@ -372,7 +432,20 @@ const ProductManagement = () => {
                   value={formData.description}
                   onChange={handleInputChange}
                   className="form-input"
-                  rows="3"
+                  rows="2"
+                  placeholder="Brief product description"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Specifications</label>
+                <textarea
+                  name="specifications"
+                  value={formData.specifications}
+                  onChange={handleInputChange}
+                  className="form-input"
+                  rows="2"
+                  placeholder="Technical specifications (size, grade, etc.)"
                 />
               </div>
 
@@ -395,6 +468,19 @@ const ProductManagement = () => {
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
                 </select>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="featured"
+                    checked={formData.featured}
+                    onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                    className="form-checkbox"
+                  />
+                  <span>Featured Product</span>
+                </label>
               </div>
 
               <div className="modal-actions">

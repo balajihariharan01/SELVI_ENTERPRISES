@@ -110,15 +110,156 @@
   border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
+.revenue-section.enhanced {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.revenue-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
 .revenue-section h2 {
   font-size: 1.2rem;
-  margin-bottom: 1.75rem;
+  margin-bottom: 0;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.revenue-section h2 svg {
+  color: var(--primary);
+}
+
+/* Date Filter Buttons */
+.date-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.period-buttons {
+  display: flex;
+  gap: 0.35rem;
+  background: #f1f5f9;
+  padding: 0.25rem;
+  border-radius: 8px;
+}
+
+.period-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.period-btn:hover {
+  background: rgba(255, 255, 255, 0.6);
   color: var(--text-primary);
 }
 
+.period-btn.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+/* Date Range Filter */
+.date-range-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  flex-wrap: wrap;
+}
+
+.date-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.date-input-group svg {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.date-input-group input {
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  background: transparent;
+  width: 140px;
+}
+
+.date-separator {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* Period Label */
+.period-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  background: #e0f2fe;
+  border-radius: 20px;
+  display: inline-block;
+  font-weight: 500;
+}
+
+/* Revenue Loading */
+.revenue-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+}
+
+.spinner-small {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Revenue Cards */
 .revenue-cards {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
 }
 
@@ -132,8 +273,23 @@
   transition: all 0.3s ease;
 }
 
+.revenue-card.primary {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.revenue-card.primary .revenue-value,
+.revenue-card.primary .revenue-label {
+  color: white;
+}
+
+.revenue-card.primary .revenue-icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 .revenue-card:hover {
-  transform: translateX(5px);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .revenue-icon {
@@ -141,11 +297,20 @@
   height: 55px;
   background: var(--success-gradient);
   color: white;
-  border-radius: 10px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.revenue-icon.secondary {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.revenue-icon.tertiary {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
 }
 
 .revenue-icon.monthly {
@@ -154,7 +319,7 @@
 
 .revenue-value {
   display: block;
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--text-primary);
 }
@@ -163,6 +328,64 @@
   display: block;
   font-size: 0.85rem;
   color: var(--text-secondary);
+  margin-top: 0.2rem;
+}
+
+/* No Data Message */
+.no-data-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+/* Business Info Section */
+.business-info-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.business-info-section h2 {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.business-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.business-info-item {
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+}
+
+.business-info-item .info-label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+
+.business-info-item .info-value {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  word-break: break-word;
 }
 
 /* Alerts Section */
@@ -267,6 +490,14 @@
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .revenue-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .business-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
@@ -283,6 +514,36 @@
   }
 
   .revenue-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .revenue-section .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .period-buttons {
+    flex-wrap: wrap;
+  }
+
+  .date-range-filter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .date-input-group {
+    width: 100%;
+  }
+
+  .date-input-group input {
+    width: 100%;
+  }
+
+  .date-separator {
+    text-align: center;
+  }
+
+  .business-info-grid {
     grid-template-columns: 1fr;
   }
 }

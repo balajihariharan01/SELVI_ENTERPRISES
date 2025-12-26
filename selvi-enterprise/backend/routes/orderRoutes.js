@@ -13,7 +13,8 @@ const {
   cancelOrder,
   updateOrder,
   deleteOrder,
-  getDashboardStats
+  getDashboardStats,
+  getRevenueAnalytics
 } = require('../controllers/orderController');
 
 // Validation rules
@@ -41,6 +42,7 @@ router.delete('/:id', protect, deleteOrder);
 // Admin routes
 router.get('/admin/all', protect, adminOnly, getAllOrders);
 router.get('/admin/dashboard', protect, adminOnly, getDashboardStats);
+router.get('/admin/revenue', protect, adminOnly, getRevenueAnalytics);
 router.put('/:id/status', protect, adminOnly, updateOrderStatus);
 
 module.exports = router;

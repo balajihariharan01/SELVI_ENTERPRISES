@@ -55,6 +55,12 @@ export const orderService = {
     return response.data;
   },
 
+  // Admin: Get revenue analytics with date filter
+  getRevenueAnalytics: async (params = {}) => {
+    const response = await api.get('/orders/admin/revenue', { params });
+    return response.data;
+  },
+
   // Admin: Update order status
   updateOrderStatus: async (id, status) => {
     const response = await api.put(`/orders/${id}/status`, { status });

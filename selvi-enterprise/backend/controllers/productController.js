@@ -233,3 +233,25 @@ exports.getLowStockProducts = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Get available categories and units
+// @route   GET /api/products/meta/options
+// @access  Public
+exports.getProductOptions = async (req, res, next) => {
+  try {
+    const categories = Product.getCategories();
+    const units = Product.getUnits();
+    
+    // Also get unique categories from existing products
+    const usedCategories = await Product.distinct('category');
+    const usedUnits = await Product.distinct('unit');
+
+    res.json({
+      success: true,
+      categories: [...new Set([...categories, ...usedCategories])].sort(),
+      units: [...new Set([...units, ...usedUnits])].sort()
+    });
+  } catch (error) {
+    next(error);
+  }
+};

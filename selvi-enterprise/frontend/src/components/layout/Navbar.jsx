@@ -1,8 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { FiShoppingCart, FiUser, FiMenu, FiX } from 'react-icons/fi';
+import { FiShoppingCart, FiUser, FiMenu, FiX, FiHome, FiPackage, FiClipboard, FiGrid, FiLogOut } from 'react-icons/fi';
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import { BUSINESS_CONFIG } from '../../config/businessConfig';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -25,16 +26,25 @@ const Navbar = () => {
         <div className="navbar-content">
           {/* Logo */}
           <Link to="/" className="navbar-logo">
-            <img src="/logo.png" alt="Selvi Enterprise" className="logo-img" />
-            <span className="logo-text">Selvi Enterprise</span>
+            <img src="/logo.png" alt={BUSINESS_CONFIG.name} className="logo-img" />
+            <span className="logo-text">{BUSINESS_CONFIG.name}</span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="navbar-nav">
-            <Link to="/" className="nav-link">Home</Link>
-            <Link to="/products" className="nav-link">Products</Link>
+            <Link to="/" className="nav-link">
+              <FiHome className="nav-icon" />
+              <span>Home</span>
+            </Link>
+            <Link to="/products" className="nav-link">
+              <FiPackage className="nav-icon" />
+              <span>Products</span>
+            </Link>
             {isAuthenticated && !isAdmin && (
-              <Link to="/my-orders" className="nav-link">My Orders</Link>
+              <Link to="/my-orders" className="nav-link">
+                <FiClipboard className="nav-icon" />
+                <span>My Orders</span>
+              </Link>
             )}
           </nav>
 
@@ -43,7 +53,7 @@ const Navbar = () => {
             {isAuthenticated ? (
               <>
                 {!isAdmin && (
-                  <Link to="/cart" className="cart-btn">
+                  <Link to="/cart" className="cart-btn" title="Shopping Cart">
                     <FiShoppingCart size={22} />
                     {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
                   </Link>
@@ -56,15 +66,25 @@ const Navbar = () => {
                   </button>
                   <div className="dropdown-menu">
                     {isAdmin ? (
-                      <Link to="/admin" className="dropdown-item">Dashboard</Link>
+                      <Link to="/admin" className="dropdown-item">
+                        <FiGrid className="dropdown-icon" />
+                        <span>Dashboard</span>
+                      </Link>
                     ) : (
                       <>
-                        <Link to="/profile" className="dropdown-item">Profile</Link>
-                        <Link to="/my-orders" className="dropdown-item">My Orders</Link>
+                        <Link to="/profile" className="dropdown-item">
+                          <FiUser className="dropdown-icon" />
+                          <span>Profile</span>
+                        </Link>
+                        <Link to="/my-orders" className="dropdown-item">
+                          <FiClipboard className="dropdown-icon" />
+                          <span>My Orders</span>
+                        </Link>
                       </>
                     )}
                     <button onClick={handleLogout} className="dropdown-item logout">
-                      Logout
+                      <FiLogOut className="dropdown-icon" />
+                      <span>Logout</span>
                     </button>
                   </div>
                 </div>
@@ -90,42 +110,51 @@ const Navbar = () => {
         {mobileMenuOpen && (
           <div className="mobile-menu">
             <Link to="/" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-              Home
+              <FiHome className="mobile-icon" />
+              <span>Home</span>
             </Link>
             <Link to="/products" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-              Products
+              <FiPackage className="mobile-icon" />
+              <span>Products</span>
             </Link>
             {isAuthenticated ? (
               <>
                 {!isAdmin && (
                   <>
                     <Link to="/cart" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-                      Cart ({cartCount})
+                      <FiShoppingCart className="mobile-icon" />
+                      <span>Cart ({cartCount})</span>
                     </Link>
                     <Link to="/my-orders" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-                      My Orders
+                      <FiClipboard className="mobile-icon" />
+                      <span>My Orders</span>
                     </Link>
                     <Link to="/profile" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-                      Profile
+                      <FiUser className="mobile-icon" />
+                      <span>Profile</span>
                     </Link>
                   </>
                 )}
                 {isAdmin && (
                   <Link to="/admin" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-                    Dashboard
+                    <FiGrid className="mobile-icon" />
+                    <span>Dashboard</span>
                   </Link>
                 )}
                 <button onClick={handleLogout} className="mobile-nav-link logout">
-                  Logout
+                  <FiLogOut className="mobile-icon" />
+                  <span>Logout</span>
                 </button>
               </>
             ) : (
               <>
                 <Link to="/login" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-                  Login
+                  <FiUser className="mobile-icon" />
+                  <span>Login</span>
                 </Link>
                 <Link to="/register" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-                  Register
+                  <FiUser className="mobile-icon" />
+                  <span>Register</span>
                 </Link>
               </>
             )}

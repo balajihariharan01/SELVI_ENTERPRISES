@@ -12,22 +12,24 @@ const {
   deleteProduct,
   updateStock,
   getAllProductsAdmin,
-  getLowStockProducts
+  getLowStockProducts,
+  getProductOptions
 } = require('../controllers/productController');
 
-// Validation rules
+// Validation rules - more flexible now
 const productValidation = [
   body('productName').trim().notEmpty().withMessage('Product name is required'),
-  body('category').isIn(['cement', 'steel', 'other']).withMessage('Invalid category'),
+  body('category').trim().notEmpty().withMessage('Category is required'),
   body('brand').trim().notEmpty().withMessage('Brand is required'),
   body('price').isFloat({ min: 0 }).withMessage('Price must be a positive number'),
   body('stockQuantity').isInt({ min: 0 }).withMessage('Stock must be a non-negative integer'),
-  body('unit').isIn(['bags', 'kg', 'tons', 'pieces', 'rods', 'bundles']).withMessage('Invalid unit'),
+  body('unit').trim().notEmpty().withMessage('Unit is required'),
   handleValidationErrors
 ];
 
 // Public routes
 router.get('/', getProducts);
+router.get('/meta/options', getProductOptions);
 router.get('/:id', getProduct);
 
 // Admin routes

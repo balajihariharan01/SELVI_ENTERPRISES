@@ -1,9 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { FiTruck, FiShield, FiClock, FiArrowRight } from 'react-icons/fi';
+import { FiTruck, FiShield, FiClock, FiArrowRight, FiPhone, FiMail, FiMapPin } from 'react-icons/fi';
+import { FaWhatsapp } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import productService from '../services/productService';
 import ProductCard from '../components/ProductCard';
 import { useAuth } from '../context/AuthContext';
+import { BUSINESS_CONFIG, getWhatsAppGeneralLink } from '../config/businessConfig';
 import './Home.css';
 
 const Home = () => {
@@ -35,7 +37,7 @@ const Home = () => {
           <div className="hero-content">
             <h1>Quality Steel & Cement for Your Construction Needs</h1>
             <p>
-              Selvi Enterprise is your trusted partner for premium construction materials. 
+              {BUSINESS_CONFIG.name} is your trusted partner for premium construction materials. 
               We provide the best brands at competitive prices with reliable delivery.
             </p>
             <div className="hero-buttons">
@@ -91,7 +93,7 @@ const Home = () => {
         <div className="container">
           <div className="section-header">
             <h2>Our Products</h2>
-            <p>Choose from our wide range of construction materials</p>
+            <p>Choose from our range of quality construction materials</p>
           </div>
           <div className="category-cards">
             <div 
@@ -117,6 +119,31 @@ const Home = () => {
                   Shop Now <FiArrowRight />
                 </span>
               </div>
+            </div>
+          </div>
+          {/* Others Category */}
+          <div className="category-others">
+            <div 
+              className="category-item-large"
+              onClick={() => navigate('/products?category=others')}
+            >
+              <span className="category-icon">📦</span>
+              <div className="category-text">
+                <span className="category-name">Other Materials</span>
+                <span className="category-desc">Additional construction materials</span>
+              </div>
+              <FiArrowRight className="arrow-icon" />
+            </div>
+            <div 
+              className="category-item-large view-all"
+              onClick={() => navigate('/products')}
+            >
+              <span className="category-icon">🏗️</span>
+              <div className="category-text">
+                <span className="category-name">View All Products</span>
+                <span className="category-desc">Browse our complete catalog</span>
+              </div>
+              <FiArrowRight className="arrow-icon" />
             </div>
           </div>
         </div>
@@ -145,13 +172,95 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Contact Section */}
+      <section className="contact-section">
+        <div className="container">
+          <div className="section-header">
+            <h2>Contact Us</h2>
+            <p>Get in touch with us for bulk orders and inquiries</p>
+          </div>
+          <div className="contact-grid">
+            {/* Phone Card */}
+            <div className="contact-card">
+              <div className="contact-icon">
+                <FiPhone />
+              </div>
+              <div className="contact-info">
+                <h3>Phone</h3>
+                <div className="contact-details">
+                  {BUSINESS_CONFIG.owners.map((owner, index) => (
+                    <div key={index} className="owner-contact">
+                      <span className="owner-name">{owner.name}</span>
+                      <a href={`tel:${owner.phone?.replace(/\s/g, '')}`} className="phone-link">
+                        {owner.phone}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* WhatsApp Card */}
+            <div className="contact-card">
+              <div className="contact-icon whatsapp">
+                <FaWhatsapp />
+              </div>
+              <div className="contact-info">
+                <h3>WhatsApp</h3>
+                <p className="contact-desc">Quick inquiry via WhatsApp</p>
+                <a 
+                  href={getWhatsAppGeneralLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-whatsapp"
+                >
+                  <FaWhatsapp /> Chat Now
+                </a>
+              </div>
+            </div>
+
+            {/* Email Card */}
+            <div className="contact-card">
+              <div className="contact-icon email">
+                <FiMail />
+              </div>
+              <div className="contact-info">
+                <h3>Email</h3>
+                <p className="contact-desc">Send us your inquiries</p>
+                <a href={`mailto:${BUSINESS_CONFIG.contact.email}`} className="email-link">
+                  {BUSINESS_CONFIG.contact.email}
+                </a>
+              </div>
+            </div>
+
+            {/* Location Card */}
+            <div className="contact-card location-card">
+              <div className="contact-icon location">
+                <FiMapPin />
+              </div>
+              <div className="contact-info">
+                <h3>Location</h3>
+                <div className="address-text">
+                  {BUSINESS_CONFIG.location.addressLines?.map((line, index) => (
+                    <span key={index} className="address-line">{line}</span>
+                  )) || <span>{BUSINESS_CONFIG.location.fullAddress}</span>}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Google Map Embed - Full Width Below Contact Cards */}
+          
+        </div>
+      </section>
+
       {/* CTA Section - Only show if not logged in */}
       {!isAuthenticated && (
         <section className="cta">
           <div className="container">
             <div className="cta-content">
               <h2>Ready to Start Your Project?</h2>
-              <p>Get the best prices on quality construction materials</p>
+              <p>Get the best prices on quality construction materials from {BUSINESS_CONFIG.name}</p>
               <Link to="/register" className="btn btn-primary btn-lg">
                 Create Account
               </Link>

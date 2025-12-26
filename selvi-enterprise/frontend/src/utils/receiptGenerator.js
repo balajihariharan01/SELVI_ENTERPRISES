@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { BUSINESS_CONFIG } from '../config/businessConfig';
 
 /**
  * Generate and download a PDF receipt for an order
@@ -44,33 +45,35 @@ export const generateReceipt = async (order, isAdmin = false) => {
         doc.text('SE', 28, 32);
       }
       
-      // Company Header
-      doc.setFontSize(20);
+      // Company Header - Using centralized config
+      doc.setFontSize(18);
       doc.setTextColor(...primaryColor);
       doc.setFont('helvetica', 'bold');
-      doc.text('Selvi Enterprise', 55, 22);
+      doc.text(BUSINESS_CONFIG.fullName, 55, 18);
       
       doc.setFontSize(9);
       doc.setTextColor(...textGray);
       doc.setFont('helvetica', 'normal');
-      doc.text('Quality Products for Your Business', 55, 30);
-      doc.text('Phone: +91 98765 43210', 55, 36);
-      doc.text('Email: selvi.enterprise@gmail.com', 55, 42);
+      doc.text(`Owners: ${BUSINESS_CONFIG.owners.map(o => o.name).join(', ')}`, 55, 25);
+      doc.text(`Phone: ${BUSINESS_CONFIG.contact.phones.join(', ')}`, 55, 31);
+      doc.text(`Email: ${BUSINESS_CONFIG.contact.email}`, 55, 37);
+      doc.text(`UPI ID: ${BUSINESS_CONFIG.payment.upiId}`, 55, 43);
+      doc.text(`Location: ${BUSINESS_CONFIG.location.fullAddress}`, 55, 49);
       
       // Receipt Title
       doc.setFontSize(16);
       doc.setTextColor(...textDark);
       doc.setFont('helvetica', 'bold');
       const title = order.orderStatus === 'delivered' ? 'RECEIPT' : 'ORDER INVOICE';
-      doc.text(title, pageWidth / 2, 56, { align: 'center' });
+      doc.text(title, pageWidth / 2, 60, { align: 'center' });
       
       // Draw a line
       doc.setDrawColor(...primaryColor);
       doc.setLineWidth(0.5);
-      doc.line(14, 60, pageWidth - 14, 60);
+      doc.line(14, 64, pageWidth - 14, 64);
       
       // Order Info Section
-      const startY = 70;
+      const startY = 74;
       
       // Left column - Order details
       doc.setFontSize(9);
@@ -226,7 +229,8 @@ export const generateReceipt = async (order, isAdmin = false) => {
       doc.setTextColor(...textGray);
       doc.setFont('helvetica', 'normal');
       doc.text('Thank you for your business!', pageWidth / 2, footerY + 6, { align: 'center' });
-      doc.text('For any queries, please contact us at selvi.enterprise@gmail.com', pageWidth / 2, footerY + 11, { align: 'center' });
+      doc.text(`For any queries, please contact us at ${BUSINESS_CONFIG.contact.email}`, pageWidth / 2, footerY + 11, { align: 'center' });
+      doc.text(`WhatsApp: ${BUSINESS_CONFIG.contact.whatsappDisplay}`, pageWidth / 2, footerY + 16, { align: 'center' });
       
       // Generated timestamp
       doc.setFontSize(7);

@@ -46,6 +46,26 @@ export const AuthProvider = ({ children }) => {
     return response;
   };
 
+  const googleLogin = async (credential) => {
+    console.log('AuthContext: Calling googleLogin with credential');
+    try {
+      const response = await authService.googleLogin(credential);
+      console.log('AuthContext: googleLogin response received', response);
+      
+      if (!response.token || !response.user) {
+        throw new Error('Invalid response from server');
+      }
+      
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      setUser(response.user);
+      return response;
+    } catch (error) {
+      console.error('AuthContext: googleLogin error', error);
+      throw error; // Re-throw to let component handle it
+    }
+  };
+
   const register = async (userData) => {
     const response = await authService.register(userData);
     localStorage.setItem('token', response.token);
@@ -70,11 +90,13 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     login,
+    googleLogin,
     register,
     logout,
     updateUser,
     isAuthenticated: !!user,
-    isAdmin: user?.role === 'admin'
+    isAdmin: user?.role === 'admin',
+    isGoogleUser: user?.authProvider === 'google'
   };
 
   return (
