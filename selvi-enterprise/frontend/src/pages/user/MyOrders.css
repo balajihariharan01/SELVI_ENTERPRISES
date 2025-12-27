@@ -1,6 +1,6 @@
 .my-orders-page {
   min-height: calc(100vh - 200px);
-  background: var(--bg-mesh);
+  background: var(--bg-profile);
   padding-bottom: 3rem;
 }
 
@@ -9,12 +9,12 @@
   border-radius: 16px;
   padding: 4rem 2rem;
   margin-top: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 20px rgba(44, 62, 80, 0.04);
+  border: 1px solid rgba(44, 62, 80, 0.04);
 }
 
 .my-orders-page .empty-state svg {
-  color: #c7d2fe;
+  color: #b8c2d9;
   margin-bottom: 1.25rem;
   font-size: 3.5rem;
 }
@@ -44,14 +44,14 @@
   background: white;
   border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 20px rgba(44, 62, 80, 0.04);
+  border: 1px solid rgba(44, 62, 80, 0.04);
   transition: all 0.2s ease;
 }
 
 .order-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(44, 62, 80, 0.06);
 }
 
 .order-header {

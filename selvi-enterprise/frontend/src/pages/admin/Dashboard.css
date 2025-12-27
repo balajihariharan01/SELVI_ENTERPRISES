@@ -33,15 +33,15 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
   transition: all 0.2s ease;
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(44, 62, 80, 0.04);
   min-width: 0; /* Prevent overflow */
 }
 
 .stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 20px rgba(44, 62, 80, 0.06);
 }
 
 .stat-icon {
@@ -55,23 +55,23 @@
 }
 
 .stat-icon.orders {
-  background: #eff6ff;
-  color: #2563eb;
+  background: #e8edf5;
+  color: #5b6eb3;
 }
 
 .stat-icon.pending {
-  background: #fef9c3;
-  color: #ca8a04;
+  background: #faf6e8;
+  color: #b8952e;
 }
 
 .stat-icon.products {
-  background: #dcfce7;
-  color: #16a34a;
+  background: #e6f4ed;
+  color: #4a9d7c;
 }
 
 .stat-icon.customers {
-  background: #f3e8ff;
-  color: #9333ea;
+  background: #f2eefa;
+  color: #8a6db8;
 }
 
 .stat-info {
@@ -106,12 +106,12 @@
   background: white;
   border-radius: 20px;
   padding: 1.75rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 20px rgba(44, 62, 80, 0.05);
+  border: 1px solid rgba(44, 62, 80, 0.04);
 }
 
 .revenue-section.enhanced {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #faf9f7 100%);
 }
 
 .revenue-section .section-header {
@@ -146,7 +146,7 @@
 .period-buttons {
   display: flex;
   gap: 0.35rem;
-  background: #f1f5f9;
+  background: #f2f3f5;
   padding: 0.25rem;
   border-radius: 8px;
 }
@@ -171,7 +171,7 @@
 .period-btn.active {
   background: var(--primary);
   color: white;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 2px 8px rgba(91, 110, 179, 0.2);
 }
 
 /* Date Range Filter */
@@ -181,7 +181,7 @@
   gap: 0.75rem;
   margin-bottom: 1.5rem;
   padding: 1rem;
-  background: #f8fafc;
+  background: #faf9f7;
   border-radius: 12px;
   flex-wrap: wrap;
 }
@@ -193,7 +193,7 @@
   background: white;
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e5e3df;
 }
 
 .date-input-group svg {
@@ -226,7 +226,7 @@
   color: var(--text-secondary);
   margin-bottom: 1rem;
   padding: 0.5rem 1rem;
-  background: #e0f2fe;
+  background: #e8edf5;
   border-radius: 20px;
   display: inline-block;
   font-weight: 500;
@@ -268,13 +268,13 @@
   align-items: center;
   gap: 1.15rem;
   padding: 1.25rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(135deg, #faf9f7 0%, #f2f3f5 100%);
   border-radius: 16px;
   transition: all 0.3s ease;
 }
 
 .revenue-card.primary {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #4a9d7c 0%, #3d8a6c 100%);
   color: white;
 }
 
@@ -289,7 +289,7 @@
 
 .revenue-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(44, 62, 80, 0.08);
 }
 
 .revenue-icon {
@@ -306,11 +306,11 @@
 }
 
 .revenue-icon.secondary {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #5b6eb3 0%, #7986c7 100%);
 }
 
 .revenue-icon.tertiary {
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  background: linear-gradient(135deg, #8a6db8 0%, #a085c8 100%);
 }
 
 .revenue-icon.monthly {
@@ -339,8 +339,8 @@
   gap: 0.5rem;
   padding: 1rem;
   margin-top: 1rem;
-  background: #fef3c7;
-  color: #92400e;
+  background: #faf6e8;
+  color: #8b6914;
   border-radius: 8px;
   font-size: 0.9rem;
 }
@@ -418,11 +418,11 @@
 }
 
 .alert-card.warning {
-  background: #fef3c7;
+  background: #faf6e8;
 }
 
 .alert-card.danger {
-  background: #fee2e2;
+  background: #fae8e8;
 }
 
 .alert-value {
@@ -432,11 +432,11 @@
 }
 
 .alert-card.warning .alert-value {
-  color: #d97706;
+  color: #b8952e;
 }
 
 .alert-card.danger .alert-value {
-  color: #dc2626;
+  color: #b85252;
 }
 
 .alert-label {

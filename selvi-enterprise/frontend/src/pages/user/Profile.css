@@ -1,6 +1,6 @@
 .profile-page {
   min-height: calc(100vh - 200px);
-  background: var(--bg-mesh);
+  background: var(--bg-profile);
   padding-bottom: 3rem;
 }
 
@@ -18,15 +18,15 @@
   padding: 2rem;
   text-align: center;
   height: fit-content;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 20px rgba(44, 62, 80, 0.04);
+  border: 1px solid rgba(44, 62, 80, 0.04);
 }
 
 .profile-avatar {
   width: 90px;
   height: 90px;
   margin: 0 auto 1.25rem;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #5b6eb3 0%, #7986c7 100%);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -34,7 +34,7 @@
   justify-content: center;
   font-size: 2rem;
   font-weight: 700;
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 8px 24px rgba(91, 110, 179, 0.2);
 }
 
 .profile-card h2 {
@@ -79,8 +79,8 @@
   background: white;
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 20px rgba(44, 62, 80, 0.04);
+  border: 1px solid rgba(44, 62, 80, 0.04);
 }
 
 .profile-form-card h3 {
@@ -122,15 +122,15 @@
   padding: 0.875rem 2rem;
   font-size: 0.95rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #5b6eb3 0%, #7986c7 100%);
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 4px 12px rgba(91, 110, 179, 0.2);
   transition: all 0.2s ease;
 }
 
 .save-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 6px 16px rgba(91, 110, 179, 0.25);
 }
 
 /* Responsive */

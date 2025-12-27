@@ -1,6 +1,6 @@
 .checkout-page {
   min-height: calc(100vh - 200px);
-  background: var(--bg-mesh);
+  background: var(--bg-checkout);
   padding-bottom: 3rem;
 }
 
@@ -14,7 +14,7 @@
   padding: 0.5rem 1rem;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
   transition: all 0.2s ease;
   font-size: 0.9rem;
 }
@@ -35,8 +35,8 @@
   background: white;
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 20px rgba(44, 62, 80, 0.04);
+  border: 1px solid rgba(44, 62, 80, 0.04);
 }
 
 .checkout-form h3 {
@@ -87,20 +87,20 @@
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e5e3df;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .payment-option:hover {
-  border-color: #c7d2fe;
-  background: #fafafe;
+  border-color: #b8c2d9;
+  background: #fafbfd;
 }
 
 .payment-option.selected {
   border-color: var(--primary);
-  background: #f8faff;
+  background: #f8f9fc;
 }
 
 .payment-option input {
@@ -129,15 +129,15 @@
   padding: 1rem;
   font-size: 1rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #5b6eb3 0%, #7986c7 100%);
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 4px 12px rgba(91, 110, 179, 0.2);
   transition: all 0.2s ease;
 }
 
 .place-order-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 6px 16px rgba(91, 110, 179, 0.25);
 }
 
 /* Order Summary */
@@ -151,8 +151,8 @@
   background: white;
   border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 20px rgba(44, 62, 80, 0.04);
+  border: 1px solid rgba(44, 62, 80, 0.04);
 }
 
 .order-summary h3 {
@@ -218,7 +218,7 @@
 }
 
 .summary-row .free {
-  color: #16a34a;
+  color: #4a9d7c;
   font-weight: 600;
 }
 

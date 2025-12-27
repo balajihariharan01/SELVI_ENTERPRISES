@@ -36,15 +36,15 @@
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 15px rgba(44, 62, 80, 0.05);
   transition: all 0.3s ease;
-  border: 1px solid rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(91, 110, 179, 0.08);
   min-width: 0; /* Prevent overflow */
 }
 
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(44, 62, 80, 0.08);
 }
 
 .stat-icon {
@@ -54,19 +54,19 @@
   align-items: center;
   justify-content: center;
   border-radius: 14px;
-  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+  background: linear-gradient(135deg, #eef0f5 0%, #dfe2eb 100%);
   color: var(--primary);
   font-size: 1.6rem;
 }
 
 .stat-icon.active {
-  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  background: linear-gradient(135deg, #e6f4ed 0%, #d4ebe0 100%);
   color: var(--success);
 }
 
 .stat-icon.orders {
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  color: #d97706;
+  background: linear-gradient(135deg, #faf6e8 0%, #f5ecd0 100%);
+  color: #b8952e;
 }
 
 .stat-content {
@@ -99,12 +99,12 @@
   border-radius: 18px;
   padding: 1.75rem;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(99, 102, 241, 0.1);
+  box-shadow: 0 4px 15px rgba(44, 62, 80, 0.05);
+  border: 1px solid rgba(91, 110, 179, 0.08);
 }
 
 .customer-card:hover {
-  box-shadow: 0 15px 40px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 15px 40px rgba(91, 110, 179, 0.1);
   transform: translateY(-4px);
 }
 
@@ -120,7 +120,7 @@
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: 1.25rem;
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 6px 20px rgba(91, 110, 179, 0.2);
 }
 
 .customer-info h3 {
@@ -149,7 +149,7 @@
   gap: 0.6rem;
   margin-top: 1.25rem;
   padding-top: 1.25rem;
-  border-top: 2px solid #eef2ff;
+  border-top: 2px solid #eef0f2;
 }
 
 .meta-item {
@@ -175,7 +175,7 @@
 .customer-address {
   margin-top: 1.25rem;
   padding-top: 1.25rem;
-  border-top: 2px solid #eef2ff;
+  border-top: 2px solid #eef0f2;
   font-size: 0.85rem;
   color: var(--text-secondary);
   line-height: 1.6;
