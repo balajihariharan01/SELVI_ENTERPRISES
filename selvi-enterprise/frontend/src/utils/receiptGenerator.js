@@ -9,7 +9,7 @@ import { BUSINESS_CONFIG } from '../config/businessConfig';
  * Design System:
  * - Colors: Soft blue (#dbeafe), Dark slate (#1e293b), Gray (#64748b), Light gray (#e5e7eb)
  * - Typography: Helvetica (closest to Inter in jsPDF)
- * - Spacing: 4px/8px system converted to PDF units
+ * - Spacing: Consistent 5mm grid system
  */
 
 // ==============================================
@@ -31,26 +31,29 @@ const COLORS = {
 // TYPOGRAPHY SETTINGS
 // ==============================================
 const FONTS = {
-  title: { size: 20, style: 'bold' },
-  sectionHeading: { size: 12, style: 'bold' },
-  label: { size: 10, style: 'normal' },
-  value: { size: 10, style: 'bold' },
-  body: { size: 10, style: 'normal' },
-  small: { size: 9, style: 'normal' },
-  tiny: { size: 8, style: 'normal' },
+  title: { size: 22, style: 'bold' },
+  companyName: { size: 13, style: 'bold' },
+  sectionHeading: { size: 11, style: 'bold' },
+  label: { size: 9, style: 'normal' },
+  value: { size: 9, style: 'bold' },
+  body: { size: 9, style: 'normal' },
+  small: { size: 8, style: 'normal' },
+  tiny: { size: 7, style: 'normal' },
 };
 
 // ==============================================
-// LAYOUT CONSTANTS (A4 Portrait)
+// LAYOUT CONSTANTS (A4 Portrait - Mobile Optimized)
 // ==============================================
 const LAYOUT = {
-  margin: 20,           // Equal margins on all sides
+  margin: 15,           // Smaller margins for better mobile viewing
   pageWidth: 210,       // A4 width in mm
   pageHeight: 297,      // A4 height in mm
-  contentWidth: 170,    // 210 - (20 * 2)
-  columnGap: 10,
-  rowGap: 4,
-  sectionGap: 16,
+  contentWidth: 180,    // 210 - (15 * 2)
+  columnGap: 12,        // Gap between columns
+  rowGap: 4.5,          // Gap between rows
+  sectionGap: 10,       // Gap between sections
+  lineHeight: 4.5,      // Consistent line height
+  labelWidth: 20,       // Fixed width for labels
 };
 
 /**
@@ -90,15 +93,15 @@ export const generateReceipt = async (order, isAdmin = false) => {
       doc.setFont('helvetica', FONTS.title.style);
       doc.setFontSize(FONTS.title.size);
       doc.setTextColor(...COLORS.textDark);
-      doc.text('RECEIPT', leftX, currentY + 6);
+      doc.text('RECEIPT', leftX, currentY + 7);
       
-      // Company Name (bold)
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
+      // Company Name
+      doc.setFont('helvetica', FONTS.companyName.style);
+      doc.setFontSize(FONTS.companyName.size);
       doc.setTextColor(...COLORS.textDark);
-      doc.text(BUSINESS_CONFIG.name, leftX, currentY + 14);
+      doc.text(BUSINESS_CONFIG.name, leftX, currentY + 15);
       
-      // Company Details (normal)
+      // Company Details
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(FONTS.small.size);
       doc.setTextColor(...COLORS.textGray);
@@ -110,15 +113,15 @@ export const generateReceipt = async (order, isAdmin = false) => {
         `Email: ${BUSINESS_CONFIG.contact.email}`,
       ];
       
-      let companyY = currentY + 20;
+      let companyY = currentY + 21;
       companyLines.forEach((line, index) => {
-        doc.text(line, leftX, companyY + (index * 4.5));
+        doc.text(line, leftX, companyY + (index * 4));
       });
       
       // RIGHT SIDE: Logo placeholder, Date, Receipt No
-      const logoX = rightX - 25;
+      const logoSize = 22;
+      const logoX = rightX - logoSize;
       const logoY = currentY;
-      const logoSize = 20;
       
       // Circular logo placeholder
       doc.setDrawColor(...COLORS.border);
@@ -127,29 +130,31 @@ export const generateReceipt = async (order, isAdmin = false) => {
       
       // Logo text fallback
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
+      doc.setFontSize(13);
       doc.setTextColor(...COLORS.primaryAccent);
       doc.text('SE', logoX + logoSize/2, logoY + logoSize/2 + 2, { align: 'center' });
       
-      // Date (below logo, right aligned)
+      // Date and Receipt info (right aligned below logo)
       const metaX = rightX;
-      const metaY = logoY + logoSize + 6;
+      const metaY = logoY + logoSize + 8;
       
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(FONTS.small.size);
       doc.setTextColor(...COLORS.textGray);
-      doc.text('Date:', metaX - 35, metaY);
+      doc.text('Date:', metaX - 40, metaY);
+      doc.setFont('helvetica', 'bold');
       doc.setTextColor(...COLORS.textDark);
       doc.text(formatDateShort(order.createdAt), metaX, metaY, { align: 'right' });
       
-      // Receipt Number (below date)
+      // Receipt Number
+      doc.setFont('helvetica', 'normal');
       doc.setTextColor(...COLORS.textGray);
-      doc.text('Receipt No:', metaX - 35, metaY + 5);
+      doc.text('Receipt No:', metaX - 40, metaY + 5);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(...COLORS.textDark);
       doc.text(String(order.orderNumber || 'N/A'), metaX, metaY + 5, { align: 'right' });
       
-      currentY += 48;
+      currentY += 50;
       
       // Divider line
       doc.setDrawColor(...COLORS.border);
@@ -159,71 +164,93 @@ export const generateReceipt = async (order, isAdmin = false) => {
       currentY += LAYOUT.sectionGap;
 
       // ==============================================
-      // BILLING INFORMATION SECTION
+      // BILLING & SHIPPING INFORMATION SECTION
       // ==============================================
       
       const colWidth = (contentWidth - LAYOUT.columnGap) / 2;
       const leftColX = leftX;
       const rightColX = leftX + colWidth + LAYOUT.columnGap;
+      const labelWidth = LAYOUT.labelWidth;
       
-      // BILL TO Section (Left)
+      // Section Headers
       doc.setFont('helvetica', FONTS.sectionHeading.style);
       doc.setFontSize(FONTS.sectionHeading.size);
       doc.setTextColor(...COLORS.textDark);
       doc.text('BILL TO', leftColX, currentY);
-      
-      // SITE / LOCATION Section (Right)
       doc.text('SHIPPING ADDRESS', rightColX, currentY);
       
       currentY += 6;
       
       const address = order.shippingAddress || {};
+      const valueStartX = leftColX + labelWidth;
+      const rightValueStartX = rightColX + labelWidth;
+      const maxValueWidth = colWidth - labelWidth - 3;
       
-      // Bill To Details
+      // BILL TO section (Left Column)
+      let leftY = currentY;
+      
+      // Name
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(FONTS.body.size);
-      
-      // Customer Name
       doc.setTextColor(...COLORS.textGray);
-      doc.text('Name:', leftColX, currentY);
-      doc.setTextColor(...COLORS.textDark);
+      doc.text('Name:', leftColX, leftY);
       doc.setFont('helvetica', 'bold');
-      doc.text(String(address.name || 'N/A'), leftColX + 18, currentY);
+      doc.setTextColor(...COLORS.textDark);
+      doc.text(truncateText(doc, String(address.name || 'N/A'), maxValueWidth), valueStartX, leftY);
+      
+      leftY += LAYOUT.lineHeight;
       
       // Phone
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(...COLORS.textGray);
-      doc.text('Phone:', leftColX, currentY + 5);
+      doc.text('Phone:', leftColX, leftY);
       doc.setTextColor(...COLORS.textDark);
-      doc.text(String(address.phone || 'N/A'), leftColX + 18, currentY + 5);
+      doc.text(String(address.phone || 'N/A'), valueStartX, leftY);
       
-      // Email (if available from user)
+      leftY += LAYOUT.lineHeight;
+      
+      // Email
       const userEmail = order.user?.email || '';
       if (userEmail) {
         doc.setTextColor(...COLORS.textGray);
-        doc.text('Email:', leftColX, currentY + 10);
+        doc.text('Email:', leftColX, leftY);
         doc.setTextColor(...COLORS.textDark);
-        doc.text(userEmail, leftColX + 18, currentY + 10);
+        doc.text(truncateText(doc, userEmail, maxValueWidth), valueStartX, leftY);
+        leftY += LAYOUT.lineHeight;
       }
       
-      // Shipping Address Details (Right column)
-      doc.setTextColor(...COLORS.textGray);
-      doc.text('Street:', rightColX, currentY);
-      doc.setTextColor(...COLORS.textDark);
-      const streetText = doc.splitTextToSize(String(address.street || 'N/A'), colWidth - 18);
-      doc.text(streetText, rightColX + 18, currentY);
+      // SHIPPING ADDRESS section (Right Column)
+      let rightY = currentY;
       
+      // Street - handle multi-line with proper wrapping
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(FONTS.body.size);
       doc.setTextColor(...COLORS.textGray);
-      doc.text('City:', rightColX, currentY + 5);
+      doc.text('Street:', rightColX, rightY);
       doc.setTextColor(...COLORS.textDark);
-      doc.text(`${address.city || ''}, ${address.state || ''}`, rightColX + 18, currentY + 5);
+      const streetText = String(address.street || 'N/A');
+      const streetLines = doc.splitTextToSize(streetText, maxValueWidth);
+      doc.text(streetLines, rightValueStartX, rightY);
+      rightY += (streetLines.length * LAYOUT.lineHeight);
       
+      // City & State
       doc.setTextColor(...COLORS.textGray);
-      doc.text('Pincode:', rightColX, currentY + 10);
+      doc.text('City:', rightColX, rightY);
       doc.setTextColor(...COLORS.textDark);
-      doc.text(String(address.pincode || 'N/A'), rightColX + 18, currentY + 10);
+      const cityText = address.city || '';
+      const stateText = address.state || '';
+      const cityStateText = cityText && stateText ? `${cityText}, ${stateText}` : (cityText || stateText || 'N/A');
+      doc.text(truncateText(doc, cityStateText, maxValueWidth), rightValueStartX, rightY);
       
-      currentY += 22;
+      rightY += LAYOUT.lineHeight;
+      
+      // Pincode
+      doc.setTextColor(...COLORS.textGray);
+      doc.text('Pincode:', rightColX, rightY);
+      doc.setTextColor(...COLORS.textDark);
+      doc.text(String(address.pincode || 'N/A'), rightValueStartX, rightY);
+      
+      currentY = Math.max(leftY, rightY) + LAYOUT.sectionGap;
       
       // Divider line
       doc.setDrawColor(...COLORS.border);
@@ -236,23 +263,16 @@ export const generateReceipt = async (order, isAdmin = false) => {
       // ITEMS TABLE (ACCOUNTING-GRADE)
       // ==============================================
       
-      // Table column configuration
-      const tableColumns = {
-        description: { width: 85, align: 'left' },
-        qty: { width: 25, align: 'center' },
-        unitPrice: { width: 30, align: 'right' },
-        total: { width: 30, align: 'right' },
-      };
-      
+      // Optimized table column widths for perfect alignment
       const tableHeaders = [['DESCRIPTION', 'QTY', 'UNIT PRICE', 'TOTAL']];
       const tableData = (order.items || []).map((item) => [
         String(item.productName || item.product?.productName || 'Product'),
-        String(item.quantity || 0) + ' ' + (item.unit || 'unit'),
+        `${item.quantity || 0} ${item.unit || 'unit'}`,
         formatCurrency(item.price || 0),
         formatCurrency(item.subtotal || 0),
       ]);
       
-      // Professional table using autoTable
+      // Professional table using autoTable with optimized widths
       autoTable(doc, {
         head: tableHeaders,
         body: tableData,
@@ -260,40 +280,38 @@ export const generateReceipt = async (order, isAdmin = false) => {
         theme: 'plain',
         styles: {
           font: 'helvetica',
-          fontSize: FONTS.body.size,
-          cellPadding: { top: 3, right: 4, bottom: 3, left: 4 },
+          fontSize: 9,
+          cellPadding: { top: 3.5, right: 4, bottom: 3.5, left: 4 },
           lineColor: COLORS.border,
           lineWidth: 0.3,
           textColor: COLORS.textDark,
           overflow: 'linebreak',
+          valign: 'middle',
         },
         headStyles: {
           fillColor: COLORS.tableHeader,
           textColor: COLORS.textDark,
           fontStyle: 'bold',
-          fontSize: FONTS.small.size,
+          fontSize: 8,
           halign: 'left',
+          cellPadding: { top: 3.5, right: 4, bottom: 3.5, left: 4 },
         },
         bodyStyles: {
           fillColor: COLORS.white,
         },
         alternateRowStyles: {
-          fillColor: [250, 251, 252], // Very subtle alternating
+          fillColor: [250, 251, 252],
         },
         columnStyles: {
-          0: { cellWidth: tableColumns.description.width, halign: 'left' },
-          1: { cellWidth: tableColumns.qty.width, halign: 'center' },
-          2: { cellWidth: tableColumns.unitPrice.width, halign: 'right', font: 'helvetica' },
-          3: { cellWidth: tableColumns.total.width, halign: 'right', fontStyle: 'bold' },
+          0: { cellWidth: 90, halign: 'left' },
+          1: { cellWidth: 25, halign: 'center' },
+          2: { cellWidth: 32, halign: 'right' },
+          3: { cellWidth: 33, halign: 'right', fontStyle: 'bold' },
         },
         margin: { left: leftX, right: LAYOUT.margin },
+        tableWidth: contentWidth,
         tableLineColor: COLORS.border,
         tableLineWidth: 0.3,
-        didDrawPage: function(data) {
-          // Draw outer border
-          doc.setDrawColor(...COLORS.border);
-          doc.setLineWidth(0.5);
-        },
       });
       
       // Get table end position
@@ -301,13 +319,13 @@ export const generateReceipt = async (order, isAdmin = false) => {
       currentY = tableEndY + LAYOUT.sectionGap;
 
       // ==============================================
-      // TOTALS SECTION (RIGHT ALIGNED)
+      // TOTALS SECTION (RIGHT ALIGNED BOX)
       // ==============================================
       
-      const totalsWidth = 75;
+      const totalsWidth = 80;
       const totalsX = rightX - totalsWidth;
-      const labelX = totalsX + 4;
-      const valueX = rightX - 4;
+      const labelPadding = 6;
+      const valuePadding = 6;
       
       // Calculate totals
       const subtotal = order.totalAmount || 0;
@@ -317,108 +335,119 @@ export const generateReceipt = async (order, isAdmin = false) => {
       const taxAmount = order.taxAmount || 0;
       const totalDue = order.finalTotal || subtotalLessDiscount + taxAmount;
       
+      // Calculate box height based on content
+      let boxHeight = 28; // Base height for subtotal + total
+      if (discount > 0) boxHeight += 12;
+      if (taxRate > 0 || taxAmount > 0) boxHeight += 6;
+      
       // Totals box background
       doc.setDrawColor(...COLORS.border);
       doc.setFillColor(...COLORS.white);
-      doc.roundedRect(totalsX, currentY, totalsWidth, 48, 2, 2, 'FD');
+      doc.roundedRect(totalsX, currentY, totalsWidth, boxHeight, 2, 2, 'FD');
       
-      let totalsY = currentY + 6;
+      let totalsY = currentY + 7;
       
-      // Subtotal
+      // Subtotal row
       doc.setFont('helvetica', 'normal');
-      doc.setFontSize(FONTS.body.size);
+      doc.setFontSize(9);
       doc.setTextColor(...COLORS.textGray);
-      doc.text('Subtotal', labelX, totalsY);
+      doc.text('Subtotal', totalsX + labelPadding, totalsY);
       doc.setTextColor(...COLORS.textDark);
-      doc.text(formatCurrency(subtotal), valueX, totalsY, { align: 'right' });
+      doc.text(formatCurrency(subtotal), totalsX + totalsWidth - valuePadding, totalsY, { align: 'right' });
       
       totalsY += 6;
       
       // Discount (if any)
       if (discount > 0) {
         doc.setTextColor(...COLORS.textGray);
-        doc.text('Discount', labelX, totalsY);
+        doc.text('Discount', totalsX + labelPadding, totalsY);
         doc.setTextColor([239, 68, 68]); // Red for discount
-        doc.text(`-${formatCurrency(discount)}`, valueX, totalsY, { align: 'right' });
+        doc.text(`-${formatCurrency(discount)}`, totalsX + totalsWidth - valuePadding, totalsY, { align: 'right' });
         totalsY += 6;
         
         // Subtotal Less Discount
         doc.setTextColor(...COLORS.textGray);
-        doc.text('Subtotal Less Discount', labelX, totalsY);
+        doc.text('After Discount', totalsX + labelPadding, totalsY);
         doc.setTextColor(...COLORS.textDark);
-        doc.text(formatCurrency(subtotalLessDiscount), valueX, totalsY, { align: 'right' });
+        doc.text(formatCurrency(subtotalLessDiscount), totalsX + totalsWidth - valuePadding, totalsY, { align: 'right' });
         totalsY += 6;
       }
       
       // Tax (if any)
       if (taxRate > 0 || taxAmount > 0) {
         doc.setTextColor(...COLORS.textGray);
-        doc.text(`Tax (${taxRate}%)`, labelX, totalsY);
+        doc.text(`Tax (${taxRate}%)`, totalsX + labelPadding, totalsY);
         doc.setTextColor(...COLORS.textDark);
-        doc.text(formatCurrency(taxAmount), valueX, totalsY, { align: 'right' });
+        doc.text(formatCurrency(taxAmount), totalsX + totalsWidth - valuePadding, totalsY, { align: 'right' });
         totalsY += 6;
       }
       
       // Separator line before total
-      totalsY += 2;
+      totalsY += 1;
       doc.setDrawColor(...COLORS.border);
-      doc.setLineWidth(0.5);
-      doc.line(totalsX + 2, totalsY, rightX - 2, totalsY);
-      totalsY += 6;
+      doc.setLineWidth(0.4);
+      doc.line(totalsX + 3, totalsY, totalsX + totalsWidth - 3, totalsY);
+      totalsY += 5;
       
       // Total Due (highlighted)
       doc.setFillColor(...COLORS.primary);
-      doc.roundedRect(totalsX + 2, totalsY - 4, totalsWidth - 4, 10, 1, 1, 'F');
+      doc.roundedRect(totalsX + 3, totalsY - 4, totalsWidth - 6, 11, 1, 1, 'F');
       
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
+      doc.setFontSize(10);
       doc.setTextColor(...COLORS.textDark);
-      doc.text('TOTAL DUE', labelX + 2, totalsY + 2);
-      doc.text(formatCurrency(totalDue), valueX - 2, totalsY + 2, { align: 'right' });
+      doc.text('TOTAL DUE', totalsX + labelPadding + 2, totalsY + 2);
+      doc.setFontSize(11);
+      doc.text(formatCurrency(totalDue), totalsX + totalsWidth - valuePadding - 2, totalsY + 2, { align: 'right' });
       
-      currentY = totalsY + 16;
+      currentY = currentY + boxHeight + 12;
 
       // ==============================================
-      // PAYMENT INFORMATION
+      // PAYMENT INFORMATION (Clean Grid Layout)
       // ==============================================
       
-      currentY += 8;
-      
-      // Payment method and status box
+      // Section Header
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(FONTS.sectionHeading.size);
       doc.setTextColor(...COLORS.textDark);
       doc.text('PAYMENT INFORMATION', leftX, currentY);
       
-      currentY += 6;
+      currentY += 7;
       
+      const paymentLabelWidth = 32;
+      const paymentCol1X = leftX;
+      const paymentCol2X = leftX + 80;
+      
+      // Row 1: Payment Method and Payment Status
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(FONTS.body.size);
       
       // Payment Method
       doc.setTextColor(...COLORS.textGray);
-      doc.text('Payment Method:', leftX, currentY);
-      doc.setTextColor(...COLORS.textDark);
-      doc.text(formatPaymentMethod(order.paymentMethod), leftX + 38, currentY);
+      doc.text('Payment Method:', paymentCol1X, currentY);
+      doc.setTextColor(...COLORS.primaryAccent);
+      doc.text(formatPaymentMethod(order.paymentMethod), paymentCol1X + paymentLabelWidth + 8, currentY);
       
       // Payment Status
       doc.setTextColor(...COLORS.textGray);
-      doc.text('Payment Status:', leftX + 85, currentY);
-      const paymentStatusColor = order.paymentStatus === 'paid' ? [34, 197, 94] : COLORS.textDark;
+      doc.text('Payment Status:', paymentCol2X, currentY);
+      const paymentStatusColor = order.paymentStatus === 'paid' ? [34, 197, 94] : [234, 179, 8];
       doc.setTextColor(...paymentStatusColor);
       doc.setFont('helvetica', 'bold');
-      doc.text(capitalizeFirst(order.paymentStatus || 'pending'), leftX + 120, currentY);
+      doc.text(capitalizeFirst(order.paymentStatus || 'pending'), paymentCol2X + paymentLabelWidth + 6, currentY);
       
-      // Order Status
+      currentY += LAYOUT.lineHeight;
+      
+      // Row 2: Order Status
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(...COLORS.textGray);
-      doc.text('Order Status:', leftX, currentY + 5);
+      doc.text('Order Status:', paymentCol1X, currentY);
       const statusColor = getStatusColor(order.orderStatus);
       doc.setTextColor(...statusColor);
       doc.setFont('helvetica', 'bold');
-      doc.text(capitalizeFirst(order.orderStatus || 'pending'), leftX + 38, currentY + 5);
+      doc.text(capitalizeFirst(order.orderStatus || 'pending'), paymentCol1X + paymentLabelWidth + 8, currentY);
       
-      currentY += 16;
+      currentY += LAYOUT.sectionGap;
 
       // ==============================================
       // NOTES SECTION (if any)
@@ -431,9 +460,9 @@ export const generateReceipt = async (order, isAdmin = false) => {
         doc.text('Notes:', leftX, currentY);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(...COLORS.textDark);
-        const noteLines = doc.splitTextToSize(order.notes, contentWidth - 20);
-        doc.text(noteLines, leftX + 15, currentY);
-        currentY += (noteLines.length * 4) + 8;
+        const noteLines = doc.splitTextToSize(order.notes, contentWidth - 18);
+        doc.text(noteLines, leftX + 18, currentY);
+        currentY += (noteLines.length * 4) + 6;
       }
       
       // Admin notes (only for admin view)
@@ -444,16 +473,16 @@ export const generateReceipt = async (order, isAdmin = false) => {
         doc.text('Admin Notes:', leftX, currentY);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(...COLORS.textDark);
-        const adminNoteLines = doc.splitTextToSize(order.adminNotes, contentWidth - 25);
-        doc.text(adminNoteLines, leftX + 25, currentY);
-        currentY += (adminNoteLines.length * 4) + 8;
+        const adminNoteLines = doc.splitTextToSize(order.adminNotes, contentWidth - 28);
+        doc.text(adminNoteLines, leftX + 28, currentY);
+        currentY += (adminNoteLines.length * 4) + 6;
       }
 
       // ==============================================
       // FOOTER SECTION
       // ==============================================
       
-      const footerY = pageHeight - 28;
+      const footerY = pageHeight - 25;
       
       // Footer divider
       doc.setDrawColor(...COLORS.border);
@@ -464,19 +493,19 @@ export const generateReceipt = async (order, isAdmin = false) => {
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(FONTS.small.size);
       doc.setTextColor(...COLORS.textGray);
-      doc.text('Thank you for your business!', pageWidth / 2, footerY + 6, { align: 'center' });
+      doc.text('Thank you for your business!', pageWidth / 2, footerY + 5, { align: 'center' });
       
       // Contact info
       doc.setFontSize(FONTS.tiny.size);
-      doc.text(`For queries: ${BUSINESS_CONFIG.contact.email} | WhatsApp: ${BUSINESS_CONFIG.contact.whatsappDisplay}`, pageWidth / 2, footerY + 11, { align: 'center' });
+      doc.text(`For queries: ${BUSINESS_CONFIG.contact.email} | WhatsApp: ${BUSINESS_CONFIG.contact.whatsappDisplay}`, pageWidth / 2, footerY + 10, { align: 'center' });
       
       // UPI Payment info
-      doc.text(`UPI: ${BUSINESS_CONFIG.payment.upiId}`, pageWidth / 2, footerY + 16, { align: 'center' });
+      doc.text(`UPI: ${BUSINESS_CONFIG.payment.upiId}`, pageWidth / 2, footerY + 15, { align: 'center' });
       
       // Generated timestamp (bottom right)
-      doc.setFontSize(7);
+      doc.setFontSize(6);
       doc.setTextColor(...COLORS.textGray);
-      doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`, rightX, footerY + 21, { align: 'right' });
+      doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`, rightX, footerY + 20, { align: 'right' });
       
       // ==============================================
       // DOWNLOAD PDF
@@ -623,6 +652,21 @@ const getStatusColor = (status) => {
     cancelled: [239, 68, 68]    // red
   };
   return colors[status] || [100, 116, 139];
+};
+
+/**
+ * Truncate text to fit within a given width
+ */
+const truncateText = (doc, text, maxWidth) => {
+  if (!text) return 'N/A';
+  const textWidth = doc.getTextWidth(text);
+  if (textWidth <= maxWidth) return text;
+  
+  let truncated = text;
+  while (doc.getTextWidth(truncated + '...') > maxWidth && truncated.length > 0) {
+    truncated = truncated.slice(0, -1);
+  }
+  return truncated + '...';
 };
 
 export default generateReceipt;

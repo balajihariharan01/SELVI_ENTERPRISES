@@ -76,8 +76,16 @@ const ProductDetail = () => {
   const cartQuantity = getItemQuantity(product._id);
   const inStock = product.stockQuantity > 0;
 
+  // Determine category class for dynamic background
+  const getCategoryClass = () => {
+    const category = product.category?.toLowerCase();
+    if (category === 'cement') return 'category-cement';
+    if (category === 'steel') return 'category-steel';
+    return 'category-other';
+  };
+
   return (
-    <div className="product-detail-page">
+    <div className={`product-detail-page ${getCategoryClass()}`}>
       <div className="container">
         {/* Breadcrumb */}
         <div className="breadcrumb">

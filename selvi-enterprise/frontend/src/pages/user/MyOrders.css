@@ -180,23 +180,78 @@
   color: var(--primary);
 }
 
-/* Responsive */
+/* Responsive - Mobile Perfect */
 @media (max-width: 640px) {
-  .order-header {
-    flex-direction: column;
-    align-items: flex-start;
+  .my-orders-page {
+    padding-bottom: 2rem;
+  }
+
+  .my-orders-page .page-header {
+    padding: 1.5rem 0;
+  }
+
+  .my-orders-page .page-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .orders-list {
+    padding-top: 1rem;
     gap: 1rem;
   }
 
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .order-number {
+    font-size: 0.95rem;
+  }
+
+  .order-date {
+    font-size: 0.8rem;
+  }
+
   .order-item {
-    grid-template-columns: 1fr;
-    gap: 0.375rem;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    padding: 0.625rem 0;
+  }
+
+  .order-item .item-name {
+    font-size: 0.9rem;
+    grid-column: 1;
+  }
+
+  .order-item .item-price {
+    font-size: 0.9rem;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .order-item .item-qty {
+    font-size: 0.8rem;
+    grid-column: 1;
+    grid-row: 2;
   }
 
   .order-footer {
     flex-direction: column;
-    gap: 1.25rem;
-    align-items: flex-start;
+    gap: 1rem;
+    align-items: stretch;
+    padding-top: 1rem;
+  }
+
+  .order-total {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .total-amount {
+    font-size: 1.2rem;
   }
 
   .order-footer .btn {

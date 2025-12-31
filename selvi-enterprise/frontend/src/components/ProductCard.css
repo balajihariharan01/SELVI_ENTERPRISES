@@ -248,49 +248,96 @@
 .add-to-cart-btn.in-cart:hover:not(:disabled) {
   box-shadow: 0 8px 24px rgba(34, 197, 94, 0.35);
 }
-  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.25);
-}
 
-/* Responsive */
+/* Responsive - Mobile Perfect */
 @media (max-width: 768px) {
   .product-card {
-    border-radius: var(--radius);
+    border-radius: var(--radius-lg);
+  }
+  
+  .product-card:hover {
+    transform: translateY(-4px);
   }
   
   .product-image {
-    height: 150px;
+    height: 160px;
   }
   
-  .product-info {
-    padding: 0.875rem 1rem 1rem;
-  }
-  
-  .product-name {
-    font-size: 0.9rem;
-    min-height: 2.43em;
-  }
-  
-  .product-price {
-    font-size: 1.1rem;
-  }
-  
-  .add-to-cart-btn {
-    padding: 0.65rem;
-    font-size: 0.8rem;
-    border-radius: var(--radius);
-  }
-}
-
-@media (max-width: 480px) {
-  .product-image {
-    height: 180px;
+  .product-image img {
+    padding: 1rem;
   }
   
   .product-info {
     padding: 1rem;
   }
   
+  .product-category {
+    font-size: 0.6rem;
+    padding: 4px 8px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .product-name {
+    font-size: 0.9rem;
+    min-height: 2.5em;
+    margin-bottom: 0.125rem;
+  }
+  
+  .product-brand {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .product-pricing {
+    margin-bottom: 0.75rem;
+  }
+  
+  .product-price {
+    font-size: 1.15rem;
+  }
+  
+  .product-unit {
+    font-size: 0.75rem;
+  }
+  
+  .add-to-cart-btn {
+    padding: 0.7rem;
+    font-size: 0.8rem;
+    border-radius: var(--radius);
+  }
+  
+  .out-of-stock-badge,
+  .low-stock-badge {
+    top: 8px;
+    right: 8px;
+    padding: 4px 8px;
+    font-size: 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-card {
+    border-radius: var(--radius);
+  }
+  
+  .product-image {
+    height: 180px;
+  }
+  
+  .product-info {
+    padding: 0.875rem;
+  }
+  
   .product-name {
     font-size: 0.95rem;
+  }
+  
+  .product-price {
+    font-size: 1.2rem;
+  }
+  
+  .add-to-cart-btn {
+    padding: 0.75rem;
+    font-size: 0.85rem;
   }
 }

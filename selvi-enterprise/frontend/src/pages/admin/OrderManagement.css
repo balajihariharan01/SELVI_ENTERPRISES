@@ -389,14 +389,40 @@
 @media (max-width: 768px) {
   .order-management {
     animation: none;
+    padding: 0 0.5rem;
   }
   
   .page-title {
     animation: none;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .page-title h1 {
+    font-size: 1.35rem;
+  }
+
+  .page-title p {
+    font-size: 0.85rem;
   }
   
   .order-stats {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
   }
 
   .order-info-grid {
@@ -404,7 +430,97 @@
     gap: 1rem;
   }
 
-  .action-buttons {
+  .info-section h3 {
+    font-size: 0.8rem;
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .info-section p {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .items-table {
+    font-size: 0.8rem;
+  }
+
+  .items-table th,
+  .items-table td {
+    padding: 0.6rem 0.5rem;
+  }
+
+  .items-table th {
+    font-size: 0.7rem;
+  }
+
+  .order-totals {
+    padding: 1rem;
+    border-radius: 10px;
+  }
+
+  .total-row {
+    font-size: 0.85rem;
+    padding: 0.4rem 0;
+  }
+
+  .total-row.grand {
+    font-size: 1rem;
+    padding-top: 0.75rem;
+    margin-top: 0.4rem;
+  }
+
+  .modal-actions {
     flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .status-update {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .modal-actions label {
+    font-size: 0.85rem;
+  }
+
+  .modal-actions .form-select {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .modal-actions .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .action-buttons {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .action-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .stat-card {
+    padding: 0.85rem;
+  }
+
+  .stat-value {
+    font-size: 1.35rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
   }
 }

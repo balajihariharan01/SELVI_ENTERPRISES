@@ -598,26 +598,71 @@
   background: linear-gradient(135deg, #475569 0%, #334155 100%);
 }
 
-/* Responsive */
+/* Responsive - Mobile Perfect */
 @media (max-width: 768px) {
+  .order-detail-page {
+    padding-bottom: 2rem;
+  }
+
+  .back-link {
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .order-status-card {
+    padding: 1.25rem;
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+  }
+
+  .status-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .status-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .badge-lg {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+  }
+
   .order-details-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .order-items-card {
     grid-column: auto;
   }
 
+  .detail-card {
+    padding: 1.25rem;
+    border-radius: 14px;
+  }
+
+  .detail-card h3 {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+
   .status-timeline {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    padding-left: 0.5rem;
   }
 
   .status-timeline::before {
-    top: 0;
-    bottom: 0;
-    left: 15px;
+    top: 18px;
+    bottom: 18px;
+    left: 17px;
     right: auto;
     width: 3px;
     height: auto;
@@ -626,60 +671,213 @@
   .timeline-step {
     flex-direction: row;
     gap: 1rem;
+    width: 100%;
+  }
+
+  .step-indicator {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .step-label {
+    font-size: 0.85rem;
   }
 
   .item-row {
     grid-template-columns: 1fr;
-    gap: 0.5rem;
+    gap: 0.4rem;
+    padding: 0.85rem 0;
+  }
+
+  .item-name {
+    font-size: 0.95rem;
+  }
+
+  .item-unit {
+    font-size: 0.8rem;
+  }
+
+  .item-qty {
+    font-size: 0.85rem;
   }
 
   .item-subtotal {
     text-align: left;
+    font-size: 1rem;
+    margin-top: 0.25rem;
+  }
+
+  .order-total-row {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .order-total {
+    font-size: 1.4rem;
   }
 
   .status-actions {
     flex-direction: column;
     width: 100%;
+    gap: 0.5rem;
   }
 
   .status-actions .btn {
     width: 100%;
     justify-content: center;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
   }
 
-  .edit-form-grid {
-    grid-template-columns: 1fr;
+  .address-details p {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
   }
 
-  .edit-item-row {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
+  .address-text {
+    font-size: 0.85rem;
+    line-height: 1.6;
   }
 
-  .edit-item-controls {
-    justify-content: flex-start;
+  .info-row {
+    font-size: 0.9rem;
   }
 
-  .edit-item-subtotal {
-    text-align: left;
+  /* Modal Mobile Styles */
+  .modal-overlay {
+    padding: 0.5rem;
+    align-items: flex-end;
   }
 
   .modal {
-    margin: 0.5rem;
-    max-height: 95vh;
+    margin: 0;
+    max-height: 92vh;
+    border-radius: 20px 20px 0 0;
+    animation: modalSlideUp 0.3s ease;
+  }
+
+  @keyframes modalSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .modal-header {
+    padding: 1.25rem 1rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.1rem;
   }
 
   .modal-body {
     padding: 1rem;
+    max-height: 55vh;
   }
 
   .modal-footer {
     padding: 1rem;
     flex-direction: column;
+    gap: 0.5rem;
   }
 
   .modal-footer .btn {
     width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .edit-form-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .edit-item-row {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    padding: 0.85rem;
+  }
+
+  .edit-item-info {
+    margin-bottom: 0.25rem;
+  }
+
+  .edit-item-name {
+    font-size: 0.9rem;
+  }
+
+  .edit-item-price {
+    font-size: 0.8rem;
+  }
+
+  .edit-item-controls {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .qty-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .qty-display {
+    min-width: 40px;
+    font-size: 1rem;
+  }
+
+  .remove-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .edit-item-subtotal {
+    text-align: right;
+    font-size: 1rem;
+    min-width: auto;
+  }
+
+  .edit-total {
+    flex-direction: row;
+    padding: 0.85rem;
+    margin-top: 0.75rem;
+  }
+
+  .edit-total span:last-child {
+    font-size: 1.1rem;
+  }
+
+  .form-group label {
+    font-size: 0.8rem;
+  }
+
+  .form-group input,
+  .edit-section textarea {
+    padding: 0.65rem 0.85rem;
+    font-size: 0.9rem;
+  }
+
+  .delete-warning {
+    padding: 0.75rem;
+  }
+
+  .warning-icon {
+    font-size: 2.5rem;
+  }
+
+  .delete-warning h3 {
+    font-size: 1rem;
+  }
+
+  .delete-warning p {
+    font-size: 0.85rem;
   }
 }
 
