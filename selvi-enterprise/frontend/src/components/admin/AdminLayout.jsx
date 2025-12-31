@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { FiGrid, FiPackage, FiShoppingCart, FiUsers, FiLogOut, FiHome } from 'react-icons/fi';
+import { FiGrid, FiPackage, FiShoppingCart, FiCreditCard, FiUsers, FiLogOut, FiHome } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import './AdminLayout.css';
 
@@ -35,6 +35,10 @@ const AdminLayout = () => {
           <NavLink to="/admin/orders" className="nav-item">
             <FiShoppingCart />
             <span>Orders</span>
+          </NavLink>
+          <NavLink to="/admin/payments" className="nav-item">
+            <FiCreditCard />
+            <span>Payment Details</span>
           </NavLink>
           <NavLink to="/admin/customers" className="nav-item">
             <FiUsers />

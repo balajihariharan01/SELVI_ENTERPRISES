@@ -1,13 +1,22 @@
-import { useState, useEffect } from 'react';
-import { FiUser, FiMail, FiPhone, FiMapPin, FiSave } from 'react-icons/fi';
+import { useState, useEffect, useRef } from 'react';
+import { FiUser, FiMail, FiPhone, FiMapPin, FiSave, FiCamera, FiUpload, FiCheckCircle, FiAlertCircle, FiSend, FiShield } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import authService from '../../services/authService';
+import uploadService from '../../services/uploadService';
 import toast from 'react-hot-toast';
 import './Profile.css';
 
 const Profile = () => {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, refreshUser } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [emailVerifying, setEmailVerifying] = useState(false);
+  const [phoneOtpSending, setPhoneOtpSending] = useState(false);
+  const [phoneOtpVerifying, setPhoneOtpVerifying] = useState(false);
+  const [showOtpInput, setShowOtpInput] = useState(false);
+  const [otpValue, setOtpValue] = useState('');
+  const [otpCooldown, setOtpCooldown] = useState(0);
+  const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -30,8 +39,113 @@ const Profile = () => {
     }
   }, [user]);
 
+  // OTP Cooldown timer
+  useEffect(() => {
+    let interval;
+    if (otpCooldown > 0) {
+      interval = setInterval(() => {
+        setOtpCooldown(prev => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [otpCooldown]);
+
+  const handleSendVerificationEmail = async () => {
+    setEmailVerifying(true);
+    try {
+      await authService.sendVerificationEmail();
+      toast.success('Verification email sent! Please check your inbox.');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to send verification email');
+    } finally {
+      setEmailVerifying(false);
+    }
+  };
+
+  const handleSendPhoneOtp = async () => {
+    if (!user?.phone || user.phone.length !== 10) {
+      toast.error('Please add a valid 10-digit phone number first');
+      return;
+    }
+
+    setPhoneOtpSending(true);
+    try {
+      await authService.sendPhoneOTP();
+      setShowOtpInput(true);
+      setOtpCooldown(60);
+      toast.success('OTP sent to your phone number');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to send OTP');
+    } finally {
+      setPhoneOtpSending(false);
+    }
+  };
+
+  const handleVerifyPhoneOtp = async () => {
+    if (otpValue.length !== 6) {
+      toast.error('Please enter a 6-digit OTP');
+      return;
+    }
+
+    setPhoneOtpVerifying(true);
+    try {
+      await authService.verifyPhoneOTP(otpValue);
+      await refreshUser();
+      setShowOtpInput(false);
+      setOtpValue('');
+      toast.success('Phone number verified successfully!');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Invalid OTP');
+    } finally {
+      setPhoneOtpVerifying(false);
+    }
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image size should be less than 5MB');
+      return;
+    }
+
+    setImageLoading(true);
+    try {
+      // Upload image
+      const uploadResponse = await uploadService.uploadImage(file);
+      
+      // Update profile with new image
+      const response = await authService.updateProfile({
+        profileImage: uploadResponse.url
+      });
+
+      updateUser(response.user);
+      toast.success('Profile picture updated successfully');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to upload image');
+    } finally {
+      setImageLoading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -72,8 +186,44 @@ const Profile = () => {
         <div className="profile-layout">
           {/* Profile Card */}
           <div className="profile-card">
-            <div className="profile-avatar">
-              <FiUser size={40} />
+            <div className="profile-avatar-wrapper">
+              <div 
+                className={`profile-avatar ${imageLoading ? 'loading' : ''}`}
+                onClick={handleImageClick}
+              >
+                {user?.profileImage ? (
+                  <img 
+                    src={user.profileImage} 
+                    alt={user.name} 
+                    className="avatar-image"
+                  />
+                ) : (
+                  <FiUser size={40} />
+                )}
+                <div className="avatar-overlay">
+                  {imageLoading ? (
+                    <div className="avatar-spinner"></div>
+                  ) : (
+                    <FiCamera size={20} />
+                  )}
+                </div>
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden-input"
+              />
+              <button 
+                type="button" 
+                className="change-photo-btn"
+                onClick={handleImageClick}
+                disabled={imageLoading}
+              >
+                <FiUpload size={14} />
+                {imageLoading ? 'Uploading...' : 'Change Photo'}
+              </button>
             </div>
             <h2>{user?.name}</h2>
             <p>{user?.email}</p>
@@ -85,6 +235,101 @@ const Profile = () => {
               <div className="info-item">
                 <FiMail />
                 <span>{user?.email}</span>
+              </div>
+            </div>
+
+            {/* Verification Status Section */}
+            <div className="verification-status-section">
+              <h4><FiShield /> Verification Status</h4>
+              
+              {/* Email Verification */}
+              <div className={`verification-item ${user?.emailVerified ? 'verified' : 'unverified'}`}>
+                <div className="verification-info">
+                  <FiMail />
+                  <span>Email</span>
+                  {user?.emailVerified ? (
+                    <span className="status-badge verified">
+                      <FiCheckCircle /> Verified
+                    </span>
+                  ) : (
+                    <span className="status-badge unverified">
+                      <FiAlertCircle /> Not Verified
+                    </span>
+                  )}
+                </div>
+                {!user?.emailVerified && (
+                  <button
+                    type="button"
+                    className="verify-btn"
+                    onClick={handleSendVerificationEmail}
+                    disabled={emailVerifying}
+                  >
+                    <FiSend />
+                    {emailVerifying ? 'Sending...' : 'Send Verification'}
+                  </button>
+                )}
+              </div>
+
+              {/* Phone Verification */}
+              <div className={`verification-item ${user?.phoneVerified ? 'verified' : 'unverified'}`}>
+                <div className="verification-info">
+                  <FiPhone />
+                  <span>Phone</span>
+                  {user?.phoneVerified ? (
+                    <span className="status-badge verified">
+                      <FiCheckCircle /> Verified
+                    </span>
+                  ) : (
+                    <span className="status-badge unverified">
+                      <FiAlertCircle /> Not Verified
+                    </span>
+                  )}
+                </div>
+                {!user?.phoneVerified && user?.phone && (
+                  <>
+                    {!showOtpInput ? (
+                      <button
+                        type="button"
+                        className="verify-btn"
+                        onClick={handleSendPhoneOtp}
+                        disabled={phoneOtpSending || otpCooldown > 0}
+                      >
+                        <FiSend />
+                        {phoneOtpSending ? 'Sending...' : otpCooldown > 0 ? `Resend in ${otpCooldown}s` : 'Send OTP'}
+                      </button>
+                    ) : (
+                      <div className="otp-input-section">
+                        <input
+                          type="text"
+                          value={otpValue}
+                          onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                          placeholder="Enter 6-digit OTP"
+                          className="otp-input"
+                          maxLength={6}
+                        />
+                        <button
+                          type="button"
+                          className="verify-btn"
+                          onClick={handleVerifyPhoneOtp}
+                          disabled={phoneOtpVerifying || otpValue.length !== 6}
+                        >
+                          {phoneOtpVerifying ? 'Verifying...' : 'Verify'}
+                        </button>
+                        <button
+                          type="button"
+                          className="resend-btn"
+                          onClick={handleSendPhoneOtp}
+                          disabled={phoneOtpSending || otpCooldown > 0}
+                        >
+                          {otpCooldown > 0 ? `${otpCooldown}s` : 'Resend'}
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+                {!user?.phone && (
+                  <span className="hint-text">Add phone number first</span>
+                )}
               </div>
             </div>
           </div>

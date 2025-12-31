@@ -123,6 +123,10 @@ const Footer = () => {
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   title="Selvi Enterprise Location"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML = '<div class="map-fallback"><span>📍</span><p>View on Google Maps</p></div>';
+                  }}
                 ></iframe>
               </div>
               <a 

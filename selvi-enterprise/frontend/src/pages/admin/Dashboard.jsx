@@ -1,6 +1,21 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPackage, FiShoppingCart, FiUsers, FiAlertTriangle, FiTrendingUp, FiDollarSign, FiCalendar } from 'react-icons/fi';
+import { 
+  FiPackage, 
+  FiShoppingCart, 
+  FiUsers, 
+  FiAlertTriangle, 
+  FiTrendingUp, 
+  FiDollarSign, 
+  FiCalendar,
+  FiArrowRight,
+  FiBox,
+  FiActivity,
+  FiMapPin,
+  FiPhone,
+  FiMail,
+  FiCreditCard
+} from 'react-icons/fi';
 import orderService from '../../services/orderService';
 import { BUSINESS_CONFIG } from '../../config/businessConfig';
 import './Dashboard.css';
@@ -71,121 +86,128 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="loading">
-        <div className="spinner"></div>
+      <div className="dashboard-loading">
+        <div className="loading-spinner"></div>
+        <p>Loading dashboard...</p>
       </div>
     );
   }
 
   return (
-    <div className="dashboard">
-      <div className="dashboard-header">
-        <h1>Dashboard</h1>
-        <p>Welcome to {BUSINESS_CONFIG.name} Admin Panel</p>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-icon orders">
-            <FiShoppingCart />
+    <div className="admin-dashboard">
+      {/* Header Section */}
+      <header className="dashboard-header">
+        <div className="header-content">
+          <div className="header-text">
+            <h1>Dashboard</h1>
+            <p>Welcome to {BUSINESS_CONFIG.name} Admin Panel</p>
           </div>
-          <div className="stat-info">
-            <span className="stat-value">{stats?.totalOrders || 0}</span>
-            <span className="stat-label">Total Orders</span>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon pending">
-            <FiTrendingUp />
-          </div>
-          <div className="stat-info">
-            <span className="stat-value">{stats?.pendingOrders || 0}</span>
-            <span className="stat-label">Pending Orders</span>
+          <div className="header-date">
+            <FiCalendar />
+            <span>{new Date().toLocaleDateString('en-IN', { 
+              weekday: 'long', 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}</span>
           </div>
         </div>
+      </header>
 
-        <div className="stat-card">
-          <div className="stat-icon products">
-            <FiPackage />
+      {/* Stats Overview Cards */}
+      <section className="stats-section">
+        <div className="stats-row">
+          <div className="stat-card stat-orders">
+            <div className="stat-icon-wrapper">
+              <FiShoppingCart />
+            </div>
+            <div className="stat-content">
+              <h3>{stats?.totalOrders || 0}</h3>
+              <p>Total Orders</p>
+            </div>
+            <div className="stat-decoration"></div>
           </div>
-          <div className="stat-info">
-            <span className="stat-value">{stats?.totalProducts || 0}</span>
-            <span className="stat-label">Total Products</span>
+
+          <div className="stat-card stat-pending">
+            <div className="stat-icon-wrapper">
+              <FiActivity />
+            </div>
+            <div className="stat-content">
+              <h3>{stats?.pendingOrders || 0}</h3>
+              <p>Pending Orders</p>
+            </div>
+            <div className="stat-decoration"></div>
+          </div>
+
+          <div className="stat-card stat-products">
+            <div className="stat-icon-wrapper">
+              <FiBox />
+            </div>
+            <div className="stat-content">
+              <h3>{stats?.totalProducts || 0}</h3>
+              <p>Total Products</p>
+            </div>
+            <div className="stat-decoration"></div>
+          </div>
+
+          <div className="stat-card stat-customers">
+            <div className="stat-icon-wrapper">
+              <FiUsers />
+            </div>
+            <div className="stat-content">
+              <h3>{stats?.totalCustomers || 0}</h3>
+              <p>Total Customers</p>
+            </div>
+            <div className="stat-decoration"></div>
           </div>
         </div>
+      </section>
 
-        <div className="stat-card">
-          <div className="stat-icon customers">
-            <FiUsers />
-          </div>
-          <div className="stat-info">
-            <span className="stat-value">{stats?.totalCustomers || 0}</span>
-            <span className="stat-label">Total Customers</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Revenue & Alerts */}
-      <div className="dashboard-grid">
-        {/* Revenue Section with Date Filter */}
-        <div className="revenue-section enhanced">
-          <div className="section-header">
-            <h2><FiDollarSign /> Revenue Overview</h2>
-            <div className="date-filters">
-              <div className="period-buttons">
-                <button 
-                  className={`period-btn ${dateFilter.period === 'today' ? 'active' : ''}`}
-                  onClick={() => handlePeriodChange('today')}
-                >
-                  Today
-                </button>
-                <button 
-                  className={`period-btn ${dateFilter.period === 'week' ? 'active' : ''}`}
-                  onClick={() => handlePeriodChange('week')}
-                >
-                  Week
-                </button>
-                <button 
-                  className={`period-btn ${dateFilter.period === 'month' ? 'active' : ''}`}
-                  onClick={() => handlePeriodChange('month')}
-                >
-                  Month
-                </button>
-                <button 
-                  className={`period-btn ${dateFilter.period === 'year' ? 'active' : ''}`}
-                  onClick={() => handlePeriodChange('year')}
-                >
-                  Year
-                </button>
+      {/* Main Dashboard Grid */}
+      <div className="dashboard-main-grid">
+        {/* Revenue Analytics Section */}
+        <section className="revenue-panel">
+          <div className="panel-header">
+            <div className="panel-title">
+              <div className="title-icon revenue-icon">
+                <FiDollarSign />
               </div>
+              <h2>Revenue Overview</h2>
+            </div>
+            <div className="period-selector">
+              {['today', 'week', 'month', 'year'].map((period) => (
+                <button
+                  key={period}
+                  className={`period-btn ${dateFilter.period === period ? 'active' : ''}`}
+                  onClick={() => handlePeriodChange(period)}
+                >
+                  {period.charAt(0).toUpperCase() + period.slice(1)}
+                </button>
+              ))}
             </div>
           </div>
 
           {/* Custom Date Range */}
-          <div className="date-range-filter">
-            <div className="date-input-group">
-              <FiCalendar />
+          <div className="custom-date-range">
+            <div className="date-input-wrapper">
+              <FiCalendar className="date-icon" />
               <input
                 type="date"
                 value={dateFilter.startDate}
                 onChange={(e) => setDateFilter(prev => ({ ...prev, startDate: e.target.value }))}
-                placeholder="From Date"
               />
             </div>
-            <span className="date-separator">to</span>
-            <div className="date-input-group">
-              <FiCalendar />
+            <span className="date-to">to</span>
+            <div className="date-input-wrapper">
+              <FiCalendar className="date-icon" />
               <input
                 type="date"
                 value={dateFilter.endDate}
                 onChange={(e) => setDateFilter(prev => ({ ...prev, endDate: e.target.value }))}
-                placeholder="To Date"
               />
             </div>
             <button 
-              className="btn btn-primary btn-sm"
+              className="apply-btn"
               onClick={handleDateRangeSubmit}
               disabled={!dateFilter.startDate || !dateFilter.endDate}
             >
@@ -195,141 +217,180 @@ const Dashboard = () => {
 
           {revenueLoading ? (
             <div className="revenue-loading">
-              <div className="spinner-small"></div>
-              <span>Loading revenue data...</span>
+              <div className="mini-spinner"></div>
+              <span>Loading analytics...</span>
             </div>
-          ) : revenueData ? (
+          ) : (
             <>
-              <div className="period-label">{revenueData.period}</div>
-              <div className="revenue-cards">
-                <div className="revenue-card primary">
-                  <div className="revenue-icon">
+              {revenueData && (
+                <p className="period-indicator">{revenueData.period}</p>
+              )}
+              <div className="revenue-metrics">
+                <div className="metric-card metric-primary">
+                  <div className="metric-icon">
                     <FiDollarSign />
                   </div>
-                  <div>
-                    <span className="revenue-value">{formatCurrency(revenueData.analytics?.totalRevenue || 0)}</span>
-                    <span className="revenue-label">Total Revenue</span>
+                  <div className="metric-data">
+                    <span className="metric-value">
+                      {formatCurrency(revenueData?.analytics?.totalRevenue || stats?.totalRevenue || 0)}
+                    </span>
+                    <span className="metric-label">TOTAL REVENUE</span>
                   </div>
                 </div>
-                <div className="revenue-card">
-                  <div className="revenue-icon secondary">
+
+                <div className="metric-card metric-secondary">
+                  <div className="metric-icon">
                     <FiShoppingCart />
                   </div>
-                  <div>
-                    <span className="revenue-value">{revenueData.analytics?.totalOrders || 0}</span>
-                    <span className="revenue-label">Orders</span>
+                  <div className="metric-data">
+                    <span className="metric-value">
+                      {revenueData?.analytics?.totalOrders || 0}
+                    </span>
+                    <span className="metric-label">ORDERS</span>
                   </div>
                 </div>
-                <div className="revenue-card">
-                  <div className="revenue-icon tertiary">
+
+                <div className="metric-card metric-tertiary">
+                  <div className="metric-icon">
                     <FiTrendingUp />
                   </div>
-                  <div>
-                    <span className="revenue-value">{formatCurrency(revenueData.analytics?.averageOrderValue || 0)}</span>
-                    <span className="revenue-label">Avg. Order Value</span>
+                  <div className="metric-data">
+                    <span className="metric-value">
+                      {formatCurrency(revenueData?.analytics?.averageOrderValue || 0)}
+                    </span>
+                    <span className="metric-label">AVG. ORDER VALUE</span>
                   </div>
                 </div>
               </div>
 
-              {revenueData.analytics?.totalOrders === 0 && (
-                <div className="no-data-message">
+              {revenueData?.analytics?.totalOrders === 0 && (
+                <div className="no-orders-alert">
                   <FiAlertTriangle />
                   <span>No orders found for the selected period</span>
                 </div>
               )}
             </>
-          ) : (
-            <div className="revenue-cards">
-              <div className="revenue-card">
-                <div className="revenue-icon">
-                  <FiDollarSign />
-                </div>
-                <div>
-                  <span className="revenue-value">{formatCurrency(stats?.totalRevenue || 0)}</span>
-                  <span className="revenue-label">Total Revenue</span>
-                </div>
-              </div>
-              <div className="revenue-card">
-                <div className="revenue-icon monthly">
-                  <FiTrendingUp />
-                </div>
-                <div>
-                  <span className="revenue-value">{formatCurrency(stats?.monthlyRevenue || 0)}</span>
-                  <span className="revenue-label">This Month</span>
-                </div>
-              </div>
-            </div>
           )}
-        </div>
+        </section>
 
-        {/* Stock Alerts */}
-        <div className="alerts-section">
-          <h2><FiAlertTriangle /> Stock Alerts</h2>
-          <div className="alert-cards">
-            <div className="alert-card warning">
-              <span className="alert-value">{stats?.lowStockProducts || 0}</span>
-              <span className="alert-label">Low Stock Items</span>
-            </div>
-            <div className="alert-card danger">
-              <span className="alert-value">{stats?.outOfStockProducts || 0}</span>
-              <span className="alert-label">Out of Stock</span>
+        {/* Stock Alerts Section */}
+        <section className="alerts-panel">
+          <div className="panel-header">
+            <div className="panel-title">
+              <div className="title-icon alert-icon">
+                <FiAlertTriangle />
+              </div>
+              <h2>Stock Alerts</h2>
             </div>
           </div>
-          <Link to="/admin/products" className="btn btn-outline btn-sm">
-            View Products →
+
+          <div className="alert-boxes">
+            <div className="alert-box warning-box">
+              <span className="alert-number">{stats?.lowStockProducts || 0}</span>
+              <span className="alert-text">LOW STOCK<br/>ITEMS</span>
+            </div>
+            <div className="alert-box danger-box">
+              <span className="alert-number">{stats?.outOfStockProducts || 0}</span>
+              <span className="alert-text">OUT OF STOCK</span>
+            </div>
+          </div>
+
+          <Link to="/admin/products" className="view-products-btn">
+            View Products <FiArrowRight />
           </Link>
-        </div>
+        </section>
       </div>
 
       {/* Quick Actions */}
-      <div className="quick-actions">
+      <section className="quick-actions-section">
         <h2>Quick Actions</h2>
-        <div className="actions-grid">
-          <Link to="/admin/products" className="action-card">
-            <FiPackage />
+        <div className="actions-row">
+          <Link to="/admin/products" className="action-tile">
+            <div className="action-icon products-action">
+              <FiPackage />
+            </div>
             <span>Manage Products</span>
           </Link>
-          <Link to="/admin/orders" className="action-card">
-            <FiShoppingCart />
+          <Link to="/admin/orders" className="action-tile">
+            <div className="action-icon orders-action">
+              <FiShoppingCart />
+            </div>
             <span>View Orders</span>
           </Link>
-          <Link to="/admin/customers" className="action-card">
-            <FiUsers />
+          <Link to="/admin/customers" className="action-tile">
+            <div className="action-icon customers-action">
+              <FiUsers />
+            </div>
             <span>Customer Records</span>
           </Link>
         </div>
-      </div>
+      </section>
 
-      {/* Business Info */}
-      <div className="business-info-section">
+      {/* Business Information */}
+      <section className="business-info-section">
         <h2>Business Information</h2>
-        <div className="business-info-grid">
-          <div className="business-info-item">
-            <span className="info-label">Business Name</span>
-            <span className="info-value">{BUSINESS_CONFIG.fullName}</span>
+        <div className="business-grid">
+          <div className="info-card">
+            <div className="info-icon">
+              <FiBox />
+            </div>
+            <div className="info-content">
+              <label>Business Name</label>
+              <p>{BUSINESS_CONFIG.fullName}</p>
+            </div>
           </div>
-          <div className="business-info-item">
-            <span className="info-label">Owners</span>
-            <span className="info-value">{BUSINESS_CONFIG.owners.map(o => o.name).join(', ')}</span>
+
+          <div className="info-card">
+            <div className="info-icon">
+              <FiUsers />
+            </div>
+            <div className="info-content">
+              <label>Owners</label>
+              <p>{BUSINESS_CONFIG.owners.map(o => o.name).join(', ')}</p>
+            </div>
           </div>
-          <div className="business-info-item">
-            <span className="info-label">Contact</span>
-            <span className="info-value">{BUSINESS_CONFIG.contact.phones.join(', ')}</span>
+
+          <div className="info-card">
+            <div className="info-icon">
+              <FiPhone />
+            </div>
+            <div className="info-content">
+              <label>Contact</label>
+              <p>{BUSINESS_CONFIG.contact.phones.join(', ')}</p>
+            </div>
           </div>
-          <div className="business-info-item">
-            <span className="info-label">Email</span>
-            <span className="info-value">{BUSINESS_CONFIG.contact.email}</span>
+
+          <div className="info-card">
+            <div className="info-icon">
+              <FiMail />
+            </div>
+            <div className="info-content">
+              <label>Email</label>
+              <p>{BUSINESS_CONFIG.contact.email}</p>
+            </div>
           </div>
-          <div className="business-info-item">
-            <span className="info-label">UPI ID</span>
-            <span className="info-value">{BUSINESS_CONFIG.payment.upiId}</span>
+
+          <div className="info-card">
+            <div className="info-icon">
+              <FiCreditCard />
+            </div>
+            <div className="info-content">
+              <label>UPI ID</label>
+              <p>{BUSINESS_CONFIG.payment.upiId}</p>
+            </div>
           </div>
-          <div className="business-info-item">
-            <span className="info-label">Location</span>
-            <span className="info-value">{BUSINESS_CONFIG.location.fullAddress}</span>
+
+          <div className="info-card">
+            <div className="info-icon">
+              <FiMapPin />
+            </div>
+            <div className="info-content">
+              <label>Location</label>
+              <p>{BUSINESS_CONFIG.location.fullAddress}</p>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };

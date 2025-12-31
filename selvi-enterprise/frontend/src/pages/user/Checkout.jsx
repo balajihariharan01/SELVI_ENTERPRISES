@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import { FiMapPin, FiPhone, FiUser, FiArrowLeft, FiCreditCard, FiTruck, FiLoader } from 'react-icons/fi';
+import { FiMapPin, FiPhone, FiUser, FiArrowLeft, FiCreditCard, FiTruck, FiLoader, FiAlertCircle, FiMail, FiSend } from 'react-icons/fi';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import orderService from '../../services/orderService';
 import paymentService from '../../services/paymentService';
+import authService from '../../services/authService';
 import CheckoutForm from '../../components/CheckoutForm';
 import toast from 'react-hot-toast';
 import './Checkout.css';
@@ -16,7 +17,7 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const Checkout = () => {
   const { cart, getCartTotal, clearCart } = useCart();
-  const { user } = useAuth();
+  const { user, refreshUser, isEmailVerified } = useAuth();
   const navigate = useNavigate();
   
   const [loading, setLoading] = useState(false);
@@ -25,6 +26,7 @@ const Checkout = () => {
   const [orderId, setOrderId] = useState(null);
   const [orderCreated, setOrderCreated] = useState(false);
   const [creatingPaymentIntent, setCreatingPaymentIntent] = useState(false);
+  const [sendingVerification, setSendingVerification] = useState(false);
   
   // Store order details after creation to persist across payment flow
   const [orderTotal, setOrderTotal] = useState(0);
@@ -42,6 +44,19 @@ const Checkout = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Handle sending verification email
+  const handleSendVerification = async () => {
+    setSendingVerification(true);
+    try {
+      await authService.sendVerificationEmail();
+      toast.success('Verification email sent! Check your inbox.');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to send verification email');
+    } finally {
+      setSendingVerification(false);
+    }
   };
 
   // Create order first, then create payment intent for online payments
@@ -182,7 +197,52 @@ const Checkout = () => {
         </Link>
 
         <div className="checkout-layout">
-          {/* Main Section */}
+          {/* Email Verification Gate */}
+          {!isEmailVerified && (
+            <div className="verification-gate">
+              <div className="verification-gate-content">
+                <div className="verification-gate-icon">
+                  <FiAlertCircle />
+                </div>
+                <h3>Email Verification Required</h3>
+                <p>
+                  Please verify your email address before placing an order. 
+                  This helps us send you order updates and important notifications.
+                </p>
+                <div className="verification-gate-email">
+                  <FiMail />
+                  <span>{user?.email}</span>
+                </div>
+                <div className="verification-gate-actions">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleSendVerification}
+                    disabled={sendingVerification}
+                  >
+                    <FiSend />
+                    {sendingVerification ? 'Sending...' : 'Send Verification Email'}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline"
+                    onClick={async () => {
+                      await refreshUser();
+                      toast.success('Status refreshed');
+                    }}
+                  >
+                    I've Verified - Refresh
+                  </button>
+                </div>
+                <p className="verification-gate-hint">
+                  Already verified? Click "I've Verified - Refresh" to continue.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Main Section - Only show if email is verified */}
+          {isEmailVerified && (
           <div className="checkout-form-section">
             {!orderCreated ? (
               // Step 1: Shipping & Payment Method Selection
@@ -387,8 +447,10 @@ const Checkout = () => {
               </div>
             )}
           </div>
+          )}
 
-          {/* Order Summary */}
+          {/* Order Summary - Only show if email is verified */}
+          {isEmailVerified && (
           <div className="order-summary-section">
             <div className="order-summary">
               <h3>Order Summary</h3>
@@ -434,6 +496,7 @@ const Checkout = () => {
               )}
             </div>
           </div>
+          )}
         </div>
       </div>
     </div>

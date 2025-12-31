@@ -9,16 +9,16 @@
   position: relative;
   width: 100%;
   height: 200px;
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e5e7eb;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  transition: all 0.3s ease;
+  transition: all 0.35s ease;
 }
 
 .image-preview-container:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  border-color: #c7d2fe;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
 .preview-image {
@@ -57,7 +57,7 @@
   width: 100%;
   height: 160px;
   border: 2px dashed #d1d5db;
-  border-radius: 14px;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,11 +65,11 @@
   gap: 0.5rem;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   color: #94a3b8;
-  transition: all 0.3s ease;
+  transition: all 0.35s ease;
 }
 
 .upload-placeholder:hover {
-  border-color: #94a3b8;
+  border-color: #c7d2fe;
   background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
 }
 

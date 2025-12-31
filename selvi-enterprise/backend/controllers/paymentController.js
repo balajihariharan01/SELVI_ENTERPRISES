@@ -1,5 +1,7 @@
 const Stripe = require('stripe');
 const Order = require('../models/Order');
+const Payment = require('../models/Payment');
+const User = require('../models/User');
 
 // Initialize Stripe with secret key from environment
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -181,7 +183,7 @@ exports.confirmPayment = async (req, res, next) => {
     }
 
     // Find and update order
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate('user', 'name email phone');
 
     if (!order) {
       return res.status(404).json({
@@ -208,10 +210,47 @@ exports.confirmPayment = async (req, res, next) => {
     });
     await order.save();
 
+    // Create or update payment record (idempotent)
+    let payment = await Payment.findOne({ stripePaymentIntentId: paymentIntentId });
+    
+    if (!payment) {
+      payment = new Payment({
+        order: order._id,
+        orderNumber: order.orderNumber,
+        user: order.user._id || order.user,
+        customerName: order.shippingAddress?.name || order.user?.name || req.user.name || 'N/A',
+        customerEmail: order.user?.email || req.user.email || 'N/A',
+        customerPhone: order.shippingAddress?.phone || order.user?.phone || 'N/A',
+        paymentMethod: 'stripe',
+        transactionId: paymentIntentId,
+        stripePaymentIntentId: paymentIntentId,
+        amount: order.totalAmount,
+        status: 'success',
+        paymentDate: new Date(),
+        gatewayResponse: {
+          id: paymentIntent.id,
+          status: paymentIntent.status,
+          amount: paymentIntent.amount,
+          currency: paymentIntent.currency
+        }
+      });
+      await payment.save();
+      console.log(`Payment record created for order ${order.orderNumber}`);
+    } else if (payment.status !== 'success') {
+      payment.status = 'success';
+      payment.paymentDate = new Date();
+      await payment.save();
+    }
+
     res.json({
       success: true,
       message: 'Payment confirmed successfully',
-      order
+      order,
+      payment: {
+        paymentId: payment.paymentId,
+        transactionId: payment.transactionId,
+        status: payment.status
+      }
     });
   } catch (error) {
     console.error('Confirm Payment Error:', error.message);
@@ -268,7 +307,7 @@ async function handlePaymentSuccess(paymentIntent) {
       return;
     }
 
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate('user', 'name email phone');
     
     if (!order) {
       console.error('Order not found for payment:', orderId);
@@ -286,6 +325,44 @@ async function handlePaymentSuccess(paymentIntent) {
       });
       await order.save();
       console.log(`Order ${order.orderNumber} marked as paid via webhook`);
+
+      // Create or update payment record
+      let payment = await Payment.findOne({ stripePaymentIntentId: paymentIntent.id });
+      
+      if (!payment) {
+        payment = new Payment({
+          order: order._id,
+          orderNumber: order.orderNumber,
+          user: order.user._id || order.user,
+          customerName: order.shippingAddress?.name || order.user?.name || 'N/A',
+          customerEmail: order.user?.email || 'N/A',
+          customerPhone: order.shippingAddress?.phone || order.user?.phone || 'N/A',
+          paymentMethod: 'stripe',
+          transactionId: paymentIntent.id,
+          stripePaymentIntentId: paymentIntent.id,
+          amount: order.totalAmount,
+          status: 'success',
+          paymentDate: new Date(),
+          gatewayResponse: {
+            id: paymentIntent.id,
+            status: paymentIntent.status,
+            amount: paymentIntent.amount,
+            currency: paymentIntent.currency
+          }
+        });
+      } else {
+        payment.status = 'success';
+        payment.paymentDate = new Date();
+        payment.gatewayResponse = {
+          id: paymentIntent.id,
+          status: paymentIntent.status,
+          amount: paymentIntent.amount,
+          currency: paymentIntent.currency
+        };
+      }
+      
+      await payment.save();
+      console.log(`Payment record created/updated for order ${order.orderNumber}`);
     }
   } catch (error) {
     console.error('Error handling payment success:', error.message);
@@ -302,7 +379,7 @@ async function handlePaymentFailure(paymentIntent) {
       return;
     }
 
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate('user', 'name email phone');
     
     if (!order) {
       console.error('Order not found for payment:', orderId);
@@ -314,6 +391,42 @@ async function handlePaymentFailure(paymentIntent) {
       order.paymentStatus = 'failed';
       await order.save();
       console.log(`Order ${order.orderNumber} payment failed via webhook`);
+
+      // Create or update payment record
+      let payment = await Payment.findOne({ stripePaymentIntentId: paymentIntent.id });
+      
+      if (!payment) {
+        payment = new Payment({
+          order: order._id,
+          orderNumber: order.orderNumber,
+          user: order.user._id || order.user,
+          customerName: order.shippingAddress?.name || order.user?.name || 'N/A',
+          customerEmail: order.user?.email || 'N/A',
+          customerPhone: order.shippingAddress?.phone || order.user?.phone || 'N/A',
+          paymentMethod: 'stripe',
+          transactionId: paymentIntent.id,
+          stripePaymentIntentId: paymentIntent.id,
+          amount: order.totalAmount,
+          status: 'failed',
+          failureReason: paymentIntent.last_payment_error?.message || 'Payment failed',
+          gatewayResponse: {
+            id: paymentIntent.id,
+            status: paymentIntent.status,
+            error: paymentIntent.last_payment_error
+          }
+        });
+      } else {
+        payment.status = 'failed';
+        payment.failureReason = paymentIntent.last_payment_error?.message || 'Payment failed';
+        payment.gatewayResponse = {
+          id: paymentIntent.id,
+          status: paymentIntent.status,
+          error: paymentIntent.last_payment_error
+        };
+      }
+      
+      await payment.save();
+      console.log(`Payment failure recorded for order ${order.orderNumber}`);
     }
   } catch (error) {
     console.error('Error handling payment failure:', error.message);
@@ -333,8 +446,283 @@ async function handlePaymentCanceled(paymentIntent) {
       order.paymentStatus = 'pending';
       await order.save();
       console.log(`Order ${order.orderNumber} payment canceled via webhook`);
+
+      // Update payment record if exists
+      const payment = await Payment.findOne({ stripePaymentIntentId: paymentIntent.id });
+      if (payment) {
+        payment.status = 'cancelled';
+        await payment.save();
+      }
     }
   } catch (error) {
     console.error('Error handling payment cancellation:', error.message);
   }
 }
+
+// ==================== ADMIN PAYMENT ENDPOINTS ====================
+
+// @desc    Get all payments (Admin)
+// @route   GET /api/payments/admin/all
+// @access  Private/Admin
+exports.getAllPayments = async (req, res, next) => {
+  try {
+    const { status, method, startDate, endDate, search, page = 1, limit = 50 } = req.query;
+
+    let query = {};
+
+    // Status filter
+    if (status && status !== 'all') {
+      query.status = status;
+    }
+
+    // Method filter
+    if (method && method !== 'all') {
+      query.paymentMethod = method;
+    }
+
+    // Date range filter
+    if (startDate || endDate) {
+      query.createdAt = {};
+      if (startDate) {
+        query.createdAt.$gte = new Date(startDate);
+      }
+      if (endDate) {
+        query.createdAt.$lte = new Date(endDate + 'T23:59:59.999Z');
+      }
+    }
+
+    // Search filter
+    if (search) {
+      const searchRegex = new RegExp(search, 'i');
+      query.$or = [
+        { paymentId: searchRegex },
+        { orderNumber: searchRegex },
+        { customerName: searchRegex },
+        { customerEmail: searchRegex },
+        { transactionId: searchRegex }
+      ];
+    }
+
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    const payments = await Payment.find(query)
+      .populate('order', 'orderNumber totalAmount orderStatus items')
+      .populate('user', 'name email phone')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const totalPayments = await Payment.countDocuments(query);
+
+    // Calculate stats
+    const allPayments = await Payment.find({});
+    const stats = {
+      totalRevenue: allPayments.filter(p => p.status === 'success').reduce((sum, p) => sum + p.amount, 0),
+      successfulPayments: allPayments.filter(p => p.status === 'success').length,
+      pendingPayments: allPayments.filter(p => p.status === 'pending' || p.status === 'processing').length,
+      failedPayments: allPayments.filter(p => p.status === 'failed').length,
+      totalPayments: allPayments.length
+    };
+
+    res.json({
+      success: true,
+      count: payments.length,
+      total: totalPayments,
+      page: parseInt(page),
+      pages: Math.ceil(totalPayments / parseInt(limit)),
+      stats,
+      payments
+    });
+  } catch (error) {
+    console.error('Get All Payments Error:', error.message);
+    next(error);
+  }
+};
+
+// @desc    Get payment by ID (Admin)
+// @route   GET /api/payments/admin/:id
+// @access  Private/Admin
+exports.getPaymentById = async (req, res, next) => {
+  try {
+    const payment = await Payment.findById(req.params.id)
+      .populate('order')
+      .populate('user', 'name email phone');
+
+    if (!payment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Payment not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      payment
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get payment statistics (Admin)
+// @route   GET /api/payments/admin/stats
+// @access  Private/Admin
+exports.getPaymentStats = async (req, res, next) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    let dateQuery = {};
+    if (startDate || endDate) {
+      dateQuery.createdAt = {};
+      if (startDate) {
+        dateQuery.createdAt.$gte = new Date(startDate);
+      }
+      if (endDate) {
+        dateQuery.createdAt.$lte = new Date(endDate + 'T23:59:59.999Z');
+      }
+    }
+
+    const allPayments = await Payment.find(dateQuery);
+
+    // Calculate various stats
+    const successPayments = allPayments.filter(p => p.status === 'success');
+    const pendingPayments = allPayments.filter(p => p.status === 'pending' || p.status === 'processing');
+    const failedPayments = allPayments.filter(p => p.status === 'failed');
+
+    // Revenue by payment method
+    const stripePayments = successPayments.filter(p => p.paymentMethod === 'stripe');
+    const codPayments = successPayments.filter(p => p.paymentMethod === 'cod');
+    const upiPayments = successPayments.filter(p => p.paymentMethod === 'upi');
+
+    // Daily revenue for last 7 days
+    const last7Days = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      date.setHours(0, 0, 0, 0);
+      const nextDate = new Date(date);
+      nextDate.setDate(nextDate.getDate() + 1);
+
+      const dayPayments = successPayments.filter(p => {
+        const paymentDate = new Date(p.paymentDate || p.createdAt);
+        return paymentDate >= date && paymentDate < nextDate;
+      });
+
+      last7Days.push({
+        date: date.toISOString().split('T')[0],
+        revenue: dayPayments.reduce((sum, p) => sum + p.amount, 0),
+        count: dayPayments.length
+      });
+    }
+
+    res.json({
+      success: true,
+      stats: {
+        totalRevenue: successPayments.reduce((sum, p) => sum + p.amount, 0),
+        totalPayments: allPayments.length,
+        successfulPayments: successPayments.length,
+        pendingPayments: pendingPayments.length,
+        failedPayments: failedPayments.length,
+        averageOrderValue: successPayments.length > 0 
+          ? successPayments.reduce((sum, p) => sum + p.amount, 0) / successPayments.length 
+          : 0,
+        byMethod: {
+          stripe: {
+            count: stripePayments.length,
+            revenue: stripePayments.reduce((sum, p) => sum + p.amount, 0)
+          },
+          cod: {
+            count: codPayments.length,
+            revenue: codPayments.reduce((sum, p) => sum + p.amount, 0)
+          },
+          upi: {
+            count: upiPayments.length,
+            revenue: upiPayments.reduce((sum, p) => sum + p.amount, 0)
+          }
+        },
+        last7Days
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Sync payments from orders (Admin utility)
+// @route   POST /api/payments/admin/sync
+// @access  Private/Admin
+exports.syncPaymentsFromOrders = async (req, res, next) => {
+  try {
+    // Find all orders with paid status that don't have a payment record
+    const paidOrders = await Order.find({ 
+      paymentStatus: 'paid'
+    }).populate('user', 'name email phone');
+
+    let synced = 0;
+    let skipped = 0;
+
+    for (const order of paidOrders) {
+      // Check if payment already exists
+      const existingPayment = await Payment.findOne({ order: order._id });
+      
+      if (!existingPayment) {
+        await Payment.create({
+          order: order._id,
+          orderNumber: order.orderNumber,
+          user: order.user?._id || order.user,
+          customerName: order.shippingAddress?.name || order.user?.name || 'N/A',
+          customerEmail: order.user?.email || 'N/A',
+          customerPhone: order.shippingAddress?.phone || order.user?.phone || 'N/A',
+          paymentMethod: order.paymentMethod === 'online' ? 'stripe' : order.paymentMethod,
+          transactionId: order.paymentIntentId || `SYNC_${order.orderNumber}`,
+          stripePaymentIntentId: order.paymentIntentId || null,
+          amount: order.totalAmount,
+          status: 'success',
+          paymentDate: order.updatedAt || order.createdAt
+        });
+        synced++;
+      } else {
+        skipped++;
+      }
+    }
+
+    // Also create payment records for COD orders that are delivered
+    const codOrders = await Order.find({ 
+      paymentMethod: 'cod',
+      orderStatus: 'delivered'
+    }).populate('user', 'name email phone');
+
+    for (const order of codOrders) {
+      const existingPayment = await Payment.findOne({ order: order._id });
+      
+      if (!existingPayment) {
+        await Payment.create({
+          order: order._id,
+          orderNumber: order.orderNumber,
+          user: order.user?._id || order.user,
+          customerName: order.shippingAddress?.name || order.user?.name || 'N/A',
+          customerEmail: order.user?.email || 'N/A',
+          customerPhone: order.shippingAddress?.phone || order.user?.phone || 'N/A',
+          paymentMethod: 'cod',
+          transactionId: `COD_${order.orderNumber}`,
+          amount: order.totalAmount,
+          status: 'success',
+          paymentDate: order.updatedAt || order.createdAt
+        });
+        synced++;
+      } else {
+        skipped++;
+      }
+    }
+
+    res.json({
+      success: true,
+      message: `Sync completed. ${synced} payments created, ${skipped} already existed.`,
+      synced,
+      skipped
+    });
+  } catch (error) {
+    console.error('Sync Payments Error:', error.message);
+    next(error);
+  }
+};

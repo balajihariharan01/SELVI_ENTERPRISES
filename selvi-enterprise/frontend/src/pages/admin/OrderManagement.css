@@ -68,16 +68,16 @@
 }
 
 .stat-card {
-  background: white;
-  border-radius: 16px;
+  background: #f3aaaa;
+  border-radius: 18px;
   padding: 1.5rem;
   text-align: center;
   border-left: 4px solid var(--primary);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.03);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  transition: all 0.35s ease;
   min-width: 0;
   animation: cardPopIn 0.5s ease-out backwards;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e5e7eb;
   border-left-width: 4px;
 }
 
@@ -87,8 +87,10 @@
 .stat-card:nth-child(4) { animation-delay: 0.25s; }
 
 .stat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  border-color: #c7d2fe;
+  border-left-width: 4px;
 }
 
 .stat-card.pending { 

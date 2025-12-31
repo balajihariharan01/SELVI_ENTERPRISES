@@ -16,6 +16,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
+import VerifyEmail from './pages/VerifyEmail'
 
 // User Pages
 import Cart from './pages/user/Cart'
@@ -31,6 +32,7 @@ import AdminLayout from './components/admin/AdminLayout'
 import Dashboard from './pages/admin/Dashboard'
 import ProductManagement from './pages/admin/ProductManagement'
 import OrderManagement from './pages/admin/OrderManagement'
+import PaymentDetails from './pages/admin/PaymentDetails'
 import CustomerRecords from './pages/admin/CustomerRecords'
 
 // Protected Route Components
@@ -45,6 +47,9 @@ function App() {
   // Check if we're on a page that should show mobile SPA
   const isHomePage = location.pathname === '/'
   const showMobileSPA = isMobile && isHomePage
+  
+  // Show footer ONLY on Home page (not mobile SPA)
+  const showFooter = isHomePage && !showMobileSPA
 
   return (
     <div className="app">
@@ -57,7 +62,7 @@ function App() {
       ) : (
         <>
           {/* Show navbar only for non-admin pages and non-mobile home */}
-          {(!user || user.role !== 'admin' || !window.location.pathname.startsWith('/admin')) && <Navbar />}
+          {(!user || user.role !== 'admin' || !location.pathname.startsWith('/admin')) && <Navbar />}
           
           <main className="main-content">
             <Routes>
@@ -69,6 +74,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password/:token" element={<ResetPassword />} />
+              <Route path="/verify-email/:token" element={<VerifyEmail />} />
 
               {/* Protected User Routes */}
               <Route path="/cart" element={
@@ -117,13 +123,14 @@ function App() {
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="products" element={<ProductManagement />} />
                 <Route path="orders" element={<OrderManagement />} />
+                <Route path="payments" element={<PaymentDetails />} />
                 <Route path="customers" element={<CustomerRecords />} />
               </Route>
             </Routes>
           </main>
 
-          {/* Show footer only for non-admin pages */}
-          {(!user || user.role !== 'admin' || !window.location.pathname.startsWith('/admin')) && <Footer />}
+          {/* Show footer ONLY on Home page */}
+          {showFooter && <Footer />}
         </>
       )}
     </div>

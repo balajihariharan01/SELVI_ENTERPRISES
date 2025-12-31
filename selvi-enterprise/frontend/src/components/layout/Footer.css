@@ -354,6 +354,29 @@
   color: var(--primary-light);
 }
 
+/* Map Fallback - When iframe fails to load */
+.map-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 140px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-lg);
+  gap: 0.5rem;
+}
+
+.map-fallback span {
+  font-size: 2rem;
+}
+
+.map-fallback p {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
 /* ========================================
    FOOTER BOTTOM BAR
    ======================================== */

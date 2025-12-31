@@ -621,14 +621,100 @@ textarea.form-input {
   gap: 0.25rem;
 }
 
+/* ===== Premium Container System ===== */
+/* Base container styling for all modules */
+
+.premium-container {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid #e5e7eb;
+  transition: all 0.35s ease;
+  position: relative;
+}
+
+.premium-container:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  border-color: #c7d2fe;
+}
+
+/* Premium Card - with glow border on hover */
+.premium-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid #e5e7eb;
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 50%, #818cf8 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: all 0.35s ease;
+  pointer-events: none;
+}
+
+.premium-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  border-color: transparent;
+}
+
+.premium-card:hover::before {
+  opacity: 1;
+}
+
+/* Premium Section - for page sections */
+.premium-section {
+  background: #f8fafc;
+  border-radius: 18px;
+  padding: 32px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.35s ease;
+}
+
+.premium-section:hover {
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  border-color: #c7d2fe;
+}
+
+/* Premium Panel - for sidebar/sticky elements */
+.premium-panel {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid #e5e7eb;
+  transition: all 0.35s ease;
+}
+
+.premium-panel:hover {
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+  border-color: #c7d2fe;
+}
+
 /* ===== Cards - Premium with Hover Effects ===== */
 .card {
   background: var(--bg-card);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-card);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
   overflow: hidden;
-  transition: var(--transition-smooth);
-  border: 1px solid var(--border-light);
+  transition: all 0.35s ease;
+  border: 1px solid #e5e7eb;
   position: relative;
 }
 
@@ -636,21 +722,21 @@ textarea.form-input {
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: var(--radius-xl);
-  padding: 1px;
-  background: linear-gradient(135deg, transparent 0%, rgba(59, 130, 246, 0.1) 100%);
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
-  transition: var(--transition-smooth);
+  transition: all 0.35s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-card-hover);
-  border-color: var(--primary-100);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  border-color: #c7d2fe;
 }
 
 .card:hover::before {

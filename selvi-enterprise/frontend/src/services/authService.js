@@ -56,6 +56,48 @@ export const authService = {
       confirmPassword
     });
     return response.data;
+  },
+
+  // Check email availability
+  checkEmail: async (email) => {
+    const response = await api.post('/auth/check-email', { email });
+    return response.data;
+  },
+
+  // Check phone availability
+  checkPhone: async (phone, excludeUserId = null) => {
+    const response = await api.post('/auth/check-phone', { phone, excludeUserId });
+    return response.data;
+  },
+
+  // Send email verification
+  sendVerificationEmail: async () => {
+    const response = await api.post('/auth/send-verification-email');
+    return response.data;
+  },
+
+  // Verify email with token
+  verifyEmail: async (token) => {
+    const response = await api.get(`/auth/verify-email/${token}`);
+    return response.data;
+  },
+
+  // Send phone OTP
+  sendPhoneOTP: async () => {
+    const response = await api.post('/auth/send-phone-otp');
+    return response.data;
+  },
+
+  // Verify phone OTP
+  verifyPhoneOTP: async (otp) => {
+    const response = await api.post('/auth/verify-phone-otp', { otp });
+    return response.data;
+  },
+
+  // Get verification status
+  getVerificationStatus: async () => {
+    const response = await api.get('/auth/verification-status');
+    return response.data;
   }
 };
 

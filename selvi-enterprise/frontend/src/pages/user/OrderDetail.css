@@ -26,12 +26,18 @@
 
 /* Order Status Card */
 .order-status-card {
-  background: white;
-  border-radius: 20px;
+  background: #ffffff;
+  border-radius: 18px;
   padding: 2rem;
   margin-bottom: 2.5rem;
-  box-shadow: 0 4px 25px rgba(44, 62, 80, 0.06);
-  border: 1px solid rgba(91, 110, 179, 0.08);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid #e5e7eb;
+  transition: all 0.35s ease;
+}
+
+.order-status-card:hover {
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+  border-color: #c7d2fe;
 }
 
 .status-header {
@@ -147,12 +153,19 @@
 }
 
 .detail-card {
-  background: white;
+  background: #ffffff;
   border-radius: 18px;
   padding: 1.75rem;
-  box-shadow: 0 4px 20px rgba(44, 62, 80, 0.05);
-  border: 1px solid rgba(91, 110, 179, 0.06);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid #e5e7eb;
   min-width: 0; /* Prevent overflow */
+  transition: all 0.35s ease;
+}
+
+.detail-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  border-color: #c7d2fe;
 }
 
 .detail-card h3 {

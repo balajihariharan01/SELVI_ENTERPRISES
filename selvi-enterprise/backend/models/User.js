@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide your name'],
     trim: true,
+    minlength: [3, 'Name must be at least 3 characters'],
     maxlength: [50, 'Name cannot exceed 50 characters']
   },
   email: {
@@ -22,6 +23,8 @@ const userSchema = new mongoose.Schema({
       // Phone is required only for non-Google users
       return !this.googleId;
     },
+    unique: true,
+    sparse: true, // Allows multiple null values but unique non-null values
     match: [/^[0-9]{10}$/, 'Please provide a valid 10-digit phone number']
   },
   password: {
@@ -30,7 +33,7 @@ const userSchema = new mongoose.Schema({
       // Password is required only for non-Google users
       return !this.googleId;
     },
-    minlength: [6, 'Password must be at least 6 characters'],
+    minlength: [8, 'Password must be at least 8 characters'],
     select: false
   },
   role: {
@@ -57,6 +60,41 @@ const userSchema = new mongoose.Schema({
   },
   profilePicture: {
     type: String
+  },
+  // Email Verification
+  emailVerified: {
+    type: Boolean,
+    default: false
+  },
+  emailVerificationToken: {
+    type: String,
+    select: false
+  },
+  emailVerificationExpire: {
+    type: Date,
+    select: false
+  },
+  // Phone Verification
+  phoneVerified: {
+    type: Boolean,
+    default: false
+  },
+  phoneOTP: {
+    type: String,
+    select: false
+  },
+  phoneOTPExpire: {
+    type: Date,
+    select: false
+  },
+  phoneOTPAttempts: {
+    type: Number,
+    default: 0,
+    select: false
+  },
+  lastOTPSent: {
+    type: Date,
+    select: false
   },
   // Forgot Password fields
   resetPasswordToken: {
@@ -112,6 +150,50 @@ userSchema.methods.getResetPasswordToken = function() {
   this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
   
   return resetToken;
+};
+
+// Generate email verification token
+userSchema.methods.getEmailVerificationToken = function() {
+  const verificationToken = crypto.randomBytes(32).toString('hex');
+  
+  this.emailVerificationToken = crypto
+    .createHash('sha256')
+    .update(verificationToken)
+    .digest('hex');
+  
+  // Token valid for 24 hours
+  this.emailVerificationExpire = Date.now() + 24 * 60 * 60 * 1000;
+  
+  return verificationToken;
+};
+
+// Generate phone OTP
+userSchema.methods.generatePhoneOTP = function() {
+  // Generate 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  
+  // Hash OTP before storing
+  this.phoneOTP = crypto
+    .createHash('sha256')
+    .update(otp)
+    .digest('hex');
+  
+  // OTP valid for 10 minutes
+  this.phoneOTPExpire = Date.now() + 10 * 60 * 1000;
+  this.phoneOTPAttempts = 0;
+  this.lastOTPSent = Date.now();
+  
+  return otp;
+};
+
+// Verify phone OTP
+userSchema.methods.verifyPhoneOTP = function(enteredOTP) {
+  const hashedOTP = crypto
+    .createHash('sha256')
+    .update(enteredOTP)
+    .digest('hex');
+  
+  return this.phoneOTP === hashedOTP && this.phoneOTPExpire > Date.now();
 };
 
 module.exports = mongoose.model('User', userSchema);

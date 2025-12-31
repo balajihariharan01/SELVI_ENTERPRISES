@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
         // Verify token is still valid
         const response = await authService.getMe();
         setUser(response.user);
+        localStorage.setItem('user', JSON.stringify(response.user));
       } catch (error) {
         // Token invalid, clear storage
         localStorage.removeItem('token');
@@ -86,6 +87,18 @@ export const AuthProvider = ({ children }) => {
     setUser(updatedUser);
   };
 
+  const refreshUser = async () => {
+    try {
+      const response = await authService.getMe();
+      setUser(response.user);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      return response.user;
+    } catch (error) {
+      console.error('Failed to refresh user:', error);
+      throw error;
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -94,9 +107,12 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     updateUser,
+    refreshUser,
     isAuthenticated: !!user,
     isAdmin: user?.role === 'admin',
-    isGoogleUser: user?.authProvider === 'google'
+    isGoogleUser: user?.authProvider === 'google',
+    isEmailVerified: user?.emailVerified || user?.authProvider === 'google',
+    isPhoneVerified: user?.phoneVerified
   };
 
   return (

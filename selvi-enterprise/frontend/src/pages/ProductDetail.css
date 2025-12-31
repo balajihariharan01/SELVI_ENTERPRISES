@@ -134,14 +134,20 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
-  background: white;
-  border-radius: var(--radius-xl);
+  background: #ffffff;
+  border-radius: 18px;
   padding: 2.5rem;
-  box-shadow: var(--shadow-card);
-  border: 1px solid var(--border-light);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid #e5e7eb;
   align-items: start;
   position: relative;
   animation: fadeInUp 0.5s ease-out;
+  transition: all 0.35s ease;
+}
+
+.product-detail-layout:hover {
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+  border-color: #c7d2fe;
 }
 
 /* Product Image */

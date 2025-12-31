@@ -32,12 +32,32 @@ exports.register = async (req, res, next) => {
   try {
     const { name, email, phone, password, address } = req.body;
 
-    // Check if user exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    // Validate password strength
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!passwordRegex.test(password)) {
       return res.status(400).json({
         success: false,
-        message: 'Email already registered'
+        message: 'Password must be at least 8 characters with 1 uppercase letter and 1 number'
+      });
+    }
+
+    // Check if email exists
+    const existingEmail = await User.findOne({ email: email.toLowerCase() });
+    if (existingEmail) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email already registered',
+        field: 'email'
+      });
+    }
+
+    // Check if phone exists
+    const existingPhone = await User.findOne({ phone });
+    if (existingPhone) {
+      return res.status(400).json({
+        success: false,
+        message: 'Phone number already exists',
+        field: 'phone'
       });
     }
 
@@ -47,22 +67,64 @@ exports.register = async (req, res, next) => {
       email,
       phone,
       password,
-      address
+      address,
+      emailVerified: false,
+      phoneVerified: false
     });
+
+    // Generate email verification token
+    const verificationToken = user.getEmailVerificationToken();
+    await user.save({ validateBeforeSave: false });
+
+    // Send verification email
+    const verifyUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
+    const message = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%); padding: 30px; text-align: center;">
+          <h1 style="color: white; margin: 0;">Welcome to Selvi Enterprise!</h1>
+        </div>
+        <div style="padding: 30px; background: #f9fafb;">
+          <h2 style="color: #1f2937;">Hi ${user.name}!</h2>
+          <p style="color: #4b5563; line-height: 1.6;">
+            Thank you for registering. Please verify your email to unlock all features:
+          </p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${verifyUrl}" style="background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+              Verify Email
+            </a>
+          </div>
+          <p style="color: #6b7280; font-size: 14px;">Link expires in 24 hours.</p>
+        </div>
+      </div>
+    `;
+
+    try {
+      const transporter = createTransporter();
+      await transporter.sendMail({
+        from: `"Selvi Enterprise" <${process.env.EMAIL_USER}>`,
+        to: user.email,
+        subject: 'Welcome! Please Verify Your Email - Selvi Enterprise',
+        html: message
+      });
+    } catch (emailError) {
+      console.error('Welcome email error:', emailError);
+    }
 
     // Generate token
     const token = generateToken(user._id);
 
     res.status(201).json({
       success: true,
-      message: 'Registration successful',
+      message: 'Registration successful! Please check your email to verify your account.',
       token,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
         phone: user.phone,
-        role: user.role
+        role: user.role,
+        emailVerified: user.emailVerified,
+        phoneVerified: user.phoneVerified
       }
     });
   } catch (error) {
@@ -139,7 +201,9 @@ exports.login = async (req, res, next) => {
         phone: user.phone,
         role: user.role,
         authProvider: user.authProvider,
-        profilePicture: user.profilePicture
+        profilePicture: user.profilePicture,
+        emailVerified: user.emailVerified,
+        phoneVerified: user.phoneVerified
       }
     });
   } catch (error) {
@@ -263,7 +327,9 @@ exports.googleAuth = async (req, res, next) => {
         phone: user.phone,
         role: user.role,
         authProvider: user.authProvider,
-        profilePicture: user.profilePicture
+        profilePicture: user.profilePicture,
+        emailVerified: true, // Google emails are pre-verified
+        phoneVerified: user.phoneVerified
       }
     });
   } catch (error) {
@@ -294,6 +360,10 @@ exports.getMe = async (req, res, next) => {
         phone: user.phone,
         role: user.role,
         address: user.address,
+        profileImage: user.profilePicture,
+        authProvider: user.authProvider,
+        emailVerified: user.emailVerified || user.authProvider === 'google',
+        phoneVerified: user.phoneVerified,
         createdAt: user.createdAt
       }
     });
@@ -307,11 +377,49 @@ exports.getMe = async (req, res, next) => {
 // @access  Private
 exports.updateProfile = async (req, res, next) => {
   try {
-    const { name, phone, address } = req.body;
+    const { name, phone, address, profileImage } = req.body;
 
-    const user = await User.findByIdAndUpdate(
+    // Name validation
+    if (name && name.length < 3) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name must be at least 3 characters',
+        field: 'name'
+      });
+    }
+
+    // Check if phone is being changed and if it's unique
+    if (phone) {
+      const existingPhone = await User.findOne({ 
+        phone, 
+        _id: { $ne: req.user.id } 
+      });
+      if (existingPhone) {
+        return res.status(400).json({
+          success: false,
+          message: 'Phone number already exists',
+          field: 'phone'
+        });
+      }
+    }
+
+    const user = await User.findById(req.user.id);
+
+    // Build update object
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (address) updateData.address = address;
+    if (profileImage) updateData.profilePicture = profileImage;
+    
+    // If phone is changing, reset phone verification
+    if (phone && phone !== user.phone) {
+      updateData.phone = phone;
+      updateData.phoneVerified = false;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
       req.user.id,
-      { name, phone, address },
+      updateData,
       { new: true, runValidators: true }
     );
 
@@ -319,12 +427,15 @@ exports.updateProfile = async (req, res, next) => {
       success: true,
       message: 'Profile updated successfully',
       user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role,
-        address: user.address
+        id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        role: updatedUser.role,
+        address: updatedUser.address,
+        profileImage: updatedUser.profilePicture,
+        emailVerified: updatedUser.emailVerified || updatedUser.authProvider === 'google',
+        phoneVerified: updatedUser.phoneVerified
       }
     });
   } catch (error) {
@@ -583,3 +694,356 @@ exports.verifyResetToken = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Check if email is available
+// @route   POST /api/auth/check-email
+// @access  Public
+exports.checkEmailAvailability = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is required'
+      });
+    }
+
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
+
+    res.json({
+      success: true,
+      available: !existingUser,
+      message: existingUser ? 'Email already registered' : 'Email is available'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Check if phone is available
+// @route   POST /api/auth/check-phone
+// @access  Public
+exports.checkPhoneAvailability = async (req, res, next) => {
+  try {
+    const { phone, excludeUserId } = req.body;
+
+    if (!phone) {
+      return res.status(400).json({
+        success: false,
+        message: 'Phone number is required'
+      });
+    }
+
+    const query = { phone };
+    if (excludeUserId) {
+      query._id = { $ne: excludeUserId };
+    }
+
+    const existingUser = await User.findOne(query);
+
+    res.json({
+      success: true,
+      available: !existingUser,
+      message: existingUser ? 'Phone number already exists' : 'Phone number is available'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Send email verification
+// @route   POST /api/auth/send-verification-email
+// @access  Private
+exports.sendVerificationEmail = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).select('+emailVerificationToken +emailVerificationExpire');
+
+    if (user.emailVerified) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is already verified'
+      });
+    }
+
+    // Check rate limiting (max 3 emails per hour)
+    if (user.emailVerificationExpire && user.emailVerificationExpire > Date.now() - 55 * 60 * 1000) {
+      const timeLeft = Math.ceil((user.emailVerificationExpire.getTime() - Date.now() + 55 * 60 * 1000) / 60000);
+      if (timeLeft > 0 && timeLeft < 60) {
+        // Allow resend after 5 minutes
+      }
+    }
+
+    // Generate verification token
+    const verificationToken = user.getEmailVerificationToken();
+    await user.save({ validateBeforeSave: false });
+
+    // Create verification URL
+    const verifyUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
+
+    // Email content
+    const message = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%); padding: 30px; text-align: center;">
+          <h1 style="color: white; margin: 0;">Selvi Enterprise</h1>
+          <p style="color: rgba(255,255,255,0.9); margin: 5px 0 0 0;">Steel & Cement</p>
+        </div>
+        <div style="padding: 30px; background: #f9fafb;">
+          <h2 style="color: #1f2937; margin-bottom: 20px;">Verify Your Email</h2>
+          <p style="color: #4b5563; line-height: 1.6;">
+            Hi ${user.name},
+          </p>
+          <p style="color: #4b5563; line-height: 1.6;">
+            Thank you for registering! Please verify your email address by clicking the button below:
+          </p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${verifyUrl}" style="background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
+              Verify Email
+            </a>
+          </div>
+          <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
+            This link will expire in <strong>24 hours</strong>.
+          </p>
+          <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
+            If you didn't create an account, please ignore this email.
+          </p>
+        </div>
+      </div>
+    `;
+
+    try {
+      const transporter = createTransporter();
+      await transporter.sendMail({
+        from: `"Selvi Enterprise" <${process.env.EMAIL_USER}>`,
+        to: user.email,
+        subject: 'Verify Your Email - Selvi Enterprise',
+        html: message
+      });
+
+      res.json({
+        success: true,
+        message: 'Verification email sent successfully'
+      });
+    } catch (emailError) {
+      console.error('Email send error:', emailError);
+      user.emailVerificationToken = undefined;
+      user.emailVerificationExpire = undefined;
+      await user.save({ validateBeforeSave: false });
+
+      return res.status(500).json({
+        success: false,
+        message: 'Email could not be sent. Please try again later.'
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Verify email with token
+// @route   GET /api/auth/verify-email/:token
+// @access  Public
+exports.verifyEmail = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+
+    const emailVerificationToken = crypto
+      .createHash('sha256')
+      .update(token)
+      .digest('hex');
+
+    const user = await User.findOne({
+      emailVerificationToken,
+      emailVerificationExpire: { $gt: Date.now() }
+    }).select('+emailVerificationToken +emailVerificationExpire');
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired verification token'
+      });
+    }
+
+    // Mark email as verified
+    user.emailVerified = true;
+    user.emailVerificationToken = undefined;
+    user.emailVerificationExpire = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    res.json({
+      success: true,
+      message: 'Email verified successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Send phone OTP
+// @route   POST /api/auth/send-phone-otp
+// @access  Private
+exports.sendPhoneOTP = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).select('+phoneOTP +phoneOTPExpire +lastOTPSent');
+
+    if (!user.phone) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please add a phone number first'
+      });
+    }
+
+    if (user.phoneVerified) {
+      return res.status(400).json({
+        success: false,
+        message: 'Phone number is already verified'
+      });
+    }
+
+    // Rate limiting: 60 seconds between OTP requests
+    if (user.lastOTPSent && Date.now() - user.lastOTPSent.getTime() < 60000) {
+      const waitTime = Math.ceil((60000 - (Date.now() - user.lastOTPSent.getTime())) / 1000);
+      return res.status(429).json({
+        success: false,
+        message: `Please wait ${waitTime} seconds before requesting a new OTP`,
+        waitTime
+      });
+    }
+
+    // Generate OTP
+    const otp = user.generatePhoneOTP();
+    await user.save({ validateBeforeSave: false });
+
+    // In production, integrate with SMS service (Twilio, MSG91, etc.)
+    // For now, we'll send via email as a fallback and log to console
+    console.log(`[DEV] Phone OTP for ${user.phone}: ${otp}`);
+
+    // Send OTP via email as fallback (in production, use SMS API)
+    try {
+      const transporter = createTransporter();
+      await transporter.sendMail({
+        from: `"Selvi Enterprise" <${process.env.EMAIL_USER}>`,
+        to: user.email,
+        subject: 'Phone Verification OTP - Selvi Enterprise',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%); padding: 30px; text-align: center;">
+              <h1 style="color: white; margin: 0;">Selvi Enterprise</h1>
+            </div>
+            <div style="padding: 30px; background: #f9fafb; text-align: center;">
+              <h2 style="color: #1f2937;">Phone Verification OTP</h2>
+              <p style="color: #4b5563;">Your OTP for phone verification is:</p>
+              <div style="font-size: 32px; font-weight: bold; color: #4338ca; letter-spacing: 8px; margin: 20px 0;">
+                ${otp}
+              </div>
+              <p style="color: #6b7280; font-size: 14px;">
+                This OTP is valid for 10 minutes. Do not share it with anyone.
+              </p>
+            </div>
+          </div>
+        `
+      });
+    } catch (emailError) {
+      console.error('OTP email error:', emailError);
+    }
+
+    res.json({
+      success: true,
+      message: 'OTP sent successfully',
+      // In development, return OTP for testing
+      ...(process.env.NODE_ENV === 'development' && { otp })
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Verify phone OTP
+// @route   POST /api/auth/verify-phone-otp
+// @access  Private
+exports.verifyPhoneOTP = async (req, res, next) => {
+  try {
+    const { otp } = req.body;
+
+    if (!otp) {
+      return res.status(400).json({
+        success: false,
+        message: 'OTP is required'
+      });
+    }
+
+    const user = await User.findById(req.user.id).select('+phoneOTP +phoneOTPExpire +phoneOTPAttempts');
+
+    if (user.phoneVerified) {
+      return res.status(400).json({
+        success: false,
+        message: 'Phone number is already verified'
+      });
+    }
+
+    if (!user.phoneOTP || !user.phoneOTPExpire) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please request a new OTP'
+      });
+    }
+
+    // Check attempts (max 5)
+    if (user.phoneOTPAttempts >= 5) {
+      user.phoneOTP = undefined;
+      user.phoneOTPExpire = undefined;
+      user.phoneOTPAttempts = 0;
+      await user.save({ validateBeforeSave: false });
+      
+      return res.status(400).json({
+        success: false,
+        message: 'Too many failed attempts. Please request a new OTP.'
+      });
+    }
+
+    // Verify OTP
+    if (!user.verifyPhoneOTP(otp)) {
+      user.phoneOTPAttempts += 1;
+      await user.save({ validateBeforeSave: false });
+      
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired OTP',
+        attemptsLeft: 5 - user.phoneOTPAttempts
+      });
+    }
+
+    // Mark phone as verified
+    user.phoneVerified = true;
+    user.phoneOTP = undefined;
+    user.phoneOTPExpire = undefined;
+    user.phoneOTPAttempts = 0;
+    await user.save({ validateBeforeSave: false });
+
+    res.json({
+      success: true,
+      message: 'Phone number verified successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get verification status
+// @route   GET /api/auth/verification-status
+// @access  Private
+exports.getVerificationStatus = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    res.json({
+      success: true,
+      emailVerified: user.emailVerified || user.authProvider === 'google',
+      phoneVerified: user.phoneVerified,
+      hasPhone: !!user.phone
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

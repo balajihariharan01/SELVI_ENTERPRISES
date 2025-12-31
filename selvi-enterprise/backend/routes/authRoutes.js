@@ -13,15 +13,25 @@ const {
   changePassword,
   forgotPassword,
   resetPassword,
-  verifyResetToken
+  verifyResetToken,
+  checkEmailAvailability,
+  checkPhoneAvailability,
+  sendVerificationEmail,
+  verifyEmail,
+  sendPhoneOTP,
+  verifyPhoneOTP,
+  getVerificationStatus
 } = require('../controllers/authController');
 
 // Validation rules
 const registerValidation = [
-  body('name').trim().notEmpty().withMessage('Name is required'),
+  body('name').trim().notEmpty().withMessage('Name is required')
+    .isLength({ min: 3 }).withMessage('Name must be at least 3 characters'),
   body('email').isEmail().withMessage('Please provide a valid email'),
   body('phone').matches(/^[0-9]{10}$/).withMessage('Please provide a valid 10-digit phone number'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  body('password')
+    .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+    .matches(/^(?=.*[A-Z])(?=.*\d)/).withMessage('Password must contain at least 1 uppercase letter and 1 number'),
   handleValidationErrors
 ];
 
@@ -37,7 +47,7 @@ const forgotPasswordValidation = [
 ];
 
 const resetPasswordValidation = [
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
   body('confirmPassword').notEmpty().withMessage('Please confirm your password'),
   handleValidationErrors
 ];
@@ -54,5 +64,20 @@ router.put('/password', protect, changePassword);
 router.post('/forgot-password', forgotPasswordValidation, forgotPassword);
 router.post('/reset-password/:token', resetPasswordValidation, resetPassword);
 router.get('/verify-reset-token/:token', verifyResetToken);
+
+// Validation Check Routes
+router.post('/check-email', checkEmailAvailability);
+router.post('/check-phone', checkPhoneAvailability);
+
+// Email Verification Routes
+router.post('/send-verification-email', protect, sendVerificationEmail);
+router.get('/verify-email/:token', verifyEmail);
+
+// Phone Verification Routes
+router.post('/send-phone-otp', protect, sendPhoneOTP);
+router.post('/verify-phone-otp', protect, verifyPhoneOTP);
+
+// Verification Status
+router.get('/verification-status', protect, getVerificationStatus);
 
 module.exports = router;
