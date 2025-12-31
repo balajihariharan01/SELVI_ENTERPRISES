@@ -171,88 +171,11 @@ const Home = () => {
           )}
         </div>
       </section>
-
-      {/* Contact Section */}
-      <section className="contact-section">
-        <div className="container">
-          <div className="section-header">
-            <h2>Contact Us</h2>
-            <p>Get in touch with us for bulk orders and inquiries</p>
-          </div>
-          <div className="contact-grid">
-            {/* Phone Card */}
-            <div className="contact-card">
-              <div className="contact-icon">
-                <FiPhone />
-              </div>
-              <div className="contact-info">
-                <h3>Phone</h3>
-                <div className="contact-details">
-                  {BUSINESS_CONFIG.owners.map((owner, index) => (
-                    <div key={index} className="owner-contact">
-                      <span className="owner-name">{owner.name}</span>
-                      <a href={`tel:${owner.phone?.replace(/\s/g, '')}`} className="phone-link">
-                        {owner.phone}
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* WhatsApp Card */}
-            <div className="contact-card">
-              <div className="contact-icon whatsapp">
-                <FaWhatsapp />
-              </div>
-              <div className="contact-info">
-                <h3>WhatsApp</h3>
-                <p className="contact-desc">Quick inquiry via WhatsApp</p>
-                <a 
-                  href={getWhatsAppGeneralLink()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-whatsapp"
-                >
-                  <FaWhatsapp /> Chat Now
-                </a>
-              </div>
-            </div>
-
-            {/* Email Card */}
-            <div className="contact-card">
-              <div className="contact-icon email">
-                <FiMail />
-              </div>
-              <div className="contact-info">
-                <h3>Email</h3>
-                <p className="contact-desc">Send us your inquiries</p>
-                <a href={`mailto:${BUSINESS_CONFIG.contact.email}`} className="email-link">
-                  {BUSINESS_CONFIG.contact.email}
-                </a>
-              </div>
-            </div>
-
-            {/* Location Card */}
-            <div className="contact-card location-card">
-              <div className="contact-icon location">
-                <FiMapPin />
-              </div>
-              <div className="contact-info">
-                <h3>Location</h3>
-                <div className="address-text">
-                  {BUSINESS_CONFIG.location.addressLines?.map((line, index) => (
-                    <span key={index} className="address-line">{line}</span>
-                  )) || <span>{BUSINESS_CONFIG.location.fullAddress}</span>}
-                </div>
-              </div>
-            </div>
-          </div>
-
+          
+      
           {/* Google Map Embed - Full Width Below Contact Cards */}
           
-        </div>
-      </section>
+        
 
       {/* CTA Section - Only show if not logged in */}
       {!isAuthenticated && (

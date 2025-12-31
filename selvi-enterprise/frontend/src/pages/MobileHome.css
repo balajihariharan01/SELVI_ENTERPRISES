@@ -1,8 +1,8 @@
-/* Mobile Single Page Application Styles */
+/* Mobile Single Page Application Styles - Premium Light Theme */
 
 .mobile-spa {
   min-height: 100vh;
-  background: #faf9f7;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
   padding-bottom: 70px; /* Space for bottom nav */
 }
 
@@ -12,9 +12,9 @@
   top: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(135deg, #5b6eb3 0%, #7986c7 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   z-index: 1000;
-  box-shadow: 0 2px 20px rgba(91, 110, 179, 0.2);
+  box-shadow: 0 2px 20px rgba(59, 130, 246, 0.25);
 }
 
 .mobile-header-content {
@@ -57,7 +57,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  background: #ef4444;
+  background: #f97316;
   color: white;
   font-size: 0.65rem;
   font-weight: 700;
@@ -86,7 +86,7 @@
   padding: 12px 20px;
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -110,7 +110,7 @@
 /* Hero Section */
 .mobile-hero {
   position: relative;
-  background: linear-gradient(135deg, #5b6eb3 0%, #7986c7 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   padding: 40px 20px 50px;
   text-align: center;
   overflow: hidden;
@@ -142,7 +142,7 @@
 }
 
 .mobile-hero p {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   font-size: 1rem;
   margin-bottom: 24px;
   line-height: 1.5;
@@ -157,9 +157,9 @@
   font-weight: 700;
   border-radius: 50px;
   background: white;
-  color: #5b6eb3;
+  color: #3b82f6;
   border: none;
-  box-shadow: 0 4px 15px rgba(44, 62, 80, 0.15);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25);
   cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -195,7 +195,7 @@
 
 .feature-item .feature-icon {
   font-size: 1.5rem;
-  color: #5b6eb3;
+  color: #3b82f6;
 }
 
 .feature-item span {
@@ -218,12 +218,12 @@
 .section-header h2 {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #2c3e50;
+  color: #1e293b;
   margin-bottom: 6px;
 }
 
 .section-header p {
-  color: #5a6b7d;
+  color: #64748b;
   font-size: 0.9rem;
 }
 
@@ -231,7 +231,7 @@
 .mobile-search {
   display: flex;
   align-items: center;
-  background: #f2f3f5;
+  background: #f1f5f9;
   border-radius: 12px;
   padding: 12px 16px;
   margin-bottom: 16px;
@@ -239,7 +239,7 @@
 }
 
 .mobile-search .search-icon {
-  color: #8a9bab;
+  color: #64748b;
   font-size: 1.2rem;
 }
 
@@ -248,12 +248,12 @@
   border: none;
   background: none;
   font-size: 1rem;
-  color: #2c3e50;
+  color: #1e293b;
   outline: none;
 }
 
 .mobile-search input::placeholder {
-  color: #8a9bab;
+  color: #94a3b8;
 }
 
 /* Category Pills */
@@ -273,18 +273,18 @@
 .pill {
   padding: 10px 20px;
   border-radius: 50px;
-  border: 2px solid #e5e3df;
+  border: 2px solid #e2e8f0;
   background: white;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #4a5a6b;
+  color: #475569;
   white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .pill.active {
-  background: linear-gradient(135deg, #5b6eb3 0%, #7986c7 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   border-color: transparent;
   color: white;
 }
@@ -329,8 +329,8 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid #e5e3df;
-  border-top-color: #5b6eb3;
+  border: 3px solid #e2e8f0;
+  border-top-color: #3b82f6;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -342,7 +342,7 @@
 /* Contact Section */
 .mobile-contact-section {
   padding: 24px 16px;
-  background: #faf9f7;
+  background: #f1f5f9;
 }
 
 .contact-cards {
@@ -360,7 +360,7 @@
   background: white;
   border-radius: 12px;
   text-decoration: none;
-  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
   transition: transform 0.2s ease;
 }
 
@@ -370,10 +370,10 @@
 
 .contact-icon {
   font-size: 1.5rem;
-  color: #5b6eb3;
+  color: #3b82f6;
   width: 44px;
   height: 44px;
-  background: #eef0f5;
+  background: #eff6ff;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -388,13 +388,13 @@
 
 .contact-label {
   font-size: 0.8rem;
-  color: #5a6b7d;
+  color: #64748b;
 }
 
 .contact-value {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: #1e293b;
 }
 
 /* Quick Actions */
@@ -410,13 +410,13 @@
   justify-content: center;
   gap: 8px;
   padding: 16px;
-  background: #25d366;
+  background: #22c55e;
   color: white;
   border-radius: 12px;
   font-size: 1rem;
   font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
   transition: transform 0.2s ease;
 }
 
@@ -427,7 +427,7 @@
 /* Mobile CTA */
 .mobile-cta {
   padding: 32px 20px;
-  background: linear-gradient(135deg, #5b6eb3 0%, #7986c7 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   text-align: center;
 }
 
@@ -458,7 +458,7 @@
 
 .cta-buttons .btn-primary {
   background: white;
-  color: #5b6eb3;
+  color: #3b82f6;
 }
 
 .cta-buttons .btn-outline {
@@ -476,7 +476,7 @@
 .mobile-user-menu h3 {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #2c3e50;
+  color: #1e293b;
   margin-bottom: 16px;
 }
 
@@ -492,10 +492,10 @@
   align-items: center;
   gap: 8px;
   padding: 20px 12px;
-  background: #faf9f7;
+  background: #f1f5f9;
   border-radius: 12px;
   text-decoration: none;
-  color: #4a5a6b;
+  color: #475569;
   font-size: 0.9rem;
   font-weight: 600;
   transition: all 0.2s ease;
@@ -507,7 +507,7 @@
 }
 
 .menu-item:active {
-  background: #eef0f5;
+  background: #e2e8f0;
   transform: scale(0.98);
 }
 
@@ -521,9 +521,9 @@
   justify-content: space-around;
   background: white;
   padding: 8px 0;
-  border-top: 1px solid #e5e3df;
+  border-top: 1px solid #e2e8f0;
   z-index: 1000;
-  box-shadow: 0 -4px 20px rgba(44, 62, 80, 0.08);
+  box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.06);
 }
 
 .bottom-nav-item {
@@ -534,7 +534,7 @@
   padding: 8px 16px;
   background: none;
   border: none;
-  color: #5a6b7d;
+  color: #64748b;
   font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
@@ -545,7 +545,7 @@
 
 .bottom-nav-item.active,
 .bottom-nav-item:hover {
-  color: #5b6eb3;
+  color: #3b82f6;
 }
 
 .nav-icon {
@@ -556,7 +556,7 @@
   position: absolute;
   top: 2px;
   right: 8px;
-  background: #ef4444;
+  background: #f97316;
   color: white;
   font-size: 0.6rem;
   padding: 2px 5px;

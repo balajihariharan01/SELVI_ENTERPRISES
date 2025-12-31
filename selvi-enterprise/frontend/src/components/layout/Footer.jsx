@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { FiPhone, FiMail, FiMapPin, FiExternalLink } from 'react-icons/fi';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FiPhone, FiMail, FiMapPin, FiNavigation } from 'react-icons/fi';
+import { FaWhatsapp, FaBuilding } from 'react-icons/fa';
 import { BUSINESS_CONFIG, getWhatsAppGeneralLink } from '../../config/businessConfig';
 import './Footer.css';
 
@@ -13,13 +13,26 @@ const Footer = () => {
           <div className="footer-col">
             <div className="brand-section">
               <div className="brand-header">
-                <img src="/logo.png" alt={BUSINESS_CONFIG.name} className="brand-logo" />
-                <div className="brand-name">{BUSINESS_CONFIG.fullName}</div>
+                <div className="brand-logo">
+                  <FaBuilding size={20} color="#fff" />
+                </div>
+                <div className="brand-name-wrapper">
+                  <span className="brand-name">{BUSINESS_CONFIG.name}</span>
+                  <span className="brand-tagline">Building Materials</span>
+                </div>
               </div>
               <p className="brand-desc">{BUSINESS_CONFIG.description}</p>
-              <p className="brand-owners">
-                <span className="owners-label">Owners:</span> {BUSINESS_CONFIG.owners.map(o => o.name).join(', ')}
-              </p>
+              <div className="brand-owners">
+                {BUSINESS_CONFIG.owners.map((owner, index) => (
+                  <div className="owner-item" key={index}>
+                    <div className="owner-badge">{owner.name.charAt(0)}</div>
+                    <div className="owner-details">
+                      <span className="owner-name">{owner.name}</span>
+                      <span className="owner-role">Proprietor</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -41,16 +54,24 @@ const Footer = () => {
             <h4 className="footer-heading">Contact Us</h4>
             <ul className="contact-list">
               <li className="contact-row">
-                <FiMapPin className="contact-icon" />
+                <span className="contact-icon">
+                  <FiMapPin size={14} />
+                </span>
                 <div className="contact-details">
-                  <span>Opposite to Eye Foundation,</span>
-                  <span>Coonoor Main Road,</span>
-                  <span>Ooty – 643001, Tamil Nadu</span>
+                  <span className="contact-label">Address</span>
+                  <span className="address-text">
+                    Opposite to Eye Foundation,<br />
+                    Coonoor Main Road,<br />
+                    Ooty – 643001, Tamil Nadu
+                  </span>
                 </div>
               </li>
               <li className="contact-row">
-                <FiPhone className="contact-icon" />
+                <span className="contact-icon">
+                  <FiPhone size={14} />
+                </span>
                 <div className="contact-details">
+                  <span className="contact-label">Phone</span>
                   <a href={`tel:${BUSINESS_CONFIG.contact.phone1.replace(/\s/g, '')}`}>
                     {BUSINESS_CONFIG.contact.phone1}
                   </a>
@@ -60,20 +81,30 @@ const Footer = () => {
                 </div>
               </li>
               <li className="contact-row">
-                <FiMail className="contact-icon" />
-                <a href={`mailto:${BUSINESS_CONFIG.contact.email}`} className="email-link">
-                  {BUSINESS_CONFIG.contact.email}
-                </a>
+                <span className="contact-icon">
+                  <FiMail size={14} />
+                </span>
+                <div className="contact-details">
+                  <span className="contact-label">Email</span>
+                  <a href={`mailto:${BUSINESS_CONFIG.contact.email}`} className="email-link">
+                    {BUSINESS_CONFIG.contact.email}
+                  </a>
+                </div>
               </li>
               <li className="contact-row whatsapp-row">
-                <FaWhatsapp className="contact-icon whatsapp-icon" />
-                <a 
-                  href={getWhatsAppGeneralLink()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {BUSINESS_CONFIG.contact.whatsappDisplay}
-                </a>
+                <span className="contact-icon">
+                  <FaWhatsapp size={14} />
+                </span>
+                <div className="contact-details">
+                  <span className="contact-label">WhatsApp</span>
+                  <a 
+                    href={getWhatsAppGeneralLink()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {BUSINESS_CONFIG.contact.whatsappDisplay}
+                  </a>
+                </div>
               </li>
             </ul>
           </div>
@@ -100,21 +131,25 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className="map-external-link"
               >
-                <FiExternalLink className="external-icon" />
-                <span>Open in Google Maps</span>
+                <FiNavigation size={12} />
+                <span>Get Directions</span>
               </a>
             </div>
           </div>
         </div>
 
-        {/* Payment & Copyright */}
+        {/* Bottom Bar */}
         <div className="footer-bottom-section">
           <div className="payment-info">
-            <span className="payment-label">UPI ID:</span>
-            <span className="payment-value">{BUSINESS_CONFIG.payment.upiId}</span>
+            <span className="payment-icon">💳</span>
+            <div className="payment-content">
+              <span className="payment-label">UPI ID</span>
+              <span className="payment-value">{BUSINESS_CONFIG.payment.upiId}</span>
+            </div>
           </div>
           <div className="copyright">
-            &copy; {new Date().getFullYear()} {BUSINESS_CONFIG.name}. All rights reserved.
+            <p>&copy; {new Date().getFullYear()} {BUSINESS_CONFIG.name}. All rights reserved.</p>
+            <p>Premium Building Materials Supplier</p>
           </div>
         </div>
       </div>

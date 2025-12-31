@@ -23,6 +23,8 @@ import Checkout from './pages/user/Checkout'
 import MyOrders from './pages/user/MyOrders'
 import OrderDetail from './pages/user/OrderDetail'
 import Profile from './pages/user/Profile'
+import PaymentSuccess from './pages/user/PaymentSuccess'
+import PaymentFailed from './pages/user/PaymentFailed'
 
 // Admin Pages
 import AdminLayout from './components/admin/AdminLayout'
@@ -92,6 +94,16 @@ function App() {
               <Route path="/profile" element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              } />
+              <Route path="/payment-success" element={
+                <ProtectedRoute>
+                  <PaymentSuccess />
+                </ProtectedRoute>
+              } />
+              <Route path="/payment-failed" element={
+                <ProtectedRoute>
+                  <PaymentFailed />
                 </ProtectedRoute>
               } />
 

@@ -1,10 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { FiArrowLeft, FiMapPin, FiPhone, FiUser, FiCalendar, FiPackage, FiDownload, FiEdit2, FiTrash2, FiX, FiPlus, FiMinus } from 'react-icons/fi';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import { FiArrowLeft, FiMapPin, FiPhone, FiUser, FiCalendar, FiPackage, FiDownload, FiEdit2, FiTrash2, FiX, FiPlus, FiMinus, FiCreditCard, FiLoader } from 'react-icons/fi';
 import orderService from '../../services/orderService';
+import paymentService from '../../services/paymentService';
 import { generateReceipt } from '../../utils/receiptGenerator';
+import CheckoutForm from '../../components/CheckoutForm';
 import toast from 'react-hot-toast';
 import './OrderDetail.css';
+
+// Initialize Stripe with publishable key
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const OrderDetail = () => {
   const { id } = useParams();
@@ -19,6 +26,11 @@ const OrderDetail = () => {
   // Modal states
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  
+  // Payment states
+  const [clientSecret, setClientSecret] = useState('');
+  const [creatingPaymentIntent, setCreatingPaymentIntent] = useState(false);
   
   // Edit form state
   const [editItems, setEditItems] = useState([]);
@@ -191,6 +203,54 @@ const OrderDetail = () => {
     return colors[status] || 'secondary';
   };
 
+  // Handle opening payment modal
+  const openPaymentModal = async () => {
+    setShowPaymentModal(true);
+    setCreatingPaymentIntent(true);
+    
+    try {
+      const response = await paymentService.createPaymentIntent(
+        order._id,
+        order.totalAmount,
+        null // email will be fetched from auth
+      );
+      setClientSecret(response.clientSecret);
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to initialize payment');
+      setShowPaymentModal(false);
+    } finally {
+      setCreatingPaymentIntent(false);
+    }
+  };
+
+  // Handle successful payment
+  const handlePaymentSuccess = async (paymentIntent) => {
+    try {
+      await paymentService.confirmPayment(paymentIntent.id, order._id);
+      toast.success('Payment successful!');
+      setShowPaymentModal(false);
+      navigate(`/payment-success?orderId=${order._id}`);
+    } catch (error) {
+      toast.success('Payment processed! Refreshing...');
+      setShowPaymentModal(false);
+      fetchOrder();
+    }
+  };
+
+  // Handle payment error
+  const handlePaymentError = (error) => {
+    toast.error(error.message || 'Payment failed');
+  };
+
+  // Stripe appearance config
+  const stripeAppearance = {
+    theme: 'stripe',
+    variables: {
+      colorPrimary: '#2563eb',
+      borderRadius: '8px',
+    }
+  };
+
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString('en-IN', {
       day: 'numeric',
@@ -254,6 +314,17 @@ const OrderDetail = () => {
                 >
                   <FiDownload /> {downloading ? 'Generating...' : 'Receipt'}
                 </button>
+                
+                {/* Pay Now Button - for online orders with pending payment */}
+                {order.paymentMethod === 'online' && order.paymentStatus === 'pending' && order.orderStatus !== 'cancelled' && (
+                  <button 
+                    className="btn btn-success btn-sm"
+                    onClick={openPaymentModal}
+                    title="Complete Payment"
+                  >
+                    <FiCreditCard /> Pay Now
+                  </button>
+                )}
                 
                 {order.orderStatus === 'pending' && (
                   <>
@@ -347,11 +418,11 @@ const OrderDetail = () => {
                 </div>
                 <div className="info-row">
                   <span>Payment Method</span>
-                  <span>{order.paymentMethod === 'cod' ? 'Cash on Delivery' : order.paymentMethod}</span>
+                  <span>{order.paymentMethod === 'cod' ? 'Cash on Delivery' : order.paymentMethod === 'online' ? 'Online Payment' : order.paymentMethod}</span>
                 </div>
                 <div className="info-row">
                   <span>Payment Status</span>
-                  <span className={`badge badge-${order.paymentStatus === 'paid' ? 'success' : 'warning'}`}>
+                  <span className={`badge badge-${order.paymentStatus === 'paid' ? 'success' : order.paymentStatus === 'failed' ? 'danger' : 'warning'}`}>
                     {order.paymentStatus}
                   </span>
                 </div>
@@ -541,6 +612,55 @@ const OrderDetail = () => {
               >
                 {deleting ? 'Deleting...' : 'Delete Order'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Modal */}
+      {showPaymentModal && (
+        <div className="modal-overlay">
+          <div className="modal payment-modal">
+            <div className="modal-header">
+              <h2><FiCreditCard /> Complete Payment</h2>
+              <button className="close-btn" onClick={() => setShowPaymentModal(false)}>
+                <FiX />
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="payment-order-summary">
+                <p>Order #{order.orderNumber}</p>
+                <p className="payment-amount">Amount: ₹{order.totalAmount?.toLocaleString()}</p>
+              </div>
+              
+              {creatingPaymentIntent ? (
+                <div className="payment-loading">
+                  <FiLoader className="spinner-large" />
+                  <p>Initializing secure payment...</p>
+                </div>
+              ) : clientSecret ? (
+                <Elements 
+                  stripe={stripePromise} 
+                  options={{ clientSecret, appearance: stripeAppearance }}
+                >
+                  <CheckoutForm
+                    orderId={order._id}
+                    amount={order.totalAmount}
+                    onSuccess={handlePaymentSuccess}
+                    onError={handlePaymentError}
+                  />
+                </Elements>
+              ) : (
+                <div className="payment-error-state">
+                  <p>Failed to initialize payment. Please try again.</p>
+                  <button 
+                    className="btn btn-primary"
+                    onClick={openPaymentModal}
+                  >
+                    Retry
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
