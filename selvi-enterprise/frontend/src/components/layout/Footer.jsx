@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { FiPhone, FiMail, FiMapPin, FiNavigation } from 'react-icons/fi';
-import { FaWhatsapp, FaBuilding } from 'react-icons/fa';
+import { FaWhatsapp } from 'react-icons/fa';
 import { BUSINESS_CONFIG, getWhatsAppGeneralLink } from '../../config/businessConfig';
+import Logo from '../common/Logo';
 import './Footer.css';
 
 const Footer = () => {
@@ -14,7 +15,7 @@ const Footer = () => {
             <div className="brand-section">
               <div className="brand-header">
                 <div className="brand-logo">
-                  <FaBuilding size={20} color="#fff" />
+                  <Logo className="footer-logo-img" />
                 </div>
                 <div className="brand-name-wrapper">
                   <span className="brand-name">{BUSINESS_CONFIG.name}</span>
@@ -42,8 +43,8 @@ const Footer = () => {
             <ul className="footer-list">
               <li><Link to="/">Home</Link></li>
               <li><Link to="/products">Products</Link></li>
-              <li><Link to="/products?category=cement">Cement</Link></li>
-              <li><Link to="/products?category=steel">Steel</Link></li>
+              <li><Link to="/about">About Us</Link></li>
+              <li><Link to="/contact">Contact Us</Link></li>
               <li><Link to="/my-orders">Track Order</Link></li>
               <li><Link to="/cart">Shopping Cart</Link></li>
             </ul>
@@ -59,9 +60,9 @@ const Footer = () => {
                 </span>
                 <div className="contact-details">
                   <span className="contact-label">Address</span>
-                  <span className="address-text">
-                    Opposite to Eye Foundation,<br />
-                    Coonoor Main Road,<br />
+                  <span >
+                    Opposite to Eye Foundation,<br/>
+                    Coonoor Main Road,<br/>
                     Ooty – 643001, Tamil Nadu
                   </span>
                 </div>

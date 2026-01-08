@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(180deg, #E8F0FE 0%, #F0F5FF 100%);
 }
 
 .result-card {
@@ -14,15 +14,15 @@
   border-radius: 18px;
   padding: 3rem 2rem;
   text-align: center;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(15, 6, 137, 0.06);
+  border: 1px solid #E8F0FE;
   transition: all 0.35s ease;
   animation: scaleIn 0.4s ease-out;
 }
 
 .result-card:hover {
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
-  border-color: #c7d2fe;
+  box-shadow: 0 16px 40px rgba(15, 6, 137, 0.12);
+  border-color: #0857BE;
 }
 
 @keyframes scaleIn {
@@ -42,7 +42,7 @@
 
 .result-card.loading .spinner-large {
   font-size: 3rem;
-  color: var(--primary-color, #2563eb);
+  color: #0857BE;
   animation: spin 1s linear infinite;
   margin-bottom: 1.5rem;
 }

@@ -261,7 +261,7 @@ const ProductManagement = () => {
                   </div>
                 </td>
                 <td>
-                  <span className="category-badge">{product.category}</span>
+                  <span className={`category-badge ${product.category?.toLowerCase()}`}>{product.category}</span>
                 </td>
                 <td>₹{product.price.toLocaleString()}/{product.unit}</td>
                 <td>

@@ -1,7 +1,7 @@
 /* ===== Cart Page - Premium Light Design ===== */
 .cart-page {
   min-height: calc(100vh - 200px);
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(180deg, #E8F0FE 0%, #F0F5FF 100%);
   padding-bottom: 4rem;
   position: relative;
 }
@@ -13,7 +13,7 @@
   left: 0;
   right: 0;
   height: 350px;
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.04) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(8, 87, 190, 0.06) 0%, transparent 100%);
   pointer-events: none;
 }
 
@@ -24,16 +24,16 @@
   background: #ffffff;
   border-radius: 18px;
   margin-top: 2rem;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(15, 6, 137, 0.06);
+  border: 1px solid #E8F0FE;
   animation: fadeInUp 0.5s ease-out;
   position: relative;
   transition: all 0.35s ease;
 }
 
 .empty-cart:hover {
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.1);
-  border-color: #c7d2fe;
+  box-shadow: 0 16px 40px rgba(15, 6, 137, 0.1);
+  border-color: #0857BE;
 }
 
 .empty-cart svg {
@@ -75,16 +75,16 @@
   background: #ffffff;
   border-radius: 18px;
   padding: 1.75rem;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(15, 6, 137, 0.06);
+  border: 1px solid #E8F0FE;
   min-width: 0;
   animation: fadeInUp 0.4s ease-out;
   transition: all 0.35s ease;
 }
 
 .cart-items:hover {
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
-  border-color: #c7d2fe;
+  box-shadow: 0 12px 32px rgba(15, 6, 137, 0.08);
+  border-color: #BFDBFE;
 }
 
 .cart-header {

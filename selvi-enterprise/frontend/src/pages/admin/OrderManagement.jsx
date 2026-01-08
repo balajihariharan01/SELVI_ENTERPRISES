@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FiSearch, FiEye, FiTruck, FiCheckCircle, FiXCircle, FiX, FiPackage, FiDownload } from 'react-icons/fi';
+import { FiSearch, FiEye, FiTruck, FiCheckCircle, FiXCircle, FiX, FiPackage, FiDownload, FiShoppingBag, FiClock, FiRefreshCw } from 'react-icons/fi';
 import orderService from '../../services/orderService';
 import { generateReceipt } from '../../utils/receiptGenerator';
 import toast from 'react-hot-toast';
@@ -109,20 +109,32 @@ const OrderManagement = () => {
       {/* Stats */}
       <div className="order-stats">
         <div className="stat-card">
-          <span className="stat-value">{stats?.total || 0}</span>
-          <span className="stat-label">Total Orders</span>
+          <div className="stat-icon"><FiShoppingBag /></div>
+          <div className="stat-content">
+            <span className="stat-value">{stats?.total || 0}</span>
+            <span className="stat-label">Total Orders</span>
+          </div>
         </div>
         <div className="stat-card pending">
-          <span className="stat-value">{stats?.pending || 0}</span>
-          <span className="stat-label">Pending</span>
+          <div className="stat-icon"><FiClock /></div>
+          <div className="stat-content">
+            <span className="stat-value">{stats?.pending || 0}</span>
+            <span className="stat-label">Pending</span>
+          </div>
         </div>
         <div className="stat-card processing">
-          <span className="stat-value">{stats?.processing || 0}</span>
-          <span className="stat-label">Processing</span>
+          <div className="stat-icon"><FiRefreshCw /></div>
+          <div className="stat-content">
+            <span className="stat-value">{stats?.processing || 0}</span>
+            <span className="stat-label">Processing</span>
+          </div>
         </div>
         <div className="stat-card delivered">
-          <span className="stat-value">{stats?.delivered || 0}</span>
-          <span className="stat-label">Delivered</span>
+          <div className="stat-icon"><FiCheckCircle /></div>
+          <div className="stat-content">
+            <span className="stat-value">{stats?.delivered || 0}</span>
+            <span className="stat-label">Delivered</span>
+          </div>
         </div>
       </div>
 

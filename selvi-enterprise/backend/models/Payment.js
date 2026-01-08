@@ -1,11 +1,25 @@
 const mongoose = require('mongoose');
 
+/**
+ * Generate unique payment ID
+ * Format: PAY-YYMMDD-XXXXX (e.g., PAY-260108-12345)
+ */
+const generatePaymentId = () => {
+  const date = new Date();
+  const year = date.getFullYear().toString().slice(-2);
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const random = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+  return `PAY${year}${month}${day}${random}`;
+};
+
 const paymentSchema = new mongoose.Schema({
-  // Unique payment identifier
+  // Unique payment identifier - auto-generated if not provided
   paymentId: {
     type: String,
     unique: true,
-    required: true
+    required: true,
+    default: generatePaymentId
   },
   
   // Reference to the order
@@ -117,19 +131,22 @@ const paymentSchema = new mongoose.Schema({
   }
 });
 
-// Generate unique payment ID before saving
-paymentSchema.pre('save', async function(next) {
+// Pre-validate hook to ensure paymentId exists before validation
+paymentSchema.pre('validate', function(next) {
   if (!this.paymentId) {
-    const date = new Date();
-    const year = date.getFullYear().toString().slice(-2);
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    const random = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
-    this.paymentId = `PAY${year}${month}${day}${random}`;
+    this.paymentId = generatePaymentId();
   }
+  next();
+});
+
+// Pre-save hook to update timestamp
+paymentSchema.pre('save', function(next) {
   this.updatedAt = Date.now();
   next();
 });
+
+// Static method to generate paymentId (for use in controllers)
+paymentSchema.statics.generatePaymentId = generatePaymentId;
 
 // Index for efficient queries
 paymentSchema.index({ status: 1, createdAt: -1 });

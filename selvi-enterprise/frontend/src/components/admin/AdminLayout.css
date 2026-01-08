@@ -1,21 +1,21 @@
 /* ===== Admin Layout - Premium Light Enterprise Theme ===== */
 
-/* CSS Variables for Admin Theme */
+/* CSS Variables for Admin Theme - Construction Industry Palette */
 :root {
-  --admin-bg-primary: #f8fafc;
-  --admin-bg-secondary: #f1f5f9;
+  --admin-bg-primary: #F5F7FB;
+  --admin-bg-secondary: #eef2f7;
   --admin-surface: #ffffff;
-  --admin-surface-hover: #fafbfc;
+  --admin-surface-hover: #f8fafc;
   --admin-border: #e5e7eb;
-  --admin-border-light: #f1f5f9;
-  --admin-shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
-  --admin-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  --admin-shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.1);
-  --admin-shadow-xl: 0 16px 40px rgba(15, 23, 42, 0.12);
-  --admin-accent: #3b82f6;
-  --admin-accent-light: #eff6ff;
-  --admin-accent-hover: #2563eb;
-  --admin-hover-border: #c7d2fe;
+  --admin-border-light: #eef2f7;
+  --admin-shadow-sm: 0 2px 8px rgba(15, 6, 137, 0.04);
+  --admin-shadow: 0 8px 24px rgba(15, 6, 137, 0.06);
+  --admin-shadow-lg: 0 12px 32px rgba(15, 6, 137, 0.1);
+  --admin-shadow-xl: 0 16px 40px rgba(15, 6, 137, 0.12);
+  --admin-accent: #0857BE;
+  --admin-accent-light: #e8f0fc;
+  --admin-accent-hover: #0F0689;
+  --admin-hover-border: #0857BE;
   --admin-text-primary: #0f172a;
   --admin-text-secondary: #475569;
   --admin-text-muted: #64748b;
@@ -32,11 +32,11 @@
   background: var(--admin-bg-primary);
 }
 
-/* ===== Sidebar - Clean Light Theme ===== */
+/* ===== Sidebar - Dark Blue Theme ===== */
 .admin-sidebar {
   width: 260px;
-  background: #ffffff;
-  color: var(--admin-text-primary);
+  background: linear-gradient(180deg, #0F0689 0%, #0a0566 100%);
+  color: #ffffff;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -50,8 +50,8 @@
 
 .sidebar-header {
   padding: 1.5rem 1.25rem;
-  border-bottom: 1px solid var(--admin-border);
-  background: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
 }
 
 .admin-logo {
@@ -77,7 +77,7 @@
   font-weight: 700;
   font-size: 1rem;
   letter-spacing: -0.01em;
-  color: var(--admin-text-primary);
+  color: #ffffff;
 }
 
 /* ===== Sidebar Navigation ===== */
@@ -93,7 +93,7 @@
   gap: 0.875rem;
   padding: 0.875rem 1.25rem;
   margin: 0.25rem 0.75rem;
-  color: var(--admin-text-secondary);
+  color: rgba(255, 255, 255, 0.8);
   transition: var(--admin-transition);
   border: none;
   background: transparent;
@@ -116,14 +116,14 @@
   transform: translateY(-50%) scaleY(0);
   width: 3px;
   height: 20px;
-  background: var(--admin-accent);
+  background: #EFB523;
   border-radius: 0 3px 3px 0;
   transition: var(--admin-transition);
 }
 
 .nav-item:hover {
-  background: var(--admin-accent-light);
-  color: var(--admin-text-primary);
+  background: rgba(8, 87, 190, 0.3);
+  color: #ffffff;
 }
 
 .nav-item:hover::before {
@@ -131,8 +131,8 @@
 }
 
 .nav-item.active {
-  background: var(--admin-accent-light);
-  color: var(--admin-accent);
+  background: rgba(8, 87, 190, 0.4);
+  color: #EFB523;
   font-weight: 600;
 }
 
@@ -147,27 +147,27 @@
 
 .nav-item:hover svg,
 .nav-item.active svg {
-  color: var(--admin-accent);
+  color: #EFB523;
 }
 
 /* ===== Sidebar Footer ===== */
 .sidebar-footer {
   padding: 1rem 0.75rem;
-  border-top: 1px solid var(--admin-border);
-  background: #ffffff;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
 }
 
 .logout-btn {
-  color: var(--admin-text-secondary) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
 }
 
 .logout-btn:hover {
-  background: #fef2f2 !important;
-  color: #dc2626 !important;
+  background: rgba(211, 30, 0, 0.3) !important;
+  color: #ffffff !important;
 }
 
 .logout-btn:hover svg {
-  color: #dc2626;
+  color: #D31E00;
 }
 
 /* ===== Admin Main Area ===== */
@@ -177,7 +177,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: transparent;
+  background: #F5F2EC;
   animation: adminFadeIn 0.5s ease-out;
 }
 
@@ -202,19 +202,19 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  border-bottom: 1px solid var(--admin-border);
+  border-bottom: 1px solid #E8F0FE;
   transition: var(--admin-transition);
 }
 
 .admin-header h2 {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--admin-text-primary);
+  color: #0F0689;
   letter-spacing: -0.01em;
 }
 
 .admin-badge {
-  background: var(--admin-accent);
+  background: #0857BE;
   color: white;
   padding: 0.375rem 0.875rem;
   border-radius: 6px;
@@ -226,14 +226,14 @@
 }
 
 .admin-badge:hover {
-  background: var(--admin-accent-hover);
+  background: #0F0689;
 }
 
 /* ===== Admin Content Area ===== */
 .admin-content {
   flex: 1;
   padding: 2rem;
-  background: transparent;
+  background: #F5F2EC;
   animation: contentSlideUp 0.4s ease-out;
 }
 

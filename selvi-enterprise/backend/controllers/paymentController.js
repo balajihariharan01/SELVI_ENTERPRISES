@@ -2,6 +2,7 @@ const Stripe = require('stripe');
 const Order = require('../models/Order');
 const Payment = require('../models/Payment');
 const User = require('../models/User');
+const { sendReceiptEmail } = require('../services/emailService');
 
 // Initialize Stripe with secret key from environment
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -215,6 +216,7 @@ exports.confirmPayment = async (req, res, next) => {
     
     if (!payment) {
       payment = new Payment({
+        paymentId: Payment.generatePaymentId(), // Explicitly set to avoid validation issues
         order: order._id,
         orderNumber: order.orderNumber,
         user: order.user._id || order.user,
@@ -236,6 +238,28 @@ exports.confirmPayment = async (req, res, next) => {
       });
       await payment.save();
       console.log(`Payment record created for order ${order.orderNumber}`);
+
+      // Send receipt email to customer with tracking
+      order.receiptEmailAttempts = (order.receiptEmailAttempts || 0) + 1;
+      
+      sendReceiptEmail(order)
+        .then(async (result) => {
+          console.log(`✅ Receipt email sent for order ${order.orderNumber}`);
+          // Update order with email success
+          await Order.findByIdAndUpdate(order._id, {
+            receiptEmailStatus: 'sent',
+            receiptEmailSentAt: new Date(),
+            receiptEmailError: null
+          });
+        })
+        .catch(async (err) => {
+          console.error(`⚠️ Failed to send receipt email for order ${order.orderNumber}:`, err.message);
+          // Update order with email failure
+          await Order.findByIdAndUpdate(order._id, {
+            receiptEmailStatus: 'failed',
+            receiptEmailError: err.message
+          });
+        });
     } else if (payment.status !== 'success') {
       payment.status = 'success';
       payment.paymentDate = new Date();
@@ -331,6 +355,7 @@ async function handlePaymentSuccess(paymentIntent) {
       
       if (!payment) {
         payment = new Payment({
+          paymentId: Payment.generatePaymentId(), // Explicitly set to avoid validation issues
           order: order._id,
           orderNumber: order.orderNumber,
           user: order.user._id || order.user,
@@ -363,6 +388,11 @@ async function handlePaymentSuccess(paymentIntent) {
       
       await payment.save();
       console.log(`Payment record created/updated for order ${order.orderNumber}`);
+
+      // Send receipt email to customer (non-blocking, webhook context)
+      sendReceiptEmail(order).catch(err => {
+        console.error(`⚠️ Webhook: Failed to send receipt email for order ${order.orderNumber}:`, err.message);
+      });
     }
   } catch (error) {
     console.error('Error handling payment success:', error.message);
@@ -397,6 +427,7 @@ async function handlePaymentFailure(paymentIntent) {
       
       if (!payment) {
         payment = new Payment({
+          paymentId: Payment.generatePaymentId(), // Explicitly set to avoid validation issues
           order: order._id,
           orderNumber: order.orderNumber,
           user: order.user._id || order.user,
@@ -466,7 +497,7 @@ async function handlePaymentCanceled(paymentIntent) {
 // @access  Private/Admin
 exports.getAllPayments = async (req, res, next) => {
   try {
-    const { status, method, startDate, endDate, search, page = 1, limit = 50 } = req.query;
+    const { status, method, startDate, endDate, search, page = 1, limit = 50, syncStatus } = req.query;
 
     let query = {};
 
@@ -491,6 +522,15 @@ exports.getAllPayments = async (req, res, next) => {
       }
     }
 
+    // Sync status filter (synced vs manual)
+    if (syncStatus && syncStatus !== 'all') {
+      if (syncStatus === 'synced') {
+        query.transactionId = { $regex: /^(SYNC_|COD_)/ };
+      } else if (syncStatus === 'gateway') {
+        query.transactionId = { $not: { $regex: /^(SYNC_|COD_)/ } };
+      }
+    }
+
     // Search filter
     if (search) {
       const searchRegex = new RegExp(search, 'i');
@@ -506,7 +546,7 @@ exports.getAllPayments = async (req, res, next) => {
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
     const payments = await Payment.find(query)
-      .populate('order', 'orderNumber totalAmount orderStatus items')
+      .populate('order', 'orderNumber totalAmount orderStatus items shippingAddress')
       .populate('user', 'name email phone')
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -514,15 +554,48 @@ exports.getAllPayments = async (req, res, next) => {
 
     const totalPayments = await Payment.countDocuments(query);
 
-    // Calculate stats
-    const allPayments = await Payment.find({});
-    const stats = {
-      totalRevenue: allPayments.filter(p => p.status === 'success').reduce((sum, p) => sum + p.amount, 0),
-      successfulPayments: allPayments.filter(p => p.status === 'success').length,
-      pendingPayments: allPayments.filter(p => p.status === 'pending' || p.status === 'processing').length,
-      failedPayments: allPayments.filter(p => p.status === 'failed').length,
-      totalPayments: allPayments.length
+    // Calculate stats from database (not cached) - using aggregation for efficiency
+    const statsAggregation = await Payment.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalRevenue: {
+            $sum: {
+              $cond: [{ $eq: ['$status', 'success'] }, '$amount', 0]
+            }
+          },
+          successfulPayments: {
+            $sum: {
+              $cond: [{ $eq: ['$status', 'success'] }, 1, 0]
+            }
+          },
+          pendingPayments: {
+            $sum: {
+              $cond: [{ $in: ['$status', ['pending', 'processing']] }, 1, 0]
+            }
+          },
+          failedPayments: {
+            $sum: {
+              $cond: [{ $eq: ['$status', 'failed'] }, 1, 0]
+            }
+          },
+          totalPayments: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const stats = statsAggregation[0] || {
+      totalRevenue: 0,
+      successfulPayments: 0,
+      pendingPayments: 0,
+      failedPayments: 0,
+      totalPayments: 0
     };
+
+    // Get last sync timestamp from metadata or most recent synced payment
+    const lastSyncedPayment = await Payment.findOne({ 
+      transactionId: { $regex: /^(SYNC_|COD_)/ } 
+    }).sort({ createdAt: -1 });
 
     res.json({
       success: true,
@@ -531,6 +604,7 @@ exports.getAllPayments = async (req, res, next) => {
       page: parseInt(page),
       pages: Math.ceil(totalPayments / parseInt(limit)),
       stats,
+      lastSyncedAt: lastSyncedPayment?.createdAt || null,
       payments
     });
   } catch (error) {
@@ -652,51 +726,118 @@ exports.getPaymentStats = async (req, res, next) => {
 // @route   POST /api/payments/admin/sync
 // @access  Private/Admin
 exports.syncPaymentsFromOrders = async (req, res, next) => {
+  const syncResults = {
+    synced: 0,
+    skipped: 0,
+    failed: 0,
+    errors: [],
+    details: {
+      onlinePayments: { synced: 0, skipped: 0 },
+      codPayments: { synced: 0, skipped: 0 }
+    }
+  };
+
   try {
-    // Find all orders with paid status that don't have a payment record
-    const paidOrders = await Order.find({ 
-      paymentStatus: 'paid'
+    console.log('=== Starting Payment Sync ===');
+    
+    // 1. Sync Online Payments (paid orders with paymentIntentId)
+    const paidOnlineOrders = await Order.find({ 
+      paymentStatus: 'paid',
+      paymentMethod: 'online',
+      orderStatus: { $nin: ['cancelled'] } // Don't sync cancelled orders
     }).populate('user', 'name email phone');
 
-    let synced = 0;
-    let skipped = 0;
+    console.log(`Found ${paidOnlineOrders.length} paid online orders to check`);
 
-    for (const order of paidOrders) {
-      // Check if payment already exists
-      const existingPayment = await Payment.findOne({ order: order._id });
-      
-      if (!existingPayment) {
+    for (const order of paidOnlineOrders) {
+      try {
+        // Check for existing payment by order ID or payment intent ID
+        const existingPayment = await Payment.findOne({
+          $or: [
+            { order: order._id },
+            { stripePaymentIntentId: order.paymentIntentId }
+          ]
+        });
+        
+        if (existingPayment) {
+          syncResults.skipped++;
+          syncResults.details.onlinePayments.skipped++;
+          continue;
+        }
+
+        // Validate order has required data
+        if (!order.totalAmount || order.totalAmount <= 0) {
+          syncResults.failed++;
+          syncResults.errors.push({
+            orderNumber: order.orderNumber,
+            reason: 'Invalid or missing order amount'
+          });
+          continue;
+        }
+
+        // Create payment record with explicit paymentId
+        const paymentId = Payment.generatePaymentId();
         await Payment.create({
+          paymentId, // Explicitly set to avoid validation issues
           order: order._id,
           orderNumber: order.orderNumber,
           user: order.user?._id || order.user,
           customerName: order.shippingAddress?.name || order.user?.name || 'N/A',
           customerEmail: order.user?.email || 'N/A',
           customerPhone: order.shippingAddress?.phone || order.user?.phone || 'N/A',
-          paymentMethod: order.paymentMethod === 'online' ? 'stripe' : order.paymentMethod,
-          transactionId: order.paymentIntentId || `SYNC_${order.orderNumber}`,
+          paymentMethod: 'stripe',
+          transactionId: order.paymentIntentId || `SYNC_${order.orderNumber}_${Date.now()}`,
           stripePaymentIntentId: order.paymentIntentId || null,
           amount: order.totalAmount,
           status: 'success',
           paymentDate: order.updatedAt || order.createdAt
         });
-        synced++;
-      } else {
-        skipped++;
+        
+        syncResults.synced++;
+        syncResults.details.onlinePayments.synced++;
+        console.log(`✓ Synced payment for order ${order.orderNumber}`);
+      } catch (orderError) {
+        syncResults.failed++;
+        syncResults.errors.push({
+          orderNumber: order.orderNumber,
+          reason: orderError.message
+        });
+        console.error(`✗ Failed to sync order ${order.orderNumber}:`, orderError.message);
       }
     }
 
-    // Also create payment records for COD orders that are delivered
-    const codOrders = await Order.find({ 
+    // 2. Sync COD Payments (delivered orders only - payment received)
+    const deliveredCodOrders = await Order.find({ 
       paymentMethod: 'cod',
-      orderStatus: 'delivered'
+      orderStatus: 'delivered' // Only delivered COD orders count as paid
     }).populate('user', 'name email phone');
 
-    for (const order of codOrders) {
-      const existingPayment = await Payment.findOne({ order: order._id });
-      
-      if (!existingPayment) {
+    console.log(`Found ${deliveredCodOrders.length} delivered COD orders to check`);
+
+    for (const order of deliveredCodOrders) {
+      try {
+        const existingPayment = await Payment.findOne({ order: order._id });
+        
+        if (existingPayment) {
+          syncResults.skipped++;
+          syncResults.details.codPayments.skipped++;
+          continue;
+        }
+
+        // Validate order amount
+        if (!order.totalAmount || order.totalAmount <= 0) {
+          syncResults.failed++;
+          syncResults.errors.push({
+            orderNumber: order.orderNumber,
+            reason: 'Invalid or missing order amount'
+          });
+          continue;
+        }
+
+        // Create COD payment record with explicit paymentId
+        const paymentId = Payment.generatePaymentId();
         await Payment.create({
+          paymentId, // Explicitly set to avoid validation issues
           order: order._id,
           orderNumber: order.orderNumber,
           user: order.user?._id || order.user,
@@ -704,25 +845,180 @@ exports.syncPaymentsFromOrders = async (req, res, next) => {
           customerEmail: order.user?.email || 'N/A',
           customerPhone: order.shippingAddress?.phone || order.user?.phone || 'N/A',
           paymentMethod: 'cod',
-          transactionId: `COD_${order.orderNumber}`,
+          transactionId: `COD_${order.orderNumber}_${Date.now()}`,
           amount: order.totalAmount,
           status: 'success',
           paymentDate: order.updatedAt || order.createdAt
         });
-        synced++;
-      } else {
-        skipped++;
+        
+        syncResults.synced++;
+        syncResults.details.codPayments.synced++;
+        console.log(`✓ Synced COD payment for order ${order.orderNumber}`);
+      } catch (orderError) {
+        syncResults.failed++;
+        syncResults.errors.push({
+          orderNumber: order.orderNumber,
+          reason: orderError.message
+        });
+        console.error(`✗ Failed to sync COD order ${order.orderNumber}:`, orderError.message);
       }
+    }
+
+    // 3. Create pending payment records for pending orders (for tracking)
+    const pendingOnlineOrders = await Order.find({
+      paymentMethod: 'online',
+      paymentStatus: 'pending',
+      orderStatus: { $nin: ['cancelled'] },
+      paymentIntentId: { $exists: true, $ne: null }
+    }).populate('user', 'name email phone');
+
+    for (const order of pendingOnlineOrders) {
+      try {
+        const existingPayment = await Payment.findOne({ order: order._id });
+        
+        if (!existingPayment) {
+          const paymentId = Payment.generatePaymentId();
+          await Payment.create({
+            paymentId, // Explicitly set to avoid validation issues
+            order: order._id,
+            orderNumber: order.orderNumber,
+            user: order.user?._id || order.user,
+            customerName: order.shippingAddress?.name || order.user?.name || 'N/A',
+            customerEmail: order.user?.email || 'N/A',
+            customerPhone: order.shippingAddress?.phone || order.user?.phone || 'N/A',
+            paymentMethod: 'stripe',
+            transactionId: order.paymentIntentId || `PENDING_${order.orderNumber}`,
+            stripePaymentIntentId: order.paymentIntentId || null,
+            amount: order.totalAmount,
+            status: 'pending',
+            paymentDate: null
+          });
+        }
+      } catch (err) {
+        // Ignore pending order sync errors
+      }
+    }
+
+    console.log('=== Payment Sync Complete ===');
+    console.log(`Synced: ${syncResults.synced}, Skipped: ${syncResults.skipped}, Failed: ${syncResults.failed}`);
+
+    // Build response message
+    let message = '';
+    if (syncResults.synced > 0) {
+      message = `Successfully synced ${syncResults.synced} payment(s).`;
+    } else if (syncResults.skipped > 0 && syncResults.synced === 0) {
+      message = `All ${syncResults.skipped} payment records already exist. No new payments to sync.`;
+    } else {
+      message = 'No payments found to sync.';
+    }
+
+    if (syncResults.failed > 0) {
+      message += ` ${syncResults.failed} failed.`;
     }
 
     res.json({
       success: true,
-      message: `Sync completed. ${synced} payments created, ${skipped} already existed.`,
-      synced,
-      skipped
+      message,
+      ...syncResults,
+      syncedAt: new Date()
     });
   } catch (error) {
-    console.error('Sync Payments Error:', error.message);
+    console.error('Sync Payments Error:', error);
+    
+    // Return detailed error response
+    res.status(500).json({
+      success: false,
+      message: 'Payment sync failed',
+      error: {
+        type: error.name || 'SyncError',
+        message: error.message,
+        code: error.code || 'SYNC_FAILED'
+      },
+      partialResults: syncResults
+    });
+  }
+};
+
+// @desc    Verify payment with Stripe gateway
+// @route   POST /api/payments/admin/verify/:paymentId
+// @access  Private/Admin
+exports.verifyPaymentWithGateway = async (req, res, next) => {
+  try {
+    const payment = await Payment.findById(req.params.paymentId);
+
+    if (!payment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Payment not found'
+      });
+    }
+
+    // Only verify Stripe payments
+    if (payment.paymentMethod !== 'stripe' || !payment.stripePaymentIntentId) {
+      return res.status(400).json({
+        success: false,
+        message: 'This payment cannot be verified with gateway (not a Stripe payment)'
+      });
+    }
+
+    try {
+      // Retrieve from Stripe
+      const paymentIntent = await stripe.paymentIntents.retrieve(payment.stripePaymentIntentId);
+
+      // Update payment status based on Stripe status
+      let newStatus = payment.status;
+      if (paymentIntent.status === 'succeeded') {
+        newStatus = 'success';
+      } else if (paymentIntent.status === 'processing') {
+        newStatus = 'processing';
+      } else if (paymentIntent.status === 'canceled') {
+        newStatus = 'cancelled';
+      } else if (paymentIntent.status === 'requires_payment_method') {
+        newStatus = 'failed';
+      }
+
+      // Update if status changed
+      if (newStatus !== payment.status) {
+        payment.status = newStatus;
+        payment.gatewayResponse = {
+          id: paymentIntent.id,
+          status: paymentIntent.status,
+          verifiedAt: new Date()
+        };
+        await payment.save();
+      }
+
+      res.json({
+        success: true,
+        message: 'Payment verified with Stripe',
+        gatewayStatus: paymentIntent.status,
+        localStatus: payment.status,
+        verified: true,
+        paymentIntent: {
+          id: paymentIntent.id,
+          status: paymentIntent.status,
+          amount: paymentIntent.amount / 100,
+          currency: paymentIntent.currency
+        }
+      });
+    } catch (stripeError) {
+      // Gateway verification failed
+      res.status(503).json({
+        success: false,
+        message: 'Gateway temporarily unavailable',
+        error: {
+          type: 'GatewayError',
+          message: stripeError.message,
+          code: stripeError.code || 'GATEWAY_ERROR'
+        },
+        fallback: {
+          localStatus: payment.status,
+          amount: payment.amount,
+          paymentDate: payment.paymentDate
+        }
+      });
+    }
+  } catch (error) {
     next(error);
   }
 };

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiMail, FiArrowLeft, FiCheck } from 'react-icons/fi';
 import authService from '../services/authService';
+import Logo from '../components/common/Logo';
 import toast from 'react-hot-toast';
 import './Auth.css';
 
@@ -88,7 +89,7 @@ const ForgotPassword = () => {
       <div className="auth-container">
         <div className="auth-header">
           <Link to="/" className="auth-logo">
-            <img src="/logo.png" alt="Selvi Enterprise" className="logo-img" />
+            <Logo className="logo-img" />
             <span>Selvi Enterprise</span>
           </Link>
           <h1>Forgot Password?</h1>

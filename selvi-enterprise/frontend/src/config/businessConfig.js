@@ -67,9 +67,8 @@ export const BUSINESS_CONFIG = {
   
   // Business Hours (optional)
   businessHours: {
-    weekdays: '8:00 AM - 8:00 PM',
-    saturday: '8:00 AM - 8:00 PM',
-    sunday: '9:00 AM - 6:00 PM'
+    weekdays: '  9:00 AM - 5:00 PM',
+    sunday: 'HOLIDAY'
   }
 };
 

@@ -326,7 +326,7 @@ const OrderDetail = () => {
                   </button>
                 )}
                 
-                {order.orderStatus === 'pending' && (
+                {order.orderStatus === 'pending' && order.isModifiable && (
                   <>
                     <button 
                       className="btn btn-secondary btn-sm"
@@ -343,6 +343,13 @@ const OrderDetail = () => {
                       <FiTrash2 /> Delete
                     </button>
                   </>
+                )}
+                
+                {/* Show message when modification period expired */}
+                {order.orderStatus === 'pending' && order.isModifiable === false && (
+                  <span className="modification-expired-badge" title="Orders can only be modified within 24 hours of placement">
+                    ⏱️ Modification period expired
+                  </span>
                 )}
               </div>
             </div>

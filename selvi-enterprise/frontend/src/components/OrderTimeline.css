@@ -1,0 +1,467 @@
+/* ===== Order Timeline - Heyday Color Palette ===== */
+
+.order-timeline {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.timeline-header h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.timeline-header h3 svg {
+  color: var(--sungold-orange);
+}
+
+.current-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.current-status.pending {
+  background: var(--lemon-yellow);
+  color: var(--gray-900);
+}
+
+.current-status.processing {
+  background: var(--blue-linen);
+  color: var(--white);
+}
+
+.current-status.shipped {
+  background: var(--seed-green);
+  color: var(--white);
+}
+
+.current-status.delivered {
+  background: var(--grassy-green);
+  color: var(--white);
+}
+
+.current-status.cancelled {
+  background: var(--beet-red);
+  color: var(--white);
+}
+
+/* Timeline Steps - Horizontal */
+.timeline-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.timeline-steps::before {
+  content: '';
+  position: absolute;
+  top: 22px;
+  left: 45px;
+  right: 45px;
+  height: 4px;
+  background: var(--gray-200);
+  border-radius: var(--radius-full);
+}
+
+.timeline-progress {
+  position: absolute;
+  top: 22px;
+  left: 45px;
+  height: 4px;
+  background: var(--grassy-green);
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+}
+
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+}
+
+.step-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  background: var(--white);
+  border: 3px solid var(--gray-200);
+  color: var(--gray-400);
+  transition: all var(--transition-fast);
+  margin-bottom: 0.75rem;
+}
+
+.timeline-step.completed .step-icon {
+  background: var(--grassy-green);
+  border-color: var(--grassy-green);
+  color: var(--white);
+}
+
+.timeline-step.current .step-icon {
+  background: var(--sungold-orange);
+  border-color: var(--sungold-orange);
+  color: var(--white);
+  animation: pulse-step 2s infinite;
+}
+
+.timeline-step.cancelled .step-icon {
+  background: var(--beet-red);
+  border-color: var(--beet-red);
+  color: var(--white);
+}
+
+@keyframes pulse-step {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 91, 3, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(255, 91, 3, 0);
+  }
+}
+
+.step-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gray-500);
+  text-align: center;
+}
+
+.timeline-step.completed .step-label,
+.timeline-step.current .step-label {
+  color: var(--gray-900);
+  font-weight: 700;
+}
+
+.step-time {
+  font-size: 0.7rem;
+  color: var(--gray-400);
+  margin-top: 0.25rem;
+}
+
+/* Timeline Events - Vertical List */
+.timeline-events {
+  padding-left: 1.5rem;
+  border-left: 3px solid var(--gray-100);
+  margin-left: 1rem;
+}
+
+.timeline-event {
+  position: relative;
+  padding: 1rem 0 1rem 1.5rem;
+}
+
+.timeline-event::before {
+  content: '';
+  position: absolute;
+  left: -9px;
+  top: 1.25rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--gray-200);
+  border: 3px solid var(--white);
+}
+
+.timeline-event.completed::before {
+  background: var(--grassy-green);
+}
+
+.timeline-event.current::before {
+  background: var(--sungold-orange);
+  animation: pulse-dot 2s infinite;
+}
+
+.timeline-event.warning::before {
+  background: var(--lemon-yellow);
+}
+
+.timeline-event.error::before {
+  background: var(--beet-red);
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 91, 3, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(255, 91, 3, 0);
+  }
+}
+
+.event-content {
+  background: var(--gray-50);
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+}
+
+.timeline-event:hover .event-content {
+  background: var(--butter-bean);
+}
+
+.event-title {
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 0.25rem;
+}
+
+.event-description {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+}
+
+.event-time {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Estimated Delivery */
+.delivery-estimate {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--seed-green-light);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  margin-top: 1.5rem;
+}
+
+.delivery-icon {
+  width: 52px;
+  height: 52px;
+  background: var(--seed-green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--white);
+}
+
+.delivery-info {
+  flex: 1;
+}
+
+.delivery-label {
+  font-size: 0.8rem;
+  color: var(--gray-600);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.delivery-date {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--grassy-green);
+}
+
+/* Tracking Info */
+.tracking-info {
+  background: var(--butter-bean);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  margin-top: 1rem;
+}
+
+.tracking-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tracking-label {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+}
+
+.tracking-number {
+  font-family: monospace;
+  font-weight: 700;
+  color: var(--gray-900);
+  background: var(--white);
+  padding: 4px 12px;
+  border-radius: var(--radius-md);
+}
+
+.track-btn {
+  padding: 0.5rem 1rem;
+  background: var(--sungold-orange);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--white);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-left: 1rem;
+}
+
+.track-btn:hover {
+  background: var(--sungold-orange-hover);
+}
+
+/* Delivery Map Placeholder */
+.delivery-map {
+  height: 200px;
+  background: var(--gray-100);
+  border-radius: var(--radius-lg);
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-400);
+  font-size: 2rem;
+}
+
+/* Status Messages */
+.status-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  margin-top: 1rem;
+}
+
+.status-message.success {
+  background: var(--grassy-green-light);
+}
+
+.status-message.warning {
+  background: var(--lemon-yellow-light);
+}
+
+.status-message.error {
+  background: var(--petal-pink);
+}
+
+.status-message.info {
+  background: var(--blue-linen-light);
+}
+
+.message-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.status-message.success .message-icon {
+  background: var(--grassy-green);
+  color: var(--white);
+}
+
+.status-message.warning .message-icon {
+  background: var(--lemon-yellow);
+  color: var(--gray-900);
+}
+
+.status-message.error .message-icon {
+  background: var(--beet-red);
+  color: var(--white);
+}
+
+.status-message.info .message-icon {
+  background: var(--blue-linen);
+  color: var(--white);
+}
+
+.message-text {
+  font-size: 0.9rem;
+  color: var(--gray-700);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .timeline-steps {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .timeline-steps::before,
+  .timeline-progress {
+    display: none;
+  }
+  
+  .timeline-step {
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .step-icon {
+    margin-bottom: 0;
+  }
+  
+  .step-label {
+    text-align: left;
+  }
+  
+  .delivery-estimate {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .tracking-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .track-btn {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-timeline {
+    padding: 1rem;
+  }
+  
+  .timeline-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .step-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}

@@ -5,6 +5,7 @@ import productService from '../services/productService';
 import ProductCard from '../components/ProductCard';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import Logo from '../components/common/Logo';
 import './MobileHome.css';
 
 const MobileHome = () => {
@@ -73,7 +74,7 @@ const MobileHome = () => {
       <header className="mobile-header">
         <div className="mobile-header-content">
           <Link to="/" className="mobile-logo">
-            <img src="/logo.png" alt="Selvi Enterprise" className="logo-img" />
+            <Logo className="logo-img" />
             <span>Selvi Enterprise</span>
           </Link>
           <div className="mobile-header-actions">

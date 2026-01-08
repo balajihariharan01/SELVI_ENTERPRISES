@@ -14,7 +14,10 @@ const {
   updateOrder,
   deleteOrder,
   getDashboardStats,
-  getRevenueAnalytics
+  getRevenueAnalytics,
+  resendReceiptEmail,
+  getEmailStatus,
+  testEmail
 } = require('../controllers/orderController');
 
 // Validation rules
@@ -43,6 +46,9 @@ router.delete('/:id', protect, deleteOrder);
 router.get('/admin/all', protect, adminOnly, getAllOrders);
 router.get('/admin/dashboard', protect, adminOnly, getDashboardStats);
 router.get('/admin/revenue', protect, adminOnly, getRevenueAnalytics);
+router.get('/admin/email-status', protect, adminOnly, getEmailStatus);
+router.post('/admin/test-email', protect, adminOnly, testEmail);
 router.put('/:id/status', protect, adminOnly, updateOrderStatus);
+router.post('/:id/resend-receipt', protect, adminOnly, resendReceiptEmail);
 
 module.exports = router;

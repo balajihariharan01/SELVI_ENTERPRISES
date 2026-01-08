@@ -1,0 +1,320 @@
+/* ===== Price Breakdown - Heyday Color Palette ===== */
+
+.price-breakdown {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--gray-100);
+}
+
+.price-breakdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px dashed var(--gray-200);
+}
+
+.price-breakdown-header h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.price-breakdown-header h3 svg {
+  color: var(--sungold-orange);
+}
+
+.toggle-details {
+  background: var(--butter-bean);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.toggle-details:hover {
+  background: var(--seed-green-light);
+  color: var(--grassy-green);
+}
+
+/* Price Items */
+.price-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.price-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.625rem 0;
+}
+
+.price-item.subtotal {
+  border-top: 1px solid var(--gray-100);
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+}
+
+.price-label {
+  font-size: 0.95rem;
+  color: var(--gray-600);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.price-label .item-count {
+  background: var(--seed-green-light);
+  color: var(--grassy-green);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.price-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gray-900);
+}
+
+/* Discount Row */
+.price-item.discount .price-label {
+  color: var(--grassy-green);
+}
+
+.price-item.discount .price-value {
+  color: var(--grassy-green);
+  font-weight: 700;
+}
+
+.discount-badge {
+  background: var(--grassy-green);
+  color: var(--white);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-left: 0.5rem;
+}
+
+/* Shipping Row */
+.price-item.shipping .price-value.free {
+  color: var(--grassy-green);
+  font-weight: 700;
+}
+
+/* Tax Row */
+.price-item.tax {
+  font-size: 0.85rem;
+}
+
+.price-item.tax .price-label {
+  color: var(--gray-500);
+}
+
+/* Total Row */
+.price-item.total {
+  background: var(--butter-bean);
+  margin: 1rem -1.5rem -1.5rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0 0 18px 18px;
+}
+
+.price-item.total .price-label {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--gray-900);
+}
+
+.price-item.total .price-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--sungold-orange);
+}
+
+/* Savings Banner */
+.savings-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--grassy-green-light);
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-lg);
+  margin-top: 1rem;
+}
+
+.savings-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--grassy-green);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.savings-text {
+  font-size: 0.9rem;
+  color: var(--grassy-green);
+  font-weight: 600;
+}
+
+.savings-amount {
+  font-weight: 800;
+  color: var(--grassy-green);
+}
+
+/* Item Breakdown (Expandable) */
+.item-breakdown {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--gray-200);
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 0.85rem;
+}
+
+.breakdown-item:hover {
+  background: var(--gray-50);
+  margin: 0 -0.5rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+}
+
+.item-name {
+  color: var(--gray-700);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.item-qty {
+  background: var(--blue-linen-light);
+  color: var(--blue-linen);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.item-price {
+  font-weight: 600;
+  color: var(--gray-900);
+}
+
+/* Coupon Section */
+.coupon-section {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gray-100);
+}
+
+.coupon-input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.coupon-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+}
+
+.coupon-input:focus {
+  outline: none;
+  border-color: var(--sungold-orange);
+}
+
+.coupon-input::placeholder {
+  text-transform: none;
+  color: var(--gray-400);
+}
+
+.apply-coupon-btn {
+  padding: 0.75rem 1.25rem;
+  background: var(--seed-green);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--white);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.apply-coupon-btn:hover {
+  background: var(--grassy-green);
+}
+
+.applied-coupon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--grassy-green-light);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-lg);
+  margin-top: 0.75rem;
+}
+
+.coupon-code {
+  font-weight: 700;
+  color: var(--grassy-green);
+  font-family: monospace;
+}
+
+.remove-coupon {
+  background: transparent;
+  border: none;
+  color: var(--beet-red);
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0.25rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .price-breakdown {
+    padding: 1.25rem;
+  }
+  
+  .price-item.total {
+    margin: 1rem -1.25rem -1.25rem;
+    padding: 1rem 1.25rem;
+  }
+  
+  .price-item.total .price-value {
+    font-size: 1.35rem;
+  }
+  
+  .coupon-input-group {
+    flex-direction: column;
+  }
+  
+  .apply-coupon-btn {
+    width: 100%;
+  }
+}

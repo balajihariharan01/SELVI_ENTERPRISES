@@ -98,6 +98,24 @@ const orderSchema = new mongoose.Schema({
     type: String,
     maxlength: 500
   },
+  // Email tracking fields
+  receiptEmailStatus: {
+    type: String,
+    enum: ['pending', 'sent', 'failed', 'not_required'],
+    default: 'pending'
+  },
+  receiptEmailSentAt: {
+    type: Date,
+    default: null
+  },
+  receiptEmailError: {
+    type: String,
+    default: null
+  },
+  receiptEmailAttempts: {
+    type: Number,
+    default: 0
+  },
   statusHistory: [{
     status: String,
     updatedAt: {
@@ -117,6 +135,29 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+}, {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+});
+
+// Virtual field to check if order is modifiable (within 24 hours)
+orderSchema.virtual('isModifiable').get(function() {
+  // Order cannot be modified if it's already shipped, delivered, or cancelled
+  const nonModifiableStatuses = ['shipped', 'delivered', 'cancelled'];
+  if (nonModifiableStatuses.includes(this.orderStatus)) {
+    return false;
+  }
+  
+  // Check if within 24 hours of creation
+  const hoursSinceCreation = (Date.now() - this.createdAt) / (1000 * 60 * 60);
+  return hoursSinceCreation <= 24;
+});
+
+// Virtual field to get remaining modification time in hours
+orderSchema.virtual('modificationTimeRemaining').get(function() {
+  const hoursSinceCreation = (Date.now() - this.createdAt) / (1000 * 60 * 60);
+  const remaining = 24 - hoursSinceCreation;
+  return remaining > 0 ? Math.round(remaining * 10) / 10 : 0;
 });
 
 // Generate order number before saving

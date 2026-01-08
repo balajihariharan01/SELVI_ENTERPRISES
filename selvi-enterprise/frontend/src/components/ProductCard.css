@@ -3,11 +3,11 @@
   background: #ffffff;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 8px 24px rgba(15, 6, 137, 0.06);
   transition: all 0.35s ease;
   display: flex;
   flex-direction: column;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #E8F0FE;
   position: relative;
   height: 100%;
   animation: fadeInUp 0.4s ease-out backwards;
@@ -30,7 +30,7 @@
   inset: 0;
   border-radius: 16px;
   padding: 2px;
-  background: linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 50%, #818cf8 100%);
+  background: linear-gradient(135deg, #E8F0FE 0%, #0857BE 50%, #0F0689 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -43,8 +43,8 @@
 
 .product-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
-  border-color: #c7d2fe;
+  box-shadow: 0 16px 40px rgba(15, 6, 137, 0.12);
+  border-color: #0857BE;
 }
 
 .product-card:hover::before {
@@ -56,7 +56,7 @@
   position: relative;
   height: 200px;
   overflow: hidden;
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(180deg, #F0F5FF 0%, #E8F0FE 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,6 +96,7 @@
   text-transform: uppercase;
   z-index: 2;
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .out-of-stock-badge {

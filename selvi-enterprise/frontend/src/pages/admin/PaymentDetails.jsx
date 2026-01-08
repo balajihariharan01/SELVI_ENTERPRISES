@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { 
   FiDollarSign, 
   FiCheckCircle, 
@@ -17,7 +17,9 @@ import {
   FiHash,
   FiRefreshCw,
   FiDatabase,
-  FiAlertCircle
+  FiAlertCircle,
+  FiCheckSquare,
+  FiInfo
 } from 'react-icons/fi';
 import paymentService from '../../services/paymentService';
 import { generateReceipt } from '../../utils/receiptGenerator';
@@ -35,11 +37,14 @@ const PaymentDetails = () => {
     failedPayments: 0,
     totalPayments: 0
   });
+  const [lastSyncedAt, setLastSyncedAt] = useState(null);
+  const [syncError, setSyncError] = useState(null);
 
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [methodFilter, setMethodFilter] = useState('all');
+  const [syncStatusFilter, setSyncStatusFilter] = useState('all');
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
   // Pagination
@@ -51,29 +56,16 @@ const PaymentDetails = () => {
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [copySuccess, setCopySuccess] = useState('');
+  const [verifying, setVerifying] = useState(false);
 
-  useEffect(() => {
-    fetchPayments();
-  }, [statusFilter, methodFilter, dateRange, currentPage]);
-
-  // Debounced search
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (currentPage === 1) {
-        fetchPayments();
-      } else {
-        setCurrentPage(1);
-      }
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [searchTerm]);
-
-  const fetchPayments = async () => {
+  const fetchPayments = useCallback(async () => {
     try {
       setLoading(true);
+      setSyncError(null);
       const response = await paymentService.getAllPayments({
         status: statusFilter,
         method: methodFilter,
+        syncStatus: syncStatusFilter,
         startDate: dateRange.start,
         endDate: dateRange.end,
         search: searchTerm,
@@ -91,25 +83,146 @@ const PaymentDetails = () => {
       });
       setTotalPages(response.pages || 1);
       setTotalRecords(response.total || 0);
+      setLastSyncedAt(response.lastSyncedAt);
     } catch (error) {
       console.error('Failed to fetch payments:', error);
       toast.error('Failed to load payment data');
     } finally {
       setLoading(false);
     }
-  };
+  }, [statusFilter, methodFilter, syncStatusFilter, dateRange, searchTerm, currentPage]);
+
+  useEffect(() => {
+    fetchPayments();
+  }, [fetchPayments]);
+
+  // Debounced search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (currentPage === 1) {
+        fetchPayments();
+      } else {
+        setCurrentPage(1);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   const handleSyncPayments = async () => {
     try {
       setSyncing(true);
+      setSyncError(null);
+      
       const response = await paymentService.syncPayments();
-      toast.success(response.message || 'Payments synced successfully');
+      
+      // Show detailed success message
+      if (response.synced > 0) {
+        toast.success(
+          <div>
+            <strong>Sync Complete!</strong>
+            <br />
+            ✓ {response.synced} payment(s) synced
+            {response.skipped > 0 && <><br />↷ {response.skipped} already existed</>}
+          </div>,
+          { duration: 4000 }
+        );
+      } else if (response.skipped > 0) {
+        toast.success('All payments are already synced', { duration: 3000 });
+      } else {
+        toast('No new payments found to sync', { icon: 'ℹ️', duration: 3000 });
+      }
+
+      // Show errors if any
+      if (response.failed > 0 && response.errors?.length > 0) {
+        toast.error(
+          <div>
+            <strong>{response.failed} sync error(s)</strong>
+            <br />
+            {response.errors.slice(0, 3).map((err, i) => (
+              <span key={i}>• {err.orderNumber}: {err.reason}<br /></span>
+            ))}
+            {response.errors.length > 3 && <span>...and {response.errors.length - 3} more</span>}
+          </div>,
+          { duration: 6000 }
+        );
+      }
+
       fetchPayments();
     } catch (error) {
       console.error('Sync failed:', error);
-      toast.error('Failed to sync payments');
+      
+      // Parse error response for detailed message
+      const errorData = error.response?.data;
+      let errorMessage = 'Failed to sync payments';
+      
+      if (errorData?.error) {
+        switch (errorData.error.code) {
+          case 'GATEWAY_ERROR':
+            errorMessage = 'Payment gateway unavailable. Using local data.';
+            break;
+          case 'NETWORK_ERROR':
+            errorMessage = 'Network error. Please check your connection.';
+            break;
+          case 'AUTH_ERROR':
+            errorMessage = 'Authentication failed. Please re-login.';
+            break;
+          default:
+            errorMessage = errorData.error.message || errorMessage;
+        }
+      }
+
+      setSyncError({
+        message: errorMessage,
+        details: errorData?.error?.message,
+        canRetry: true
+      });
+
+      toast.error(
+        <div>
+          <strong>Sync Failed</strong>
+          <br />
+          {errorMessage}
+          <br />
+          <small>Click to retry</small>
+        </div>,
+        { duration: 5000 }
+      );
     } finally {
       setSyncing(false);
+    }
+  };
+
+  const handleVerifyPayment = async (paymentId) => {
+    try {
+      setVerifying(true);
+      const response = await paymentService.verifyPayment(paymentId);
+      
+      if (response.success) {
+        toast.success(
+          <div>
+            <strong>Payment Verified</strong>
+            <br />
+            Gateway Status: {response.gatewayStatus}
+          </div>
+        );
+        fetchPayments();
+      }
+    } catch (error) {
+      const errorData = error.response?.data;
+      if (errorData?.fallback) {
+        toast.error(
+          <div>
+            <strong>Gateway Unavailable</strong>
+            <br />
+            Using local status: {errorData.fallback.localStatus}
+          </div>,
+          { duration: 4000 }
+        );
+      } else {
+        toast.error(errorData?.message || 'Verification failed');
+      }
+    } finally {
+      setVerifying(false);
     }
   };
 
@@ -222,10 +335,23 @@ const PaymentDetails = () => {
     }
   };
 
+  const formatLastSynced = (date) => {
+    if (!date) return 'Never synced';
+    const d = new Date(date);
+    return d.toLocaleString('en-IN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   const clearFilters = () => {
     setSearchTerm('');
     setStatusFilter('all');
     setMethodFilter('all');
+    setSyncStatusFilter('all');
     setDateRange({ start: '', end: '' });
     setCurrentPage(1);
   };
@@ -244,14 +370,20 @@ const PaymentDetails = () => {
   return (
     <div className="payment-details">
       {/* Header Section */}
-      <div className="page-header">
-        <div className="header-content">
+      <div className="payment-header">
+        <div className="header-title">
           <h1>Payment Details</h1>
           <p>Track and manage all customer payment transactions</p>
         </div>
         <div className="header-actions">
+          {/* Last Synced Timestamp */}
+          <div className="last-synced-info">
+            <FiClock size={14} />
+            <span>Last synced: {formatLastSynced(lastSyncedAt)}</span>
+          </div>
+          
           <button 
-            className="btn-sync"
+            className={`btn-sync ${syncing ? 'syncing' : ''}`}
             onClick={handleSyncPayments}
             disabled={syncing}
             title="Sync payments from orders"
@@ -275,6 +407,25 @@ const PaymentDetails = () => {
         </div>
       </div>
 
+      {/* Sync Error Banner */}
+      {syncError && (
+        <div className="sync-error-banner">
+          <FiAlertCircle />
+          <div className="error-content">
+            <strong>{syncError.message}</strong>
+            {syncError.details && <p>{syncError.details}</p>}
+          </div>
+          {syncError.canRetry && (
+            <button onClick={handleSyncPayments} disabled={syncing}>
+              <FiRefreshCw /> Retry
+            </button>
+          )}
+          <button className="dismiss-btn" onClick={() => setSyncError(null)}>
+            <FiX />
+          </button>
+        </div>
+      )}
+
       {/* Summary Cards */}
       <div className="payment-stats">
         <div className="stat-card revenue">
@@ -284,6 +435,7 @@ const PaymentDetails = () => {
           <div className="stat-content">
             <span className="stat-value">{formatCurrency(stats.totalRevenue)}</span>
             <span className="stat-label">Total Revenue</span>
+            <span className="stat-sublabel">From successful payments</span>
           </div>
         </div>
 
@@ -363,6 +515,18 @@ const PaymentDetails = () => {
             </select>
           </div>
 
+          <div className="filter-group">
+            <FiDatabase />
+            <select 
+              value={syncStatusFilter} 
+              onChange={(e) => setSyncStatusFilter(e.target.value)}
+            >
+              <option value="all">All Sources</option>
+              <option value="gateway">Gateway Payments</option>
+              <option value="synced">Synced from Orders</option>
+            </select>
+          </div>
+
           <div className="filter-group date-range">
             <FiCalendar />
             <input
@@ -380,7 +544,7 @@ const PaymentDetails = () => {
             />
           </div>
 
-          {(searchTerm || statusFilter !== 'all' || methodFilter !== 'all' || dateRange.start || dateRange.end) && (
+          {(searchTerm || statusFilter !== 'all' || methodFilter !== 'all' || syncStatusFilter !== 'all' || dateRange.start || dateRange.end) && (
             <button className="clear-filters-btn" onClick={clearFilters}>
               <FiX /> Clear Filters
             </button>
@@ -397,6 +561,10 @@ const PaymentDetails = () => {
             </div>
             <h3>No Payment Transactions Yet</h3>
             <p>Payment records will appear here once customers complete their transactions.</p>
+            <p className="empty-hint">
+              <FiInfo size={14} /> 
+              Click "Sync Payments" to import payment records from completed orders.
+            </p>
             <button className="btn-sync-empty" onClick={handleSyncPayments} disabled={syncing}>
               <FiDatabase /> {syncing ? 'Syncing...' : 'Sync from Orders'}
             </button>
@@ -615,6 +783,15 @@ const PaymentDetails = () => {
               >
                 Close
               </button>
+              {selectedPayment.paymentMethod === 'stripe' && selectedPayment.stripePaymentIntentId && (
+                <button 
+                  className="btn-verify"
+                  onClick={() => handleVerifyPayment(selectedPayment._id)}
+                  disabled={verifying}
+                >
+                  <FiCheckSquare /> {verifying ? 'Verifying...' : 'Verify with Gateway'}
+                </button>
+              )}
               {selectedPayment.status === 'success' && (
                 <button 
                   className="btn-primary"

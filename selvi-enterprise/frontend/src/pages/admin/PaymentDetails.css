@@ -225,18 +225,19 @@
 
 .stat-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
-  border-color: #c7d2fe;
+  box-shadow: 0 16px 40px rgba(15, 6, 137, 0.12);
+  border-color: #BFDBFE;
 }
 
 .stat-card .stat-icon {
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 16px;
   font-size: 1.5rem;
+  flex-shrink: 0;
   transition: all 0.35s ease;
 }
 
@@ -587,8 +588,8 @@
 
 /* Action Button */
 .action-btn {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1147,3 +1148,208 @@
     width: 100%;
   }
 }
+
+/* ===== NEW: Payment Header ===== */
+.payment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+  animation: fadeInDown 0.4s ease-out backwards;
+  animation-delay: 0.05s;
+}
+
+.header-title h1 {
+  margin-bottom: 0.35rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.025em;
+}
+
+.header-title p {
+  color: #475569;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Last Synced Info */
+.last-synced-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.875rem;
+  background: #f8fafc;
+  color: #64748b;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid #e2e8f0;
+}
+
+.last-synced-info svg {
+  color: #94a3b8;
+}
+
+/* Sync Button States */
+.btn-sync.syncing {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  pointer-events: none;
+}
+
+/* Sync Error Banner */
+.sync-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  animation: fadeInDown 0.3s ease-out;
+}
+
+.sync-error-banner > svg {
+  color: #dc2626;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.sync-error-banner .error-content {
+  flex: 1;
+}
+
+.sync-error-banner .error-content strong {
+  display: block;
+  color: #dc2626;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.sync-error-banner .error-content p {
+  color: #7f1d1d;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.sync-error-banner button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sync-error-banner button:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.sync-error-banner button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sync-error-banner .dismiss-btn {
+  background: transparent;
+  color: #dc2626;
+  padding: 0.4rem;
+  border-radius: 6px;
+}
+
+.sync-error-banner .dismiss-btn:hover {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+/* Stat Card Sublabel */
+.stat-sublabel {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 400;
+  margin-top: 0.125rem;
+}
+
+/* Empty State Hint */
+.empty-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+/* Verify Button */
+.btn-verify {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #92400e;
+  border: 2px solid #f59e0b;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-verify:hover:not(:disabled) {
+  background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.btn-verify:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive Header Adjustments */
+@media (max-width: 768px) {
+  .payment-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  
+  .last-synced-info {
+    width: 100%;
+    justify-content: center;
+    order: 1;
+  }
+  
+  .sync-error-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .sync-error-banner .error-content {
+    order: 1;
+  }
+  
+  .sync-error-banner > svg {
+    order: 0;
+  }
+  
+  .sync-error-banner button {
+    order: 2;
+  }
+}
+

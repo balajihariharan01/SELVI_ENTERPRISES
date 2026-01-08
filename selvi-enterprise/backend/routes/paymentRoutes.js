@@ -9,7 +9,8 @@ const {
   getAllPayments,
   getPaymentById,
   getPaymentStats,
-  syncPaymentsFromOrders
+  syncPaymentsFromOrders,
+  verifyPaymentWithGateway
 } = require('../controllers/paymentController');
 
 // Webhook route - must be before express.json() middleware
@@ -25,6 +26,7 @@ router.post('/confirm', protect, confirmPayment);
 router.get('/admin/all', protect, adminOnly, getAllPayments);
 router.get('/admin/stats', protect, adminOnly, getPaymentStats);
 router.post('/admin/sync', protect, adminOnly, syncPaymentsFromOrders);
+router.post('/admin/verify/:paymentId', protect, adminOnly, verifyPaymentWithGateway);
 router.get('/admin/:id', protect, adminOnly, getPaymentById);
 
 module.exports = router;

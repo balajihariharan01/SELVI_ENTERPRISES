@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { FiGrid, FiPackage, FiShoppingCart, FiCreditCard, FiUsers, FiLogOut, FiHome } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
+import Logo from '../common/Logo';
 import './AdminLayout.css';
 
 const AdminLayout = () => {
@@ -18,7 +19,7 @@ const AdminLayout = () => {
       <aside className="admin-sidebar">
         <div className="sidebar-header">
           <div className="admin-logo">
-            <img src="/logo.png" alt="Selvi Enterprise" className="logo-img" />
+            <Logo className="logo-img" />
             <span className="logo-text">Admin Panel</span>
           </div>
         </div>

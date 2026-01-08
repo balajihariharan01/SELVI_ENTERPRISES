@@ -1,7 +1,7 @@
 /* ===== Products Page - Premium Light Design ===== */
 .products-page {
   min-height: calc(100vh - 200px);
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(180deg, #E8F0FE 0%, #F0F5FF 100%);
   padding-bottom: 4rem;
   position: relative;
 }
@@ -14,7 +14,7 @@
   left: 0;
   right: 0;
   height: 400px;
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.03) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(8, 87, 190, 0.05) 0%, transparent 100%);
   pointer-events: none;
 }
 
@@ -38,8 +38,8 @@
   position: sticky;
   top: 90px;
   height: fit-content;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(15, 6, 137, 0.06);
+  border: 1px solid #E8F0FE;
   overflow: hidden;
   box-sizing: border-box;
   animation: fadeInUp 0.4s ease-out;
@@ -47,8 +47,8 @@
 }
 
 .filters-sidebar:hover {
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
-  border-color: #c7d2fe;
+  box-shadow: 0 12px 32px rgba(15, 6, 137, 0.1);
+  border-color: #0857BE;
 }
 
 /* Ensure all children use border-box */
@@ -84,11 +84,11 @@
   color: var(--text-heading);
   margin: 0 0 1rem 0;
   padding-bottom: 0.75rem;
-  border-bottom: 2px solid #f1f5f9;
+  border-bottom: 2px solid #F0F5FF;
 }
 
 .filter-section h3 svg {
-  color: var(--primary);
+  color: #0857BE;
   font-size: 1.1rem;
   flex-shrink: 0;
   transition: all 0.35s ease;
@@ -109,7 +109,7 @@
   font-weight: var(--font-bold);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--primary);
+  color: #0857BE;
 }
 
 /* ==============================
@@ -128,10 +128,10 @@
   height: 46px;
   padding: 0 1rem;
   border-radius: 14px;
-  border: 2px solid #e5e7eb;
+  border: 2px solid #E8F0FE;
   font-size: 0.9rem;
   color: var(--text-primary);
-  background: #f8fafc;
+  background: #F0F5FF;
   transition: all 0.35s ease;
   width: 100%;
 }
@@ -142,14 +142,14 @@
 }
 
 .search-form .form-input:hover {
-  border-color: #c7d2fe;
+  border-color: #0857BE;
 }
 
 .search-form .form-input:focus {
   outline: none;
-  border-color: var(--primary);
+  border-color: #0F0689;
   background: white;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 4px rgba(8, 87, 190, 0.15);
 }
 
 /* ==============================
@@ -164,18 +164,18 @@
   border-radius: var(--radius-lg);
   border: none;
   cursor: pointer;
-  background: var(--primary-gradient);
+  background: linear-gradient(135deg, #0F0689 0%, #0857BE 100%);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-primary);
+  box-shadow: 0 4px 14px rgba(15, 6, 137, 0.3);
   transition: var(--transition-smooth);
 }
 
 .search-btn:hover {
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 20px rgba(15, 6, 137, 0.35);
 }
 
 .search-btn svg {

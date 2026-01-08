@@ -5,6 +5,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../context/AuthContext';
 import authService from '../services/authService';
+import Logo from '../components/common/Logo';
 import toast from 'react-hot-toast';
 import './Auth.css';
 
@@ -272,11 +273,12 @@ const Register = () => {
   };
 
   return (
-    <div className="auth-page">
+    <div className="auth-page auth-register">
+      <div className="auth-overlay"></div>
       <div className="auth-container">
         <div className="auth-header">
           <Link to="/" className="auth-logo">
-            <img src="/logo.png" alt="Selvi Enterprise" className="logo-img" />
+            <Logo className="logo-img" />
             <span>Selvi Enterprise</span>
           </Link>
           <h1>Create Account</h1>

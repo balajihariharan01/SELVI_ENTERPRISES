@@ -68,17 +68,17 @@
 }
 
 .stat-card {
-  background: #f3aaaa;
+  background: #ffffff;
   border-radius: 18px;
-  padding: 1.5rem;
-  text-align: center;
-  border-left: 4px solid var(--primary);
+  padding: 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
   transition: all 0.35s ease;
   min-width: 0;
   animation: cardPopIn 0.5s ease-out backwards;
   border: 1px solid #e5e7eb;
-  border-left-width: 4px;
 }
 
 .stat-card:nth-child(1) { animation-delay: 0.1s; }
@@ -88,27 +88,58 @@
 
 .stat-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
-  border-color: #c7d2fe;
-  border-left-width: 4px;
+  box-shadow: 0 16px 40px rgba(15, 6, 137, 0.12);
+  border-color: #BFDBFE;
 }
 
 .stat-card.pending { 
-  border-left-color: #f59e0b; 
-  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border-left: 4px solid #f59e0b; 
+}
+.stat-card.pending .stat-icon {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #d97706;
 }
 .stat-card.processing { 
-  border-left-color: #3b82f6; 
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-left: 4px solid #3b82f6; 
+}
+.stat-card.processing .stat-icon {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #2563eb;
 }
 .stat-card.delivered { 
-  border-left-color: #10b981; 
-  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border-left: 4px solid #10b981; 
+}
+.stat-card.delivered .stat-icon {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  color: #16a34a;
+}
+
+.stat-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  transition: all 0.35s ease;
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  color: #4338ca;
+}
+
+.stat-card:hover .stat-icon {
+  transform: scale(1.08);
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .stat-value {
-  display: block;
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: #0f172a;
   letter-spacing: -0.02em;
@@ -118,7 +149,6 @@
   font-size: 0.875rem;
   color: #64748b;
   font-weight: 500;
-  margin-top: 0.25rem;
 }
 
 /* Customer Cell */

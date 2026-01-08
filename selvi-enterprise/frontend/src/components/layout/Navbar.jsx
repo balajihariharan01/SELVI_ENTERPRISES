@@ -1,9 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { FiShoppingCart, FiUser, FiMenu, FiX, FiHome, FiPackage, FiClipboard, FiGrid, FiLogOut } from 'react-icons/fi';
+import { FiShoppingCart, FiUser, FiMenu, FiX, FiHome, FiPackage, FiClipboard, FiGrid, FiLogOut, FiInfo, FiPhone } from 'react-icons/fi';
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { BUSINESS_CONFIG } from '../../config/businessConfig';
+import Logo from '../common/Logo';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -26,7 +27,7 @@ const Navbar = () => {
         <div className="navbar-content">
           {/* Logo */}
           <Link to="/" className="navbar-logo">
-            <img src="/logo.png" alt={BUSINESS_CONFIG.name} className="logo-img" />
+            <Logo className="logo-img" />
             <span className="logo-text">{BUSINESS_CONFIG.name}</span>
           </Link>
 
@@ -39,6 +40,14 @@ const Navbar = () => {
             <Link to="/products" className="nav-link">
               <FiPackage className="nav-icon" />
               <span>Products</span>
+            </Link>
+            <Link to="/about" className="nav-link">
+              <FiInfo className="nav-icon" />
+              <span>About</span>
+            </Link>
+            <Link to="/contact" className="nav-link">
+              <FiPhone className="nav-icon" />
+              <span>Contact</span>
             </Link>
             {isAuthenticated && !isAdmin && (
               <Link to="/my-orders" className="nav-link">
@@ -116,6 +125,14 @@ const Navbar = () => {
             <Link to="/products" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
               <FiPackage className="mobile-icon" />
               <span>Products</span>
+            </Link>
+            <Link to="/about" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+              <FiInfo className="mobile-icon" />
+              <span>About Us</span>
+            </Link>
+            <Link to="/contact" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+              <FiPhone className="mobile-icon" />
+              <span>Contact Us</span>
             </Link>
             {isAuthenticated ? (
               <>

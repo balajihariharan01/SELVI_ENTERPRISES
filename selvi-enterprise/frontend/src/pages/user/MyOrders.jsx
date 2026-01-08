@@ -79,9 +79,16 @@ const MyOrders = () => {
                     <span className="order-number">Order #{order.orderNumber}</span>
                     <span className="order-date">{formatDate(order.createdAt)}</span>
                   </div>
-                  <span className={`badge badge-${getStatusColor(order.orderStatus)}`}>
-                    {order.orderStatus}
-                  </span>
+                  <div className="order-status-badges">
+                    <span className={`badge badge-${getStatusColor(order.orderStatus)}`}>
+                      {order.orderStatus}
+                    </span>
+                    {order.orderStatus === 'pending' && order.isModifiable && (
+                      <span className="badge badge-editable" title={`${order.modificationTimeRemaining || 0} hours remaining to modify`}>
+                        ✏️ Editable
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="order-items">

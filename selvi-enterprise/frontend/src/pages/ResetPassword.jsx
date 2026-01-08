@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { FiLock, FiEye, FiEyeOff, FiArrowLeft, FiCheck, FiAlertTriangle } from 'react-icons/fi';
 import authService from '../services/authService';
+import Logo from '../components/common/Logo';
 import toast from 'react-hot-toast';
 import './Auth.css';
 
@@ -162,7 +163,7 @@ const ResetPassword = () => {
       <div className="auth-container">
         <div className="auth-header">
           <Link to="/" className="auth-logo">
-            <img src="/logo.png" alt="Selvi Enterprise" className="logo-img" />
+            <Logo className="logo-img" />
             <span>Selvi Enterprise</span>
           </Link>
           <h1>Reset Password</h1>

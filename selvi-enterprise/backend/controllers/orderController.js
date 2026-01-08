@@ -1,5 +1,6 @@
 const Order = require('../models/Order');
 const Product = require('../models/Product');
+const { sendReceiptEmail, testEmailConfiguration, getEmailServiceStatus } = require('../services/emailService');
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -256,6 +257,15 @@ exports.cancelOrder = async (req, res, next) => {
       });
     }
 
+    // Check 24-hour modification limit
+    if (!order.isModifiable) {
+      const hoursSinceCreation = Math.round((Date.now() - order.createdAt) / (1000 * 60 * 60));
+      return res.status(400).json({
+        success: false,
+        message: `Order modification period has expired. Orders can only be cancelled within 24 hours of placement. This order was placed ${hoursSinceCreation} hours ago.`
+      });
+    }
+
     // Only pending orders can be cancelled by user
     if (order.orderStatus !== 'pending') {
       return res.status(400).json({
@@ -289,7 +299,7 @@ exports.cancelOrder = async (req, res, next) => {
   }
 };
 
-// @desc    Update order (User - only pending orders)
+// @desc    Update order (User - only pending orders within 24 hours)
 // @route   PUT /api/orders/:id/update
 // @access  Private
 exports.updateOrder = async (req, res, next) => {
@@ -309,6 +319,15 @@ exports.updateOrder = async (req, res, next) => {
       return res.status(403).json({
         success: false,
         message: 'Not authorized to update this order'
+      });
+    }
+
+    // Check 24-hour modification limit
+    if (!order.isModifiable) {
+      const hoursSinceCreation = Math.round((Date.now() - order.createdAt) / (1000 * 60 * 60));
+      return res.status(400).json({
+        success: false,
+        message: `Order modification period has expired. Orders can only be modified within 24 hours of placement. This order was placed ${hoursSinceCreation} hours ago.`
       });
     }
 
@@ -636,6 +655,132 @@ exports.getRevenueAnalytics = async (req, res, next) => {
         statusBreakdown,
         dailyRevenue
       }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Resend receipt email for an order
+// @route   POST /api/orders/:id/resend-receipt
+// @access  Private/Admin
+exports.resendReceiptEmail = async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.id).populate('user', 'name email phone');
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found'
+      });
+    }
+
+    // Check if order is paid
+    if (order.paymentStatus !== 'paid') {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot send receipt for unpaid order'
+      });
+    }
+
+    // Get customer email
+    const customerEmail = order.user?.email || order.shippingAddress?.email;
+    if (!customerEmail) {
+      return res.status(400).json({
+        success: false,
+        message: 'No customer email found for this order'
+      });
+    }
+
+    // Update attempt count
+    order.receiptEmailAttempts = (order.receiptEmailAttempts || 0) + 1;
+    await order.save();
+
+    // Try to send email
+    try {
+      const result = await sendReceiptEmail(order);
+      
+      // Update order with success
+      order.receiptEmailStatus = 'sent';
+      order.receiptEmailSentAt = new Date();
+      order.receiptEmailError = null;
+      await order.save();
+
+      res.json({
+        success: true,
+        message: `Receipt email sent successfully to ${customerEmail}`,
+        messageId: result.messageId
+      });
+    } catch (emailError) {
+      // Update order with failure
+      order.receiptEmailStatus = 'failed';
+      order.receiptEmailError = emailError.message;
+      await order.save();
+
+      res.status(500).json({
+        success: false,
+        message: 'Failed to send receipt email',
+        error: emailError.message,
+        code: emailError.code
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get email service status
+// @route   GET /api/orders/admin/email-status
+// @access  Private/Admin
+exports.getEmailStatus = async (req, res, next) => {
+  try {
+    const status = getEmailServiceStatus();
+    const testResult = await testEmailConfiguration();
+
+    // Get orders with failed email status
+    const failedEmailOrders = await Order.find({
+      receiptEmailStatus: 'failed'
+    }).select('orderNumber creiptEmailError receiptEmailAttempts createdAt shippingAddress')
+      .sort({ createdAt: -1 })
+      .limit(20);
+
+    res.json({
+      success: true,
+      emailService: status,
+      connectionTest: testResult,
+      failedEmailOrders: failedEmailOrders.map(o => ({
+        orderId: o._id,
+        orderNumber: o.orderNumber,
+        error: o.receiptEmailError,
+        attempts: o.receiptEmailAttempts,
+        createdAt: o.createdAt,
+        customerEmail: o.shippingAddress?.email
+      }))
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Test email configuration
+// @route   POST /api/orders/admin/test-email
+// @access  Private/Admin
+exports.testEmail = async (req, res, next) => {
+  try {
+    const testResult = await testEmailConfiguration();
+    
+    if (!testResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email configuration test failed',
+        ...testResult
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Email service is working correctly',
+      ...testResult
     });
   } catch (error) {
     next(error);

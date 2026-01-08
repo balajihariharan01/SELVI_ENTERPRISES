@@ -1,7 +1,7 @@
 /* ===== Checkout Page - Premium Light Design ===== */
 .checkout-page {
   min-height: calc(100vh - 200px);
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(180deg, #E8F0FE 0%, #F0F5FF 100%);
   padding-bottom: 4rem;
   position: relative;
 }
@@ -13,7 +13,7 @@
   left: 0;
   right: 0;
   height: 350px;
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.04) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(8, 87, 190, 0.06) 0%, transparent 100%);
   pointer-events: none;
 }
 
@@ -27,17 +27,17 @@
   padding: 0.75rem 1.5rem;
   background: #ffffff;
   border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(15, 6, 137, 0.06);
+  border: 1px solid #E8F0FE;
   transition: all 0.35s ease;
   font-size: 0.9rem;
 }
 
 .back-link:hover {
-  color: var(--primary);
+  color: #0857BE;
   transform: translateX(-4px);
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
-  border-color: #c7d2fe;
+  box-shadow: 0 12px 32px rgba(15, 6, 137, 0.1);
+  border-color: #0857BE;
 }
 
 .checkout-layout {
@@ -53,7 +53,7 @@
   background: #ffffff;
   border-radius: 18px;
   padding: 3rem 2rem;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 8px 24px rgba(15, 6, 137, 0.06);
   border: 2px solid #fde68a;
   animation: fadeInUp 0.4s ease-out;
   text-align: center;

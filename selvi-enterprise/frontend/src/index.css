@@ -12,68 +12,69 @@ iframe[src*="js.stripe.com"] {
    ============================================ */
 
 :root {
-  /* ========== PRIMARY COLOR PALETTE ========== */
-  /* Soft Blue - Trust & Reliability */
-  --primary: #3b82f6;
-  --primary-dark: #2563eb;
-  --primary-light: #60a5fa;
-  --primary-50: #eff6ff;
-  --primary-100: #dbeafe;
-  --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  --primary-gradient-hover: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  /* ========== PRIMARY COLOR PALETTE - CONSTRUCTION INDUSTRY ========== */
+  /* Royal Blue - Trust & Authority */
+  --primary: #0857BE;
+  --primary-dark: #0F0689;
+  --primary-light: #3a7bd5;
+  --primary-50: #e8f0fc;
+  --primary-100: #d1e1f9;
+  --primary-gradient: linear-gradient(135deg, #0857BE 0%, #0F0689 100%);
+  --primary-gradient-hover: linear-gradient(135deg, #0F0689 0%, #0a0566 100%);
   
-  /* Warm Orange - CTA & Action */
-  --accent: #f97316;
-  --accent-dark: #ea580c;
-  --accent-light: #fb923c;
-  --accent-50: #fff7ed;
-  --accent-100: #ffedd5;
-  --accent-gradient: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  /* Construction Yellow - CTA & Action */
+  --accent: #EFB523;
+  --accent-dark: #D78C18;
+  --accent-light: #f5c84d;
+  --accent-50: #fef9e8;
+  --accent-100: #fdf3d1;
+  --accent-gradient: linear-gradient(135deg, #EFB523 0%, #D78C18 100%);
   
-  /* Secondary - Slate Blue (Professional) */
-  --secondary: #475569;
-  --secondary-light: #64748b;
-  --secondary-dark: #334155;
+  /* Secondary - Dark Blue (Professional) */
+  --secondary: #0F0689;
+  --secondary-light: #0857BE;
+  --secondary-dark: #0a0566;
   
-  /* ========== STATUS COLORS (Soft Variants) ========== */
+  /* ========== STATUS COLORS (Construction Theme) ========== */
   --success: #22c55e;
   --success-light: #4ade80;
   --success-50: #f0fdf4;
   --success-100: #dcfce7;
   
-  --warning: #eab308;
-  --warning-light: #facc15;
-  --warning-50: #fefce8;
-  --warning-100: #fef9c3;
+  --warning: #EFB523;
+  --warning-light: #f5c84d;
+  --warning-50: #fef9e8;
+  --warning-100: #fdf3d1;
   
-  --danger: #ef4444;
-  --danger-light: #f87171;
-  --danger-50: #fef2f2;
-  --danger-100: #fee2e2;
+  --danger: #D31E00;
+  --danger-light: #e54d33;
+  --danger-50: #fef2f0;
+  --danger-100: #fde5e2;
   
-  --info: #0ea5e9;
-  --info-light: #38bdf8;
-  --info-50: #f0f9ff;
+  --info: #0857BE;
+  --info-light: #3a7bd5;
+  --info-50: #e8f0fc;
   
-  /* ========== BACKGROUND COLORS - LIGHT & PREMIUM ========== */
+  /* ========== BACKGROUND COLORS - CONSTRUCTION INDUSTRY PALETTE ========== */
+  /* Dark Blue: #0F0689 | Royal Blue: #0857BE | Yellow: #EFB523 | Orange: #D78C18 | Red: #D31E00 */
   --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --bg-page: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  --bg-secondary: #F5F7FB;
+  --bg-tertiary: #eef2f7;
+  --bg-page: linear-gradient(180deg, #F5F7FB 0%, #ffffff 100%);
   --bg-card: #ffffff;
-  --bg-card-hover: #fafbfc;
-  --bg-hover: rgba(59, 130, 246, 0.04);
-  --bg-soft-blue: #f0f7ff;
-  --bg-soft-orange: #fffbf5;
+  --bg-card-hover: #f8fafc;
+  --bg-hover: rgba(8, 87, 190, 0.08);
+  --bg-soft-blue: #e8f0fc;
+  --bg-soft-yellow: #fef9e8;
   
-  /* Page-Specific Light Backgrounds */
-  --bg-home: linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
-  --bg-products: #f8fafc;
-  --bg-product-detail: #f8fafc;
-  --bg-cart: #f8fafc;
-  --bg-checkout: #f9fafb;
-  --bg-profile: #f8fafc;
-  --bg-auth: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f7ff 100%);
+  /* Page-Specific Backgrounds - Construction Palette */
+  --bg-home: linear-gradient(180deg, #F5F7FB 0%, #ffffff 100%);
+  --bg-products: #F5F7FB;
+  --bg-product-detail: #F5F7FB;
+  --bg-cart: #F5F7FB;
+  --bg-checkout: #F5F7FB;
+  --bg-profile: #F5F7FB;
+  --bg-auth: linear-gradient(135deg, #F5F7FB 0%, #ffffff 100%);
   
   /* ========== TEXT COLORS - CLEAR HIERARCHY ========== */
   --text-primary: #0f172a;
@@ -96,12 +97,12 @@ iframe[src*="js.stripe.com"] {
   --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
   --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
   --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
-  --shadow-card-hover: 0 10px 40px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
-  --shadow-primary: 0 4px 14px rgba(59, 130, 246, 0.25);
-  --shadow-accent: 0 4px 14px rgba(249, 115, 22, 0.25);
+  --shadow-card: 0 1px 3px rgba(15, 6, 137, 0.04), 0 4px 12px rgba(15, 6, 137, 0.03);
+  --shadow-card-hover: 0 10px 40px rgba(15, 6, 137, 0.08), 0 4px 12px rgba(15, 6, 137, 0.04);
+  --shadow-primary: 0 4px 14px rgba(8, 87, 190, 0.25);
+  --shadow-accent: 0 4px 14px rgba(239, 181, 35, 0.25);
   --shadow-success: 0 4px 14px rgba(34, 197, 94, 0.25);
-  --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.15);
+  --shadow-glow: 0 0 20px rgba(8, 87, 190, 0.15);
   
   /* ========== BORDER RADIUS - MODERN & SMOOTH ========== */
   --radius-xs: 4px;
@@ -172,7 +173,7 @@ body {
   font-size: 15px;
   line-height: 1.6;
   color: var(--text-primary);
-  background: var(--bg-secondary);
+  background: #F5F7FB;
   overflow-x: hidden;
 }
 

@@ -53,6 +53,9 @@ export const paymentService = {
     if (params.limit) {
       queryParams.append('limit', params.limit);
     }
+    if (params.syncStatus && params.syncStatus !== 'all') {
+      queryParams.append('syncStatus', params.syncStatus);
+    }
 
     const queryString = queryParams.toString();
     const url = `/payments/admin/all${queryString ? '?' + queryString : ''}`;
@@ -88,6 +91,12 @@ export const paymentService = {
   // Sync payments from orders (Admin utility)
   syncPayments: async () => {
     const response = await api.post('/payments/admin/sync');
+    return response.data;
+  },
+
+  // Verify payment with Stripe gateway (Admin)
+  verifyPayment: async (paymentId) => {
+    const response = await api.post(`/payments/admin/verify/${paymentId}`);
     return response.data;
   }
 };

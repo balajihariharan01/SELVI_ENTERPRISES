@@ -12,6 +12,8 @@ import Home from './pages/Home'
 import MobileHome from './pages/MobileHome'
 import Products from './pages/Products'
 import ProductDetail from './pages/ProductDetail'
+import About from './pages/About'
+import Contact from './pages/Contact'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
@@ -48,7 +50,7 @@ function App() {
   const isHomePage = location.pathname === '/'
   const showMobileSPA = isMobile && isHomePage
   
-  // Show footer ONLY on Home page (not mobile SPA)
+  // Show footer ONLY on the Home page (desktop view)
   const showFooter = isHomePage && !showMobileSPA
 
   return (
@@ -70,6 +72,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductDetail />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
