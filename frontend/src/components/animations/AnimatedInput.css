@@ -1,0 +1,177 @@
+/**
+ * ============================================
+ * ANIMATED INPUT STYLES
+ * Premium form input with animations
+ * ============================================
+ */
+
+.animated-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  width: 100%;
+}
+
+/* ========== LABEL ========== */
+.animated-input-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.125rem;
+}
+
+.required-mark {
+  color: var(--danger);
+  margin-left: 0.25rem;
+}
+
+/* ========== INPUT WRAPPER ========== */
+.animated-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* ========== INPUT ========== */
+.animated-input {
+  width: 100%;
+  height: 48px;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.animated-input:hover:not(:disabled):not(.has-error) {
+  border-color: var(--border-focus);
+}
+
+.animated-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* With icons padding */
+.animated-input.has-left-icon {
+  padding-left: 2.75rem;
+}
+
+.animated-input.has-right-icon {
+  padding-right: 2.75rem;
+}
+
+/* ========== FOCUS STATE ========== */
+.animated-input.is-focused {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(8, 87, 190, 0.1);
+}
+
+/* Focus ring (bottom line animation) */
+.input-focus-ring {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--primary-gradient);
+  transform-origin: center;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+/* ========== ERROR STATE ========== */
+.animated-input.has-error {
+  border-color: var(--danger);
+  background-color: var(--danger-50);
+}
+
+.animated-input.has-error:focus {
+  box-shadow: 0 0 0 3px rgba(211, 30, 0, 0.1);
+}
+
+/* ========== SUCCESS STATE ========== */
+.animated-input.has-success {
+  border-color: var(--success);
+  background-color: var(--success-50);
+}
+
+.animated-input.has-success:focus {
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+/* ========== DISABLED STATE ========== */
+.animated-input.is-disabled,
+.animated-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--bg-secondary);
+}
+
+/* ========== ICONS (AnimatedInput Component ONLY) ========== */
+/* These styles are scoped to the AnimatedInput wrapper */
+.animated-input-wrapper .input-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  pointer-events: none; /* Decorative icons */
+  z-index: 2;
+}
+
+.animated-input-wrapper .input-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.animated-input-wrapper .input-icon-left {
+  left: 16px; /* On 8px grid */
+}
+
+.animated-input-wrapper .input-icon-right {
+  right: 16px; /* On 8px grid */
+}
+
+.animated-input-wrapper .input-icon-right.error {
+  color: var(--danger);
+}
+
+.animated-input-wrapper .input-icon-right.success {
+  color: var(--success);
+}
+
+/* ========== MESSAGE ========== */
+.input-message {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  margin: 0;
+  overflow: hidden;
+}
+
+.input-message.error {
+  color: var(--danger);
+}
+
+.input-message.success {
+  color: var(--success);
+}
+
+/* ========== TEXTAREA SUPPORT ========== */
+textarea.animated-input {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* ========== REDUCED MOTION ========== */
+@media (prefers-reduced-motion: reduce) {
+  .animated-input {
+    transition: none;
+  }
+  
+  .input-focus-ring {
+    display: none;
+  }
+}

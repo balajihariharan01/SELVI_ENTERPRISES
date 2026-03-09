@@ -1,0 +1,117 @@
+/**
+ * ============================================
+ * SKELETON LOADER STYLES
+ * ============================================
+ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--premium-neutral-100, #E5E9EF) 0%,
+    var(--premium-neutral-50, #F5F7F9) 50%,
+    var(--premium-neutral-100, #E5E9EF) 100%
+  );
+  background-size: 200% 100%;
+}
+
+.skeleton.shimmer {
+  animation: skeletonShimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ========== Product Card Skeleton ========== */
+.skeleton-product-card {
+  background: var(--bg-card, white);
+  border-radius: var(--radius-lg, 12px);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.skeleton-product-card .skeleton-image {
+  border-radius: 0;
+}
+
+.skeleton-product-card .skeleton-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeleton-product-card .skeleton-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+/* ========== Table Row Skeleton ========== */
+.skeleton-table-row {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.skeleton-table-row > * {
+  flex: 1;
+}
+
+/* ========== List Item Skeleton ========== */
+.skeleton-list-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+}
+
+.skeleton-list-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ========== Stat Card Skeleton ========== */
+.skeleton-stat-card {
+  background: var(--bg-card, white);
+  border-radius: var(--radius-lg, 12px);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.skeleton-stat-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ========== Profile Header Skeleton ========== */
+.skeleton-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.skeleton-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ========== Reduced Motion ========== */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton,
+  .skeleton.shimmer {
+    animation: none;
+    background: var(--premium-neutral-100, #E5E9EF);
+  }
+}

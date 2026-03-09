@@ -1,0 +1,183 @@
+/**
+ * ============================================
+ * ANIMATED BUTTON STYLES
+ * Premium button animations and states
+ * ============================================
+ */
+
+.animated-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* ========== SIZE VARIANTS ========== */
+.animated-btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  min-height: 36px;
+}
+
+.animated-btn-md {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  min-height: 44px;
+}
+
+.animated-btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  min-height: 52px;
+}
+
+/* ========== VARIANT STYLES ========== */
+
+/* Primary Button */
+.animated-btn-primary {
+  background: var(--primary-gradient);
+  color: var(--text-white);
+  box-shadow: 0 2px 8px -2px rgba(8, 87, 190, 0.3);
+}
+
+.animated-btn-primary:hover:not(.is-disabled):not(.is-loading) {
+  box-shadow: 0 8px 20px -6px rgba(8, 87, 190, 0.4);
+  background: var(--primary-gradient-hover);
+}
+
+/* Secondary Button */
+.animated-btn-secondary {
+  background: var(--secondary);
+  color: var(--text-white);
+  box-shadow: 0 2px 8px -2px rgba(15, 6, 137, 0.25);
+}
+
+.animated-btn-secondary:hover:not(.is-disabled):not(.is-loading) {
+  background: var(--secondary-dark);
+  box-shadow: 0 8px 20px -6px rgba(15, 6, 137, 0.35);
+}
+
+/* Outline Button */
+.animated-btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  box-shadow: none;
+}
+
+.animated-btn-outline:hover:not(.is-disabled):not(.is-loading) {
+  background: var(--primary-50);
+  box-shadow: 0 4px 12px -4px rgba(8, 87, 190, 0.2);
+}
+
+/* Ghost Button */
+.animated-btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  box-shadow: none;
+}
+
+.animated-btn-ghost:hover:not(.is-disabled):not(.is-loading) {
+  background: var(--bg-hover);
+  color: var(--primary);
+}
+
+/* ========== STATES ========== */
+.animated-btn.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.animated-btn.is-loading {
+  cursor: wait;
+}
+
+/* ========== CONTENT & SPINNER ========== */
+.btn-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon-left {
+  margin-right: 0.25rem;
+}
+
+.btn-icon-right {
+  margin-left: 0.25rem;
+}
+
+.btn-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-spinner svg {
+  width: 1.25em;
+  height: 1.25em;
+}
+
+/* ========== RIPPLE EFFECT (Optional CSS-based) ========== */
+.animated-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.animated-btn:active::after {
+  width: 200%;
+  height: 200%;
+  opacity: 0;
+}
+
+/* ========== FOCUS STATES (Accessibility) ========== */
+.animated-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.animated-btn-outline:focus-visible {
+  outline-color: var(--primary);
+}
+
+/* ========== REDUCED MOTION ========== */
+@media (prefers-reduced-motion: reduce) {
+  .animated-btn {
+    transition: none;
+  }
+  
+  .animated-btn::after {
+    display: none;
+  }
+  
+  .btn-spinner svg {
+    animation: none;
+  }
+}

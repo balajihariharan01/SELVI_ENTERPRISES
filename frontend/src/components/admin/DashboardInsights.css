@@ -1,0 +1,577 @@
+/* ===== Dashboard Insights - Heyday Color Palette (Admin) ===== */
+
+.dashboard-insights {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.insights-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.insights-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.insights-header h3 svg {
+  color: var(--sungold-orange);
+}
+
+.time-filter {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.time-btn {
+  padding: 0.5rem 1rem;
+  background: var(--butter-bean);
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.time-btn:hover {
+  background: var(--seed-green-light);
+  color: var(--grassy-green);
+}
+
+.time-btn.active {
+  background: var(--sungold-orange);
+  color: var(--white);
+}
+
+/* Insights Grid */
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+/* Insight Card */
+.insight-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-fast);
+}
+
+.insight-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+}
+
+.insight-card.revenue::before {
+  background: var(--grassy-green);
+}
+
+.insight-card.orders::before {
+  background: var(--sungold-orange);
+}
+
+.insight-card.customers::before {
+  background: var(--blue-linen);
+}
+
+.insight-card.products::before {
+  background: var(--seed-green);
+}
+
+.insight-card.growth::before {
+  background: linear-gradient(90deg, var(--sungold-orange), var(--lemon-yellow));
+}
+
+.insight-card.alert::before {
+  background: var(--beet-red);
+}
+
+.insight-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-xl);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.insight-card.revenue .card-icon {
+  background: var(--grassy-green-light);
+  color: var(--grassy-green);
+}
+
+.insight-card.orders .card-icon {
+  background: var(--sungold-orange-bg);
+  color: var(--sungold-orange);
+}
+
+.insight-card.customers .card-icon {
+  background: var(--blue-linen-light);
+  color: var(--blue-linen);
+}
+
+.insight-card.products .card-icon {
+  background: var(--seed-green-light);
+  color: var(--grassy-green);
+}
+
+.insight-card.growth .card-icon {
+  background: var(--lemon-yellow-light);
+  color: var(--gray-800);
+}
+
+.insight-card.alert .card-icon {
+  background: var(--petal-pink);
+  color: var(--beet-red);
+}
+
+.trend-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.trend-badge.up {
+  background: var(--grassy-green-light);
+  color: var(--grassy-green);
+}
+
+.trend-badge.down {
+  background: var(--petal-pink);
+  color: var(--beet-red);
+}
+
+.trend-badge.neutral {
+  background: var(--gray-100);
+  color: var(--gray-600);
+}
+
+.card-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin-bottom: 0.25rem;
+}
+
+.card-label {
+  font-size: 0.85rem;
+  color: var(--gray-500);
+}
+
+/* Mini Chart */
+.mini-chart {
+  height: 60px;
+  margin-top: 1rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.chart-bar {
+  flex: 1;
+  background: var(--gray-100);
+  border-radius: 4px 4px 0 0;
+  transition: all var(--transition-fast);
+}
+
+.insight-card.revenue .chart-bar {
+  background: var(--grassy-green-light);
+}
+
+.insight-card.revenue .chart-bar:hover {
+  background: var(--grassy-green);
+}
+
+.insight-card.orders .chart-bar {
+  background: var(--sungold-orange-bg);
+}
+
+.insight-card.orders .chart-bar:hover {
+  background: var(--sungold-orange);
+}
+
+.insight-card.customers .chart-bar {
+  background: var(--blue-linen-light);
+}
+
+.insight-card.customers .chart-bar:hover {
+  background: var(--blue-linen);
+}
+
+/* Large Chart Card */
+.chart-card {
+  grid-column: span 2;
+  background: var(--white);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.chart-header h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.chart-legend {
+  display: flex;
+  gap: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--gray-600);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend-dot.revenue {
+  background: var(--grassy-green);
+}
+
+.legend-dot.orders {
+  background: var(--sungold-orange);
+}
+
+.legend-dot.customers {
+  background: var(--blue-linen);
+}
+
+.chart-area {
+  height: 250px;
+  background: var(--butter-bean);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-400);
+}
+
+/* Top Products */
+.top-products-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.top-products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.top-products-header h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.view-all-link {
+  font-size: 0.85rem;
+  color: var(--sungold-orange);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.view-all-link:hover {
+  text-decoration: underline;
+}
+
+.product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.product-item {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem;
+  background: var(--gray-50);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+}
+
+.product-item:hover {
+  background: var(--butter-bean);
+}
+
+.product-rank {
+  width: 28px;
+  height: 28px;
+  background: var(--seed-green-light);
+  color: var(--grassy-green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.product-item:first-child .product-rank {
+  background: var(--sungold-orange);
+  color: var(--white);
+}
+
+.product-img {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background: var(--gray-200);
+}
+
+.product-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.product-name {
+  font-weight: 600;
+  color: var(--gray-900);
+  font-size: 0.9rem;
+}
+
+.product-sales {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+}
+
+.product-revenue {
+  font-weight: 700;
+  color: var(--grassy-green);
+  font-size: 0.95rem;
+}
+
+/* Recent Activity */
+.activity-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-item {
+  display: flex;
+  gap: 0.875rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.activity-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.activity-icon.order {
+  background: var(--sungold-orange-bg);
+  color: var(--sungold-orange);
+}
+
+.activity-icon.payment {
+  background: var(--grassy-green-light);
+  color: var(--grassy-green);
+}
+
+.activity-icon.user {
+  background: var(--blue-linen-light);
+  color: var(--blue-linen);
+}
+
+.activity-icon.stock {
+  background: var(--lemon-yellow-light);
+  color: var(--gray-800);
+}
+
+.activity-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-text {
+  font-size: 0.9rem;
+  color: var(--gray-700);
+}
+
+.activity-text strong {
+  color: var(--gray-900);
+}
+
+.activity-time {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  margin-top: 0.25rem;
+}
+
+/* Alert Banner */
+.alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--petal-pink);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--beet-red);
+}
+
+.alert-banner-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--beet-red);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+}
+
+.alert-banner-content {
+  flex: 1;
+}
+
+.alert-banner-title {
+  font-weight: 700;
+  color: var(--beet-red);
+  margin-bottom: 0.25rem;
+}
+
+.alert-banner-message {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+}
+
+.alert-banner-action {
+  padding: 0.5rem 1rem;
+  background: var(--beet-red);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--white);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.alert-banner-action:hover {
+  background: var(--beet-red-hover);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .insights-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .chart-card {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .insights-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-card {
+    grid-column: span 1;
+  }
+  
+  .time-filter {
+    flex-wrap: wrap;
+  }
+  
+  .alert-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .insight-card {
+    padding: 1.25rem;
+  }
+  
+  .card-value {
+    font-size: 1.75rem;
+  }
+  
+  .chart-area {
+    height: 180px;
+  }
+}

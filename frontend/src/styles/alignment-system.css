@@ -1,0 +1,408 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   SELVI ENTERPRISE - PIXEL-PERFECT ALIGNMENT SYSTEM
+   ═══════════════════════════════════════════════════════════════════════════
+   
+   STRICT 8PX GRID SYSTEM
+   Base Unit: 8px
+   All spacing, sizing, and layout must snap to this grid.
+   
+   RULES:
+   1. ALL margins/paddings must use variables from this file
+   2. ALL border-radius must use defined scale
+   3. ALL input heights must use standard heights
+   4. NO arbitrary pixel values allowed
+   
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─────────────────────────────────────────────────────────────────────────
+     UNIFIED SPACING SCALE (8px base)
+     ───────────────────────────────────────────────────────────────────────── */
+  --align-0: 0;
+  --align-px: 1px;
+  --align-0-5: 2px;      /* 0.25× base - micro only */
+  --align-1: 4px;        /* 0.5× base - micro only */
+  --align-2: 8px;        /* 1× base ★ PRIMARY */
+  --align-3: 12px;       /* 1.5× base */
+  --align-4: 16px;       /* 2× base ★ COMMON */
+  --align-5: 20px;       /* 2.5× base */
+  --align-6: 24px;       /* 3× base ★ SECTION GAP */
+  --align-7: 28px;       /* 3.5× base */
+  --align-8: 32px;       /* 4× base ★ COMPONENT GAP */
+  --align-10: 40px;      /* 5× base */
+  --align-12: 48px;      /* 6× base ★ SECTION SPACING */
+  --align-14: 56px;      /* 7× base */
+  --align-16: 64px;      /* 8× base ★ LARGE SECTIONS */
+  --align-20: 80px;      /* 10× base */
+  --align-24: 96px;      /* 12× base */
+  --align-32: 128px;     /* 16× base */
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     BORDER RADIUS SCALE (4px increments)
+     ───────────────────────────────────────────────────────────────────────── */
+  --radius-none: 0;
+  --radius-xs: 4px;
+  --radius-sm: 6px;      /* Exception for subtle rounding */
+  --radius-md: 8px;      /* ★ DEFAULT */
+  --radius-lg: 12px;     /* Cards, containers */
+  --radius-xl: 16px;     /* Large cards */
+  --radius-2xl: 20px;    /* Modal, hero cards */
+  --radius-3xl: 24px;    /* Feature sections */
+  --radius-pill: 9999px; /* Buttons, badges */
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     INPUT HEIGHTS (consistent across all forms)
+     ───────────────────────────────────────────────────────────────────────── */
+  --input-height-xs: 32px;   /* Tags, compact UI */
+  --input-height-sm: 40px;   /* Secondary inputs, mobile */
+  --input-height-md: 48px;   /* ★ DEFAULT - all form inputs */
+  --input-height-lg: 56px;   /* Hero CTAs, primary actions */
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     BUTTON HEIGHTS (match input heights for visual harmony)
+     ───────────────────────────────────────────────────────────────────────── */
+  --btn-height-xs: 32px;
+  --btn-height-sm: 40px;
+  --btn-height-md: 48px;     /* ★ DEFAULT */
+  --btn-height-lg: 56px;
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     ICON SIZES (consistent sizing)
+     ───────────────────────────────────────────────────────────────────────── */
+  --icon-xs: 12px;
+  --icon-sm: 16px;
+  --icon-md: 20px;           /* ★ DEFAULT in inputs */
+  --icon-lg: 24px;
+  --icon-xl: 32px;
+  --icon-2xl: 48px;
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     ICON POSITIONING (inside inputs)
+     ───────────────────────────────────────────────────────────────────────── */
+  --icon-input-left: 16px;      /* Icon left offset */
+  --icon-input-right: 16px;     /* Icon right offset */
+  --input-icon-padding: 48px;   /* Input padding when icon present */
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     CONTAINER WIDTHS
+     ───────────────────────────────────────────────────────────────────────── */
+  --container-xs: 480px;
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1440px;
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     CONTAINER PADDING (responsive)
+     ───────────────────────────────────────────────────────────────────────── */
+  --container-pad-mobile: var(--align-4);    /* 16px */
+  --container-pad-tablet: var(--align-6);    /* 24px */
+  --container-pad-desktop: var(--align-8);   /* 32px */
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     SECTION SPACING (vertical rhythm)
+     ───────────────────────────────────────────────────────────────────────── */
+  --section-gap-sm: var(--align-8);     /* 32px - tight sections */
+  --section-gap-md: var(--align-12);    /* 48px - standard sections */
+  --section-gap-lg: var(--align-16);    /* 64px - major sections */
+  --section-gap-xl: var(--align-24);    /* 96px - hero sections */
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     CARD PADDING (consistent internal spacing)
+     ───────────────────────────────────────────────────────────────────────── */
+  --card-pad-sm: var(--align-4);        /* 16px - compact cards */
+  --card-pad-md: var(--align-6);        /* 24px - standard cards */
+  --card-pad-lg: var(--align-8);        /* 32px - feature cards */
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     FORM SPACING
+     ───────────────────────────────────────────────────────────────────────── */
+  --form-gap: var(--align-5);           /* 20px between form groups */
+  --form-label-gap: var(--align-2);     /* 8px between label and input */
+  --form-row-gap: var(--align-4);       /* 16px between row items */
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     GRID GAPS (consistent grid spacing)
+     ───────────────────────────────────────────────────────────────────────── */
+  --grid-gap-sm: var(--align-3);        /* 12px - tight grid */
+  --grid-gap-md: var(--align-6);        /* 24px - standard grid */
+  --grid-gap-lg: var(--align-8);        /* 32px - loose grid */
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     NAVBAR DIMENSIONS
+     ───────────────────────────────────────────────────────────────────────── */
+  --navbar-height: 72px;                /* 9× base */
+  --navbar-pad-y: var(--align-3);       /* 12px vertical */
+  --navbar-pad-x: var(--align-4);       /* 16px horizontal */
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     FOOTER DIMENSIONS
+     ───────────────────────────────────────────────────────────────────────── */
+  --footer-pad-y: var(--align-12);      /* 48px vertical */
+  --footer-gap: var(--align-8);         /* 32px between columns */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ALIGNMENT UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Margin utilities (8px grid) */
+.m-0 { margin: var(--align-0); }
+.m-1 { margin: var(--align-1); }
+.m-2 { margin: var(--align-2); }
+.m-3 { margin: var(--align-3); }
+.m-4 { margin: var(--align-4); }
+.m-6 { margin: var(--align-6); }
+.m-8 { margin: var(--align-8); }
+
+.mt-0 { margin-top: var(--align-0); }
+.mt-2 { margin-top: var(--align-2); }
+.mt-4 { margin-top: var(--align-4); }
+.mt-6 { margin-top: var(--align-6); }
+.mt-8 { margin-top: var(--align-8); }
+.mt-12 { margin-top: var(--align-12); }
+
+.mb-0 { margin-bottom: var(--align-0); }
+.mb-2 { margin-bottom: var(--align-2); }
+.mb-4 { margin-bottom: var(--align-4); }
+.mb-6 { margin-bottom: var(--align-6); }
+.mb-8 { margin-bottom: var(--align-8); }
+.mb-12 { margin-bottom: var(--align-12); }
+
+/* Padding utilities (8px grid) */
+.p-0 { padding: var(--align-0); }
+.p-2 { padding: var(--align-2); }
+.p-4 { padding: var(--align-4); }
+.p-6 { padding: var(--align-6); }
+.p-8 { padding: var(--align-8); }
+
+.px-4 { padding-left: var(--align-4); padding-right: var(--align-4); }
+.px-6 { padding-left: var(--align-6); padding-right: var(--align-6); }
+.px-8 { padding-left: var(--align-8); padding-right: var(--align-8); }
+
+.py-4 { padding-top: var(--align-4); padding-bottom: var(--align-4); }
+.py-6 { padding-top: var(--align-6); padding-bottom: var(--align-6); }
+.py-8 { padding-top: var(--align-8); padding-bottom: var(--align-8); }
+
+/* Gap utilities */
+.gap-2 { gap: var(--align-2); }
+.gap-3 { gap: var(--align-3); }
+.gap-4 { gap: var(--align-4); }
+.gap-6 { gap: var(--align-6); }
+.gap-8 { gap: var(--align-8); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STANDARDIZED INPUT STYLING
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Standard form input - 48px height */
+.form-input-standard {
+  width: 100%;
+  height: var(--input-height-md);
+  padding: 0 var(--align-4);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  border: 2px solid var(--border-color, #CBD1DB);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  color: var(--text-primary, #151921);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.form-input-standard:hover {
+  border-color: var(--primary-light, #4A8CC4);
+}
+
+.form-input-standard:focus {
+  outline: none;
+  border-color: var(--primary, #21588B);
+  box-shadow: 0 0 0 4px rgba(33, 88, 139, 0.1);
+}
+
+/* Input with left icon */
+.input-with-icon {
+  padding-left: var(--input-icon-padding);
+}
+
+.input-icon-wrapper {
+  position: relative;
+}
+
+.input-icon-wrapper .icon {
+  position: absolute;
+  left: var(--icon-input-left);
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--icon-md);
+  height: var(--icon-md);
+  color: var(--text-muted, #7B8599);
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.input-icon-wrapper:focus-within .icon {
+  color: var(--primary, #21588B);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STANDARDIZED BUTTON SIZING
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.btn-standard {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--align-2);
+  height: var(--btn-height-md);
+  padding: 0 var(--align-6);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-standard-sm {
+  height: var(--btn-height-sm);
+  padding: 0 var(--align-4);
+  font-size: 0.875rem;
+}
+
+.btn-standard-lg {
+  height: var(--btn-height-lg);
+  padding: 0 var(--align-8);
+  font-size: 1rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STANDARDIZED CARD PADDING
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* All cards should use uniform padding */
+.card-uniform {
+  padding: var(--card-pad-md);
+  border-radius: var(--radius-xl);
+}
+
+.card-uniform-compact {
+  padding: var(--card-pad-sm);
+  border-radius: var(--radius-lg);
+}
+
+.card-uniform-spacious {
+  padding: var(--card-pad-lg);
+  border-radius: var(--radius-xl);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION SPACING STANDARDS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.section-standard {
+  padding-top: var(--section-gap-md);
+  padding-bottom: var(--section-gap-md);
+}
+
+.section-compact {
+  padding-top: var(--section-gap-sm);
+  padding-bottom: var(--section-gap-sm);
+}
+
+.section-spacious {
+  padding-top: var(--section-gap-lg);
+  padding-bottom: var(--section-gap-lg);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GRID ALIGNMENT STANDARDS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.grid-standard {
+  display: grid;
+  gap: var(--grid-gap-md);
+}
+
+.grid-tight {
+  display: grid;
+  gap: var(--grid-gap-sm);
+}
+
+.grid-loose {
+  display: grid;
+  gap: var(--grid-gap-lg);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FORM ALIGNMENT STANDARDS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-group-standard {
+  margin-bottom: var(--form-gap);
+}
+
+.form-label-standard {
+  display: block;
+  margin-bottom: var(--form-label-gap);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary, #151921);
+}
+
+.form-row-standard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--form-row-gap);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTAINER ALIGNMENT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.container-aligned {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-pad-desktop);
+  padding-right: var(--container-pad-desktop);
+}
+
+@media (max-width: 1024px) {
+  .container-aligned {
+    padding-left: var(--container-pad-tablet);
+    padding-right: var(--container-pad-tablet);
+  }
+}
+
+@media (max-width: 768px) {
+  .container-aligned {
+    padding-left: var(--container-pad-mobile);
+    padding-right: var(--container-pad-mobile);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE ADJUSTMENTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  :root {
+    --input-height-md: 48px;     /* Keep 48px on mobile for touch */
+    --btn-height-md: 48px;
+    --card-pad-md: var(--align-5);  /* 20px */
+    --section-gap-md: var(--align-10); /* 40px */
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --card-pad-md: var(--align-4);  /* 16px on small mobile */
+    --section-gap-md: var(--align-8); /* 32px */
+    --grid-gap-md: var(--align-4);    /* 16px */
+  }
+}

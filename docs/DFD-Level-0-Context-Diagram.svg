@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 650" width="950" height="650">
+  <!-- White Background -->
+  <rect width="950" height="650" fill="white"/>
+  
+  <!-- Title -->
+  <text x="475" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="black">
+    Level 0: Context Diagram
+  </text>
+  <text x="475" y="58" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="black">
+    Selvi Enterprise Steel &amp; Cement Management System
+  </text>
+  
+  <!-- Arrow Marker Definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="black"/>
+    </marker>
+  </defs>
+  
+  <!-- ==================== EXTERNAL ENTITIES ==================== -->
+  
+  <!-- Customer Entity (Left) -->
+  <rect x="40" y="230" width="140" height="80" fill="white" stroke="black" stroke-width="2"/>
+  <text x="110" y="275" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="black">CUSTOMER</text>
+  
+  <!-- Admin Entity (Right) -->
+  <rect x="770" y="230" width="140" height="80" fill="white" stroke="black" stroke-width="2"/>
+  <text x="840" y="275" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="black">ADMIN</text>
+  
+  <!-- ==================== MAIN PROCESS (Center) ==================== -->
+  
+  <circle cx="475" cy="270" r="110" fill="white" stroke="black" stroke-width="2"/>
+  <text x="475" y="250" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="black">0.0</text>
+  <text x="475" y="272" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="black">Selvi Enterprise</text>
+  <text x="475" y="290" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="black">System</text>
+  
+  <!-- ==================== CUSTOMER → SYSTEM DATA FLOWS ==================== -->
+  
+  <!-- Registration Data -->
+  <line x1="180" y1="215" x2="365" y2="215" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="272" y="208" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Registration Data</text>
+  
+  <!-- Login Credentials -->
+  <line x1="180" y1="240" x2="365" y2="240" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="272" y="233" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Login Credentials</text>
+  
+  <!-- Product Requests -->
+  <line x1="180" y1="265" x2="365" y2="265" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="272" y="258" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Product Requests</text>
+  
+  <!-- Cart Data -->
+  <line x1="180" y1="290" x2="365" y2="290" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="272" y="283" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Cart Data</text>
+  
+  <!-- Order Details -->
+  <line x1="180" y1="315" x2="365" y2="315" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="272" y="328" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Order Details</text>
+  
+  <!-- ==================== SYSTEM → CUSTOMER DATA FLOWS ==================== -->
+  
+  <!-- Authentication Response -->
+  <line x1="365" y1="370" x2="180" y2="370" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="272" y="363" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Authentication Response</text>
+  
+  <!-- Product Information -->
+  <line x1="365" y1="395" x2="180" y2="395" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="272" y="388" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Product Information</text>
+  
+  <!-- Order Confirmation -->
+  <line x1="365" y1="420" x2="180" y2="420" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="272" y="413" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Order Confirmation</text>
+  
+  <!-- Order Status -->
+  <line x1="365" y1="445" x2="180" y2="445" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="272" y="458" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Order Status</text>
+  
+  <!-- Customer Entity Extension Lines -->
+  <rect x="40" y="310" width="140" height="145" fill="none" stroke="black" stroke-width="0" stroke-dasharray="none"/>
+  <line x1="110" y1="310" x2="110" y2="450" stroke="black" stroke-width="1"/>
+  <line x1="110" y1="370" x2="180" y2="370" stroke="black" stroke-width="1"/>
+  <line x1="110" y1="395" x2="180" y2="395" stroke="black" stroke-width="1"/>
+  <line x1="110" y1="420" x2="180" y2="420" stroke="black" stroke-width="1"/>
+  <line x1="110" y1="445" x2="180" y2="445" stroke="black" stroke-width="1"/>
+  
+  <!-- ==================== ADMIN → SYSTEM DATA FLOWS ==================== -->
+  
+  <!-- Product Updates -->
+  <line x1="770" y1="215" x2="585" y2="215" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="678" y="208" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Product Updates</text>
+  
+  <!-- Stock Updates -->
+  <line x1="770" y1="240" x2="585" y2="240" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="678" y="233" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Stock Updates</text>
+  
+  <!-- Order Status Updates -->
+  <line x1="770" y1="265" x2="585" y2="265" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="678" y="258" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Order Status Updates</text>
+  
+  <!-- Customer Queries -->
+  <line x1="770" y1="290" x2="585" y2="290" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="678" y="303" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Customer Queries</text>
+  
+  <!-- ==================== SYSTEM → ADMIN DATA FLOWS ==================== -->
+  
+  <!-- Sales Reports -->
+  <line x1="585" y1="370" x2="770" y2="370" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="678" y="363" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Sales Reports</text>
+  
+  <!-- Order Reports -->
+  <line x1="585" y1="395" x2="770" y2="395" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="678" y="388" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Order Reports</text>
+  
+  <!-- Customer Records -->
+  <line x1="585" y1="420" x2="770" y2="420" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="678" y="433" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="black">Customer Records</text>
+  
+  <!-- Admin Entity Extension Lines -->
+  <line x1="840" y1="310" x2="840" y2="425" stroke="black" stroke-width="1"/>
+  <line x1="770" y1="370" x2="840" y2="370" stroke="black" stroke-width="1"/>
+  <line x1="770" y1="395" x2="840" y2="395" stroke="black" stroke-width="1"/>
+  <line x1="770" y1="420" x2="840" y2="420" stroke="black" stroke-width="1"/>
+  
+  <!-- ==================== LEGEND ==================== -->
+  <rect x="40" y="520" width="280" height="110" fill="white" stroke="black" stroke-width="1"/>
+  <text x="180" y="545" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="black">LEGEND</text>
+  
+  <!-- External Entity Symbol -->
+  <rect x="55" y="560" width="45" height="25" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="115" y="578" font-family="Arial, sans-serif" font-size="10" text-anchor="start" fill="black">External Entity</text>
+  
+  <!-- Process Symbol -->
+  <circle cx="78" cy="610" r="14" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="115" y="615" font-family="Arial, sans-serif" font-size="10" text-anchor="start" fill="black">Process</text>
+  
+  <!-- Data Flow Symbol -->
+  <line x1="200" y1="575" x2="260" y2="575" stroke="black" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <text x="200" y="615" font-family="Arial, sans-serif" font-size="10" text-anchor="start" fill="black">Data Flow</text>
+  
+  <!-- Note Box -->
+  <rect x="630" y="520" width="280" height="110" fill="white" stroke="black" stroke-width="1"/>
+  <text x="770" y="545" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="black">NOTES</text>
+  <text x="645" y="568" font-family="Arial, sans-serif" font-size="9" text-anchor="start" fill="black">• Level 0 Context Diagram</text>
+  <text x="645" y="585" font-family="Arial, sans-serif" font-size="9" text-anchor="start" fill="black">• System treated as black box</text>
+  <text x="645" y="602" font-family="Arial, sans-serif" font-size="9" text-anchor="start" fill="black">• No internal data stores shown</text>
+  <text x="645" y="619" font-family="Arial, sans-serif" font-size="9" text-anchor="start" fill="black">• All flows connect to central process</text>
+</svg>

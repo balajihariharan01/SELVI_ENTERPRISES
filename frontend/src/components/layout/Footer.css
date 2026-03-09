@@ -1,0 +1,776 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FOOTER - PREMIUM CORPORATE DESIGN
+   Selvi Enterprise - Steel & Cement
+   Professional, Clean, Business-Grade Footer
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.footer {
+  background: linear-gradient(180deg, #153660 0%, #0A1628 100%);
+  color: #ffffff;
+  margin-top: auto;
+  position: relative;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #F59E0B 0%, #D97706 50%, #F59E0B 100%);
+}
+
+/* Footer Container - Controlled Width */
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3.5rem 2rem 0;
+}
+
+/* ========================================
+   4-COLUMN GRID - EQUAL ALIGNMENT
+   ======================================== */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.9fr 1.2fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* Footer Column - Consistent Baseline */
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ========================================
+   COLUMN HEADINGS - ALIGNED BASELINE
+   ======================================== */
+.footer-heading {
+  font-size: 0.75rem;
+  font-weight: var(--font-bold);
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #F59E0B;
+  line-height: 1.4;
+}
+
+/* ========================================
+   BRAND SECTION (COLUMN 1)
+   ======================================== */
+.brand-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-header {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+.brand-logo {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+  padding: 6px;
+  overflow: hidden;
+}
+
+.footer-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: calc(var(--radius-lg) - 4px);
+}
+
+.brand-name-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.brand-name {
+  font-size: 1.2rem;
+  font-weight: var(--font-bold);
+  color: #ffffff;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.brand-tagline {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: var(--font-medium);
+}
+
+.brand-desc {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  max-width: 280px;
+}
+
+/* Owner List - Clean Vertical Alignment */
+.brand-owners {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.owner-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.owner-badge {
+  width: 36px;
+  height: 36px;
+  background: rgba(245, 158, 11, 0.25);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F59E0B;
+  font-size: 0.8rem;
+  font-weight: var(--font-semibold);
+  flex-shrink: 0;
+}
+
+.owner-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.owner-name {
+  font-size: 0.85rem;
+  font-weight: var(--font-medium);
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+.owner-role {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ========================================
+   QUICK LINKS (COLUMN 2)
+   ======================================== */
+.footer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-list li {
+  line-height: 1;
+}
+
+.footer-list a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: var(--font-medium);
+  transition: all 0.25s ease;
+  display: inline-block;
+  padding: 0.3rem 0;
+  line-height: 1.5;
+  position: relative;
+}
+
+.footer-list a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #F59E0B;
+  transition: width 0.25s ease;
+}
+
+.footer-list a:hover {
+  color: #F59E0B;
+}
+
+.footer-list a:hover::after {
+  width: 100%;
+}
+
+/* ========================================
+   CONTACT US (COLUMN 3)
+   ======================================== */
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.contact-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F59E0B;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+  transition: all 0.25s ease;
+}
+
+.contact-row:hover .contact-icon {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.contact-label {
+  font-size: 0.675rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: var(--font-semibold);
+  line-height: 1.3;
+}
+
+.contact-details span {
+  color: #ffffff;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  font-weight: var(--font-medium);
+}
+
+.contact-details a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: var(--font-medium);
+  transition: color 0.25s ease;
+  line-height: 1.5;
+  display: block;
+}
+
+.contact-details a:hover {
+  color: #F59E0B;
+}
+
+.email-link {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.address-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+/* WhatsApp Row */
+.whatsapp-row .contact-icon {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.whatsapp-row:hover .contact-icon {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.whatsapp-row a:hover {
+  color: #22c55e;
+}
+
+/* ========================================
+   FIND US / MAP (COLUMN 4)
+   ======================================== */
+.map-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.map-frame {
+  width: 100%;
+  height: 140px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.map-frame iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: none;
+}
+
+.map-external-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: var(--radius);
+  font-size: 0.8rem;
+  font-weight: var(--font-medium);
+  transition: all 0.25s ease;
+}
+
+.map-external-link:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #F59E0B;
+}
+
+/* Map Fallback - When iframe fails to load */
+.map-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 140px;
+  background: rgba(245, 158, 11, 0.05);
+  border-radius: var(--radius-lg);
+  gap: 0.5rem;
+}
+
+.map-fallback span {
+  font-size: 2rem;
+}
+
+.map-fallback p {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* ========================================
+   FOOTER BOTTOM BAR
+   ======================================== */
+.footer-bottom-section {
+  margin-top: 2.5rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid rgba(245, 158, 11, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.payment-info {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 1rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--radius);
+}
+
+.payment-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.payment-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.payment-label {
+  font-size: 0.625rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+}
+
+.payment-value {
+  font-size: 0.8rem;
+  font-weight: var(--font-semibold);
+  color: #F59E0B;
+  font-family: 'Monaco', 'Consolas', monospace;
+  line-height: 1.3;
+}
+
+.copyright {
+  text-align: right;
+}
+
+.copyright p {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.copyright p:first-child {
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+/* ========================================
+   RESPONSIVE - TABLET (1024px)
+   ======================================== */
+@media (max-width: 1024px) {
+  .footer-container {
+    padding: 3rem 1.5rem 0;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem 2rem;
+  }
+
+  .brand-section {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .brand-header {
+    margin-bottom: 0;
+  }
+
+  .brand-desc {
+    flex: 1;
+    min-width: 200px;
+    max-width: 320px;
+    margin-bottom: 0;
+  }
+
+  .brand-owners {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  .map-frame {
+    height: 140px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE (768px)
+   ======================================== */
+@media (max-width: 768px) {
+  .footer::before {
+    height: 2px;
+  }
+
+  .footer-container {
+    padding: 2rem 1rem 0;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Brand Section - Centered */
+  .brand-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .brand-header {
+    justify-content: center;
+  }
+
+  .brand-desc {
+    max-width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+
+  .brand-owners {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .owner-item {
+    justify-content: center;
+  }
+
+  /* Headings - Centered */
+  .footer-heading {
+    text-align: center;
+    border-bottom: none;
+    position: relative;
+    padding-bottom: 0.5rem;
+    font-size: 0.7rem;
+    margin-bottom: 1rem;
+  }
+
+  .footer-heading::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 2px;
+    background: var(--primary);
+  }
+
+  /* Links - Centered */
+  .footer-list {
+    align-items: center;
+  }
+  
+  .footer-list a {
+    font-size: 0.8rem;
+  }
+
+  /* Contact - Centered & Proper Alignment */
+  .contact-list {
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .contact-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .contact-icon {
+    margin-top: 0;
+    width: 36px;
+    height: 36px;
+  }
+
+  .contact-details {
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .contact-label {
+    margin-bottom: 0.25rem;
+    font-size: 0.625rem;
+  }
+
+  .contact-details span,
+  .contact-details a {
+    text-align: center;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    font-size: 0.8rem;
+  }
+
+  .address-text {
+    text-align: center;
+    line-height: 1.6;
+    font-size: 0.75rem;
+  }
+
+  .address-text br {
+    display: inline;
+  }
+
+  /* Map - Centered */
+  .map-card {
+    align-items: center;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .map-frame {
+    height: 120px;
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .map-external-link {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.875rem;
+  }
+
+  /* Bottom Bar - Stacked */
+  .footer-bottom-section {
+    flex-direction: column;
+    text-align: center;
+    margin-top: 1.25rem;
+    padding: 1rem 0;
+    gap: 0.625rem;
+  }
+  
+  .payment-info {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .payment-label {
+    font-size: 0.6rem;
+  }
+  
+  .payment-value {
+    font-size: 0.75rem;
+  }
+
+  .copyright {
+    text-align: center;
+  }
+  
+  .copyright p {
+    font-size: 0.7rem;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - SMALL MOBILE (480px)
+   ======================================== */
+@media (max-width: 480px) {
+  .footer-container {
+    padding: 1.75rem 1rem 0;
+  }
+
+  .brand-logo {
+    width: 38px;
+    height: 38px;
+  }
+
+  .brand-name {
+    font-size: 1rem;
+  }
+
+  .brand-desc {
+    font-size: 0.75rem;
+    max-width: 260px;
+  }
+
+  .owner-badge {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+  }
+
+  .owner-name {
+    font-size: 0.75rem;
+  }
+
+  .footer-heading {
+    font-size: 0.7rem;
+    margin-bottom: 1rem;
+  }
+
+  .footer-list a {
+    font-size: 0.75rem;
+  }
+
+  /* Contact Section - Small Mobile */
+  .contact-list {
+    gap: 1rem;
+  }
+
+  .contact-row {
+    max-width: 240px;
+    gap: 0.4rem;
+  }
+
+  .contact-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .contact-label {
+    font-size: 0.6rem;
+  }
+
+  .contact-details span,
+  .contact-details a {
+    font-size: 0.8rem;
+  }
+
+  .address-text {
+    font-size: 0.75rem;
+    line-height: 1.6;
+  }
+
+  .map-card {
+    max-width: 260px;
+  }
+
+  .map-frame {
+    height: 120px;
+    border-radius: 6px;
+  }
+
+  .map-external-link {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  .payment-info {
+    padding: 0.4rem 0.625rem;
+  }
+
+  .payment-value {
+    font-size: 0.7rem;
+  }
+
+  .copyright p {
+    font-size: 0.65rem;
+  }
+
+  .footer-bottom-section {
+    margin-top: 1.25rem;
+    padding: 0.875rem 0;
+  }
+}

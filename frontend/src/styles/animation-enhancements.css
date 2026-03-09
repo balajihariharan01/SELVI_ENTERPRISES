@@ -1,0 +1,707 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   SELVI ENTERPRISE - ANIMATION ENHANCEMENTS v1.0
+   ═══════════════════════════════════════════════════════════════════════════
+   
+   Premium CSS animations and transitions that complement Framer Motion.
+   These are GPU-accelerated, performance-optimized, and respect 
+   prefers-reduced-motion for accessibility.
+   
+   Contents:
+   1. Animation Variables
+   2. Base Transitions
+   3. Hover Effects
+   4. Loading States
+   5. Skeleton Loaders
+   6. Scroll Animations
+   7. Focus States
+   8. Success/Error States
+   9. Glass Effects
+   10. Reduced Motion
+   
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 1: ANIMATION VARIABLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Timing */
+  --anim-fast: 150ms;
+  --anim-normal: 250ms;
+  --anim-slow: 350ms;
+  --anim-slower: 500ms;
+  
+  /* Easing - Professional smooth curves */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-smooth-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-smooth-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* Standard transition */
+  --transition-base: var(--anim-normal) var(--ease-smooth);
+  --transition-fast: var(--anim-fast) var(--ease-smooth);
+  --transition-slow: var(--anim-slow) var(--ease-smooth);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 2: BASE TRANSITIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Apply smooth transitions to interactive elements */
+a,
+button,
+input,
+textarea,
+select,
+.card,
+.btn,
+[role="button"] {
+  transition: 
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-base),
+    transform var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 3: HOVER EFFECTS - Premium Interactions
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Lift Effect ─── */
+.hover-lift {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 12px 40px -12px rgba(0, 0, 0, 0.15),
+    0 4px 16px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* ─── Glow Effect ─── */
+.hover-glow {
+  transition: box-shadow var(--transition-base);
+}
+
+.hover-glow:hover {
+  box-shadow: 
+    0 0 20px rgba(33, 88, 139, 0.15),
+    0 0 40px rgba(33, 88, 139, 0.1);
+}
+
+/* Primary glow for buttons */
+.hover-glow-primary:hover {
+  box-shadow: 
+    0 0 0 4px rgba(33, 88, 139, 0.1),
+    0 8px 24px -4px rgba(33, 88, 139, 0.3);
+}
+
+/* Accent glow */
+.hover-glow-accent:hover {
+  box-shadow: 
+    0 0 0 4px rgba(245, 166, 35, 0.1),
+    0 8px 24px -4px rgba(245, 166, 35, 0.3);
+}
+
+/* ─── Scale Effect ─── */
+.hover-scale {
+  transition: transform var(--transition-fast);
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.hover-scale:active {
+  transform: scale(0.98);
+}
+
+/* ─── Shine Effect ─── */
+.hover-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left var(--anim-slow) var(--ease-smooth);
+  pointer-events: none;
+}
+
+.hover-shine:hover::after {
+  left: 100%;
+}
+
+/* ─── Border Animation ─── */
+.hover-border {
+  position: relative;
+}
+
+.hover-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  border-radius: inherit;
+  transition: border-color var(--transition-base);
+  pointer-events: none;
+}
+
+.hover-border:hover::before {
+  border-color: var(--primary, #21588B);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 4: LOADING STATES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Spinner ─── */
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(33, 88, 139, 0.2);
+  border-top-color: var(--primary, #21588B);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.loading-spinner-sm {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+
+.loading-spinner-lg {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Pulse Loader ─── */
+.loading-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ─── Dots Loader ─── */
+.loading-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.loading-dots span {
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary, #21588B);
+  border-radius: 50%;
+  animation: dotBounce 1.2s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotBounce {
+  0%, 80%, 100% { 
+    transform: translateY(0); 
+    opacity: 0.6;
+  }
+  40% { 
+    transform: translateY(-8px); 
+    opacity: 1;
+  }
+}
+
+/* ─── Button Loading State ─── */
+.btn-loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 5: SKELETON LOADERS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--premium-neutral-100, #E5E9EF) 0%,
+    var(--premium-neutral-50, #F5F7F9) 50%,
+    var(--premium-neutral-100, #E5E9EF) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm, 4px);
+}
+
+.skeleton-text {
+  height: 1em;
+  margin-bottom: 0.5em;
+}
+
+.skeleton-text:last-child {
+  width: 70%;
+}
+
+.skeleton-title {
+  height: 1.5em;
+  width: 60%;
+  margin-bottom: 1em;
+}
+
+.skeleton-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.skeleton-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: var(--radius-md, 8px);
+}
+
+.skeleton-card {
+  padding: 1.5rem;
+  border-radius: var(--radius-lg, 12px);
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 6: SCROLL ANIMATIONS (CSS-only for elements not using Framer)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Initial state for scroll animations */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 
+    opacity var(--anim-slow) var(--ease-smooth),
+    transform var(--anim-slow) var(--ease-smooth);
+}
+
+.animate-on-scroll.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays for children */
+.stagger-children > *:nth-child(1) { transition-delay: 0ms; }
+.stagger-children > *:nth-child(2) { transition-delay: 50ms; }
+.stagger-children > *:nth-child(3) { transition-delay: 100ms; }
+.stagger-children > *:nth-child(4) { transition-delay: 150ms; }
+.stagger-children > *:nth-child(5) { transition-delay: 200ms; }
+.stagger-children > *:nth-child(6) { transition-delay: 250ms; }
+.stagger-children > *:nth-child(7) { transition-delay: 300ms; }
+.stagger-children > *:nth-child(8) { transition-delay: 350ms; }
+
+/* Slide variations */
+.animate-slide-left {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.animate-slide-left.animate-in {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.animate-slide-right {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.animate-slide-right.animate-in {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Scale variation */
+.animate-scale {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.animate-scale.animate-in {
+  opacity: 1;
+  transform: scale(1);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 7: FOCUS STATES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Premium focus ring */
+.focus-ring:focus,
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 
+    0 0 0 2px var(--bg-card, white),
+    0 0 0 4px var(--primary, #21588B);
+}
+
+/* Subtle focus for inputs */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary, #21588B);
+  box-shadow: 0 0 0 3px rgba(33, 88, 139, 0.1);
+}
+
+/* Focus glow for buttons */
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: none;
+  box-shadow: 
+    0 0 0 3px rgba(33, 88, 139, 0.2),
+    0 4px 12px rgba(33, 88, 139, 0.15);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 8: SUCCESS / ERROR / WARNING STATES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Success Animation ─── */
+.animate-success {
+  animation: successPop 0.4s var(--ease-spring) forwards;
+}
+
+@keyframes successPop {
+  0% { 
+    transform: scale(0.8); 
+    opacity: 0; 
+  }
+  50% { 
+    transform: scale(1.05); 
+  }
+  100% { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
+}
+
+/* ─── Checkmark Animation ─── */
+.checkmark-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  animation: checkmarkStroke 0.6s var(--ease-smooth) forwards;
+}
+
+.checkmark-check {
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: checkmarkStroke 0.3s var(--ease-smooth) 0.3s forwards;
+}
+
+@keyframes checkmarkStroke {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ─── Error Shake ─── */
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
+  20%, 40%, 60%, 80% { transform: translateX(6px); }
+}
+
+/* ─── Warning Pulse ─── */
+.animate-warning {
+  animation: warningPulse 1s ease-in-out infinite;
+}
+
+@keyframes warningPulse {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(245, 166, 35, 0.4); 
+  }
+  50% { 
+    box-shadow: 0 0 0 8px rgba(245, 166, 35, 0); 
+  }
+}
+
+/* ─── Error Border Flash ─── */
+.animate-error-border {
+  animation: errorBorder 0.3s ease-in-out;
+}
+
+@keyframes errorBorder {
+  0%, 100% { border-color: var(--error, #EF4444); }
+  50% { border-color: var(--error-light, #FCA5A5); }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 9: GLASS & PREMIUM EFFECTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Glass Panel ─── */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 4px 24px -4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.glass-panel-dark {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* ─── Premium Card Hover ─── */
+.card-premium-animated {
+  transition: 
+    transform var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.card-premium-animated:hover {
+  transform: translateY(-6px);
+  box-shadow: 
+    0 20px 50px -15px rgba(0, 0, 0, 0.15),
+    0 8px 20px -8px rgba(0, 0, 0, 0.1);
+}
+
+/* ─── Gradient Border ─── */
+.gradient-border {
+  position: relative;
+  background: white;
+  border-radius: var(--radius-lg, 12px);
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, var(--primary, #21588B), var(--accent, #F5A623));
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.gradient-border:hover::before {
+  opacity: 1;
+}
+
+/* ─── Shimmer Text ─── */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--text-primary, #1a1a2e) 0%,
+    var(--primary, #21588B) 50%,
+    var(--text-primary, #1a1a2e) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textShimmer 3s ease-in-out infinite;
+}
+
+@keyframes textShimmer {
+  0%, 100% { background-position: -200% center; }
+  50% { background-position: 200% center; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 10: COUNTER & NUMBER ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Number pop effect */
+.number-pop {
+  display: inline-block;
+  animation: numberPop 0.3s var(--ease-spring);
+}
+
+@keyframes numberPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Progress bar fill */
+.progress-animated {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-animated .progress-fill {
+  transition: width 0.8s var(--ease-smooth);
+}
+
+.progress-animated::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: progressShine 2s ease-in-out infinite;
+}
+
+@keyframes progressShine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 11: TOOLTIP ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tooltip {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: 
+    opacity var(--transition-fast),
+    transform var(--transition-fast),
+    visibility var(--transition-fast);
+}
+
+.tooltip-trigger:hover .tooltip,
+.tooltip-trigger:focus .tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 12: MENU & DROPDOWN ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.menu-item {
+  transition: 
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    padding-left var(--transition-fast);
+}
+
+.menu-item:hover {
+  background-color: var(--bg-hover, rgba(33, 88, 139, 0.05));
+  padding-left: 1.25rem;
+}
+
+.menu-item.active {
+  background-color: var(--primary-50, #EDF5FB);
+  color: var(--primary, #21588B);
+  border-left: 3px solid var(--primary, #21588B);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 13: REDUCED MOTION SUPPORT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .hover-lift:hover,
+  .hover-scale:hover,
+  .card-premium-animated:hover {
+    transform: none;
+  }
+  
+  .animate-on-scroll {
+    opacity: 1;
+    transform: none;
+  }
+  
+  .loading-spinner,
+  .loading-dots span,
+  .skeleton {
+    animation: none;
+    background: var(--premium-neutral-100, #E5E9EF);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 14: PRINT STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media print {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .glass-panel,
+  .glass-panel-dark {
+    background: white;
+    backdrop-filter: none;
+  }
+}
