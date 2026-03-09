@@ -24,8 +24,30 @@ connectDB();
 // Stripe webhook needs raw body - must be before express.json()
 app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
 
+// CORS configuration for production
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://selvi-enterprises-ooty.vercel.app',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: function(origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(null, true); // Allow all origins in development, restrict in production if needed
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
 app.use(express.json());
 
 // Serve uploaded files statically

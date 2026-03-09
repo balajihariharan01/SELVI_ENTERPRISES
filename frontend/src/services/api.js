@@ -1,12 +1,17 @@
 import axios from 'axios';
 
-const API_URL = '/api';
+// Use environment variable for API URL, fallback to relative path for development with proxy
+const API_URL = import.meta.env.VITE_API_URL || '/api';
+
+// Export the base URL for use in other parts of the app (e.g., for image URLs)
+export const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || '';
 
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  withCredentials: true // Enable sending cookies for cross-origin requests
 });
 
 // Request interceptor to add auth token
