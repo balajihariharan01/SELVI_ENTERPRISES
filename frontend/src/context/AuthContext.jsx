@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import authService from '../services/authService';
 
 const AuthContext = createContext();
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   const isSessionExpired = useCallback(() => {
     const loginTime = localStorage.getItem('loginTime');
     if (!loginTime) return true;
-    
+
     const elapsed = Date.now() - parseInt(loginTime, 10);
     return elapsed >= SESSION_TIMEOUT;
   }, []);
@@ -127,11 +127,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authService.googleLogin(credential);
       console.log('AuthContext: googleLogin response received', response);
-      
+
       if (!response.token || !response.user) {
         throw new Error('Invalid response from server');
       }
-      
+
       localStorage.setItem('token', response.token);
       localStorage.setItem('user', JSON.stringify(response.user));
       localStorage.setItem('loginTime', Date.now().toString()); // Store login time
@@ -175,13 +175,13 @@ export const AuthProvider = ({ children }) => {
   const getSessionTimeRemaining = useCallback(() => {
     const loginTime = localStorage.getItem('loginTime');
     if (!loginTime) return 0;
-    
+
     const elapsed = Date.now() - parseInt(loginTime, 10);
     const remaining = SESSION_TIMEOUT - elapsed;
     return Math.max(0, Math.floor(remaining / 60000)); // Return minutes
   }, []);
 
-  const value = {
+  const value = useMemo(() => ({
     user,
     loading,
     login,
@@ -198,7 +198,14 @@ export const AuthProvider = ({ children }) => {
     isGoogleUser: user?.authProvider === 'google',
     isEmailVerified: user?.emailVerified || user?.authProvider === 'google',
     isPhoneVerified: user?.phoneVerified
-  };
+  }), [
+    user,
+    loading,
+    logout,
+    resetSessionTimer,
+    getSessionTimeRemaining,
+    sessionExpired
+  ]);
 
   return (
     <AuthContext.Provider value={value}>

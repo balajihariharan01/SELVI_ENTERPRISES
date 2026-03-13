@@ -12,7 +12,7 @@ exports.createOrder = async (req, res, next) => {
     // SECURITY: Verify user account is active before allowing order
     const User = require('../models/User');
     const currentUser = await User.findById(req.user.id);
-    
+
     if (!currentUser) {
       return res.status(401).json({
         success: false,
@@ -110,7 +110,8 @@ exports.getMyOrders = async (req, res, next) => {
   try {
     const orders = await Order.find({ user: req.user.id })
       .sort({ createdAt: -1 })
-      .populate('items.product', 'productName image');
+      .populate('items.product', 'productName image')
+      .lean();
 
     res.json({
       success: true,
@@ -176,7 +177,8 @@ exports.getAllOrders = async (req, res, next) => {
 
     const orders = await Order.find(query)
       .populate('user', 'name email phone')
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
 
     // Calculate stats
     const stats = {
@@ -229,7 +231,7 @@ exports.updateOrderStatus = async (req, res, next) => {
 
     order.orderStatus = status;
     if (adminNotes) order.adminNotes = adminNotes;
-    
+
     // Add to status history
     order.statusHistory.push({
       status,
@@ -522,36 +524,83 @@ exports.deleteOrder = async (req, res, next) => {
 // @access  Private/Admin
 exports.getDashboardStats = async (req, res, next) => {
   try {
-    const orders = await Order.find();
-    const products = await Product.find();
     const User = require('../models/User');
-    const users = await User.find({ role: 'user' });
-
-    // Today's orders
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const todayOrders = orders.filter(o => new Date(o.createdAt) >= today);
-
-    // This month's revenue
     const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const monthlyRevenue = orders
-      .filter(o => new Date(o.createdAt) >= thisMonth && o.orderStatus !== 'cancelled')
-      .reduce((sum, o) => sum + o.totalAmount, 0);
+
+    const [orderStats, productStats, userCount] = await Promise.all([
+      // Aggregation for order metrics
+      Order.aggregate([
+        {
+          $facet: {
+            counts: [
+              {
+                $group: {
+                  _id: '$orderStatus',
+                  count: { $sum: 1 },
+                  revenue: { $sum: { $cond: [{ $ne: ['$orderStatus', 'cancelled'] }, '$totalAmount', 0] } }
+                }
+              }
+            ],
+            todayOrders: [
+              {
+                $match: { createdAt: { $gte: today } }
+              },
+              { $count: 'count' }
+            ],
+            monthlyRevenue: [
+              {
+                $match: {
+                  createdAt: { $gte: thisMonth },
+                  orderStatus: { $ne: 'cancelled' }
+                }
+              },
+              {
+                $group: {
+                  _id: null,
+                  total: { $sum: '$totalAmount' }
+                }
+              }
+            ],
+            recentOrders: [
+              { $sort: { createdAt: -1 } },
+              { $limit: 5 }
+            ]
+          }
+        }
+      ]),
+      // Aggregation for product metrics
+      Product.aggregate([
+        {
+          $group: {
+            _id: null,
+            total: { $sum: 1 },
+            active: { $sum: { $cond: [{ $eq: ['$status', 'active'] }, 1, 0] } },
+            lowStock: { $sum: { $cond: [{ $and: [{ $lte: ['$stockQuantity', '$lowStockThreshold'] }, { $gt: ['$stockQuantity', 0] }] }, 1, 0] } },
+            outOfStock: { $sum: { $cond: [{ $eq: ['$stockQuantity', 0] }, 1, 0] } }
+          }
+        }
+      ]),
+      // Just a count for users
+      User.countDocuments({ role: 'user' })
+    ]);
+
+    const oData = orderStats[0];
+    const pData = productStats[0] || { total: 0, active: 0, lowStock: 0, outOfStock: 0 };
 
     const stats = {
-      totalOrders: orders.length,
-      pendingOrders: orders.filter(o => o.orderStatus === 'pending').length,
-      todayOrders: todayOrders.length,
-      totalProducts: products.length,
-      activeProducts: products.filter(p => p.status === 'active').length,
-      lowStockProducts: products.filter(p => p.stockQuantity <= p.lowStockThreshold && p.stockQuantity > 0).length,
-      outOfStockProducts: products.filter(p => p.stockQuantity === 0).length,
-      totalCustomers: users.length,
-      totalRevenue: orders
-        .filter(o => o.orderStatus !== 'cancelled')
-        .reduce((sum, o) => sum + o.totalAmount, 0),
-      monthlyRevenue,
-      recentOrders: orders.slice(0, 5)
+      totalOrders: oData.counts.reduce((sum, c) => sum + c.count, 0),
+      pendingOrders: oData.counts.find(c => c._id === 'pending')?.count || 0,
+      todayOrders: oData.todayOrders[0]?.count || 0,
+      totalProducts: pData.total,
+      activeProducts: pData.active,
+      lowStockProducts: pData.lowStock,
+      outOfStockProducts: pData.outOfStock,
+      totalCustomers: userCount,
+      totalRevenue: oData.counts.reduce((sum, c) => sum + c.revenue, 0),
+      monthlyRevenue: oData.monthlyRevenue[0]?.total || 0,
+      recentOrders: oData.recentOrders
     };
 
     res.json({
@@ -587,7 +636,7 @@ exports.getRevenueAnalytics = async (req, res, next) => {
       periodLabel = `${startDate || 'Start'} to ${endDate || 'Present'}`;
     } else if (period) {
       const now = new Date();
-      
+
       switch (period) {
         case 'today':
           const today = new Date(now);
@@ -646,11 +695,11 @@ exports.getRevenueAnalytics = async (req, res, next) => {
 
     // Daily revenue for the period (for charts)
     const dailyRevenue = await Order.aggregate([
-      { 
-        $match: { 
-          ...dateFilter, 
+      {
+        $match: {
+          ...dateFilter,
           orderStatus: { $in: ['confirmed', 'processing', 'shipped', 'delivered'] }
-        } 
+        }
       },
       {
         $group: {
@@ -717,7 +766,7 @@ exports.resendReceiptEmail = async (req, res, next) => {
     // Try to send email
     try {
       const result = await sendReceiptEmail(order);
-      
+
       // Update order with success
       order.receiptEmailStatus = 'sent';
       order.receiptEmailSentAt = new Date();
@@ -786,7 +835,7 @@ exports.getEmailStatus = async (req, res, next) => {
 exports.testEmail = async (req, res, next) => {
   try {
     const testResult = await testEmailConfiguration();
-    
+
     if (!testResult.success) {
       return res.status(400).json({
         success: false,

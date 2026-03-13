@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const path = require('path');
 const connectDB = require('./config/db');
 const { errorHandler } = require('./middleware/errorHandler');
@@ -21,6 +22,9 @@ const app = express();
 // Connect to database
 connectDB();
 
+// Middleware
+app.use(compression()); // Compress all responses
+
 // Stripe webhook needs raw body - must be before express.json()
 app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
 
@@ -33,10 +37,10 @@ const allowedOrigins = [
 
 // Middleware
 app.use(cors({
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     // Allow requests with no origin (mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
-    
+
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -64,8 +68,8 @@ app.use('/api/contact', contactRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    success: true, 
+  res.json({
+    success: true,
     message: 'Selvi Enterprise API is running',
     timestamp: new Date().toISOString()
   });

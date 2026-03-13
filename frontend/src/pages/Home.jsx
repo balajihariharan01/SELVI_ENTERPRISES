@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiTruck, FiShield, FiClock, FiArrowRight, FiPhone, FiMail, FiMapPin } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import productService from '../services/productService';
 import ProductCard from '../components/ProductCard';
 import { useAuth } from '../context/AuthContext';
@@ -16,11 +16,7 @@ const Home = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    fetchFeaturedProducts();
-  }, []);
-
-  const fetchFeaturedProducts = async () => {
+  const fetchFeaturedProducts = useCallback(async () => {
     try {
       const response = await productService.getProducts({ inStock: 'true' });
       setFeaturedProducts(response.products.slice(0, 4));
@@ -29,14 +25,18 @@ const Home = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchFeaturedProducts();
+  }, [fetchFeaturedProducts]);
 
   return (
     <PageTransition className="home">
       {/* Hero Section */}
       <section className="hero">
         <div className="container">
-          <motion.div 
+          <motion.div
             className="hero-content"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -44,7 +44,7 @@ const Home = () => {
           >
             <h1>Quality Steel & Cement for Your Construction Needs</h1>
             <p>
-              {BUSINESS_CONFIG.name} is your trusted partner for premium construction materials. 
+              {BUSINESS_CONFIG.name} is your trusted partner for premium construction materials.
               We provide the best brands at competitive prices with reliable delivery.
             </p>
             <div className="hero-buttons">
@@ -67,14 +67,14 @@ const Home = () => {
               </motion.div>
             </div>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="hero-image"
             initial={{ opacity: 0, x: 30, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
           >
-            <img 
-              src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&h=400&fit=crop" 
+            <img
+              src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&h=400&fit=crop"
               alt="Construction Materials"
             />
           </motion.div>
@@ -90,7 +90,7 @@ const Home = () => {
               { icon: <FiShield />, title: 'Quality Assured', desc: 'Only genuine products from trusted brands' },
               { icon: <FiClock />, title: '24/7 Support', desc: 'Always available to assist with your orders' },
             ].map((feature, index) => (
-              <motion.div 
+              <motion.div
                 key={feature.title}
                 className="feature-card"
                 initial={{ opacity: 0, y: 20 }}
@@ -113,7 +113,7 @@ const Home = () => {
       {/* Categories Section */}
       <section className="categories">
         <div className="container">
-          <motion.div 
+          <motion.div
             className="section-header"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -124,7 +124,7 @@ const Home = () => {
             <p>Choose from our range of quality construction materials</p>
           </motion.div>
           <div className="category-cards">
-            <motion.div 
+            <motion.div
               className="category-card cement"
               onClick={() => navigate('/products?category=cement')}
               initial={{ opacity: 0, y: 30 }}
@@ -142,7 +142,7 @@ const Home = () => {
                 </span>
               </div>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="category-card steel"
               onClick={() => navigate('/products?category=steel')}
               initial={{ opacity: 0, y: 30 }}
@@ -163,7 +163,7 @@ const Home = () => {
           </div>
           {/* Others Category */}
           <div className="category-others">
-            <motion.div 
+            <motion.div
               className="category-item-large"
               onClick={() => navigate('/products?category=others')}
               initial={{ opacity: 0, x: -20 }}
@@ -180,7 +180,7 @@ const Home = () => {
               </div>
               <FiArrowRight className="arrow-icon" />
             </motion.div>
-            <motion.div 
+            <motion.div
               className="category-item-large view-all"
               onClick={() => navigate('/products')}
               initial={{ opacity: 0, x: 20 }}
@@ -204,7 +204,7 @@ const Home = () => {
       {/* Featured Products */}
       <section className="featured-products">
         <div className="container">
-          <motion.div 
+          <motion.div
             className="section-header"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -229,15 +229,15 @@ const Home = () => {
           )}
         </div>
       </section>
-          
-      
-          {/* Google Map Embed - Full Width Below Contact Cards */}
-          
-        
+
+
+      {/* Google Map Embed - Full Width Below Contact Cards */}
+
+
 
       {/* CTA Section - Only show if not logged in */}
       {!isAuthenticated && (
-        <motion.section 
+        <motion.section
           className="cta"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}

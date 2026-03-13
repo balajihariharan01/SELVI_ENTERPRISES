@@ -41,7 +41,10 @@ exports.getProducts = async (req, res, next) => {
     if (sort === 'price_desc') sortOption = { price: -1 };
     if (sort === 'name') sortOption = { productName: 1 };
 
-    const products = await Product.find(query).sort(sortOption);
+    const products = await Product.find(query)
+      .sort(sortOption)
+      .select('productName category brand price image stockQuantity status featured unit minOrderQuantity lowStockThreshold')
+      .lean();
 
     res.json({
       success: true,
@@ -58,7 +61,7 @@ exports.getProducts = async (req, res, next) => {
 // @access  Public
 exports.getProduct = async (req, res, next) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).lean();
 
     if (!product) {
       return res.status(404).json({
@@ -195,7 +198,9 @@ exports.updateStock = async (req, res, next) => {
 // @access  Private/Admin
 exports.getAllProductsAdmin = async (req, res, next) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    const products = await Product.find()
+      .sort({ createdAt: -1 })
+      .lean();
 
     const stats = {
       total: products.length,
@@ -222,7 +227,9 @@ exports.getLowStockProducts = async (req, res, next) => {
   try {
     const products = await Product.find({
       $expr: { $lte: ['$stockQuantity', '$lowStockThreshold'] }
-    }).sort({ stockQuantity: 1 });
+    })
+      .sort({ stockQuantity: 1 })
+      .lean();
 
     res.json({
       success: true,
@@ -241,7 +248,7 @@ exports.getProductOptions = async (req, res, next) => {
   try {
     const categories = Product.getCategories();
     const units = Product.getUnits();
-    
+
     // Also get unique categories from existing products
     const usedCategories = await Product.distinct('category');
     const usedUnits = await Product.distinct('unit');

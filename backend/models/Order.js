@@ -149,27 +149,27 @@ const orderSchema = new mongoose.Schema({
 });
 
 // Virtual field to check if order is modifiable (within 24 hours)
-orderSchema.virtual('isModifiable').get(function() {
+orderSchema.virtual('isModifiable').get(function () {
   // Order cannot be modified if it's already shipped, delivered, or cancelled
   const nonModifiableStatuses = ['shipped', 'delivered', 'cancelled'];
   if (nonModifiableStatuses.includes(this.orderStatus)) {
     return false;
   }
-  
+
   // Check if within 24 hours of creation
   const hoursSinceCreation = (Date.now() - this.createdAt) / (1000 * 60 * 60);
   return hoursSinceCreation <= 24;
 });
 
 // Virtual field to get remaining modification time in hours
-orderSchema.virtual('modificationTimeRemaining').get(function() {
+orderSchema.virtual('modificationTimeRemaining').get(function () {
   const hoursSinceCreation = (Date.now() - this.createdAt) / (1000 * 60 * 60);
   const remaining = 24 - hoursSinceCreation;
   return remaining > 0 ? Math.round(remaining * 10) / 10 : 0;
 });
 
 // Generate order number before saving
-orderSchema.pre('save', async function(next) {
+orderSchema.pre('save', async function (next) {
   if (!this.orderNumber) {
     const date = new Date();
     const year = date.getFullYear().toString().slice(-2);
@@ -181,5 +181,11 @@ orderSchema.pre('save', async function(next) {
   this.updatedAt = Date.now();
   next();
 });
+
+// Add indexes for optimized searching and filtering
+orderSchema.index({ user: 1 });
+orderSchema.index({ orderNumber: 1 });
+orderSchema.index({ orderStatus: 1 });
+orderSchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model('Order', orderSchema);

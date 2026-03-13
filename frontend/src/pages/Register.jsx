@@ -31,7 +31,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  
+
   // Validation states
   const [validation, setValidation] = useState({
     name: { valid: null, message: '' },
@@ -43,7 +43,7 @@ const Register = () => {
 
   const { register, googleLogin, isAuthenticated, isAdmin } = useAuth();
   const navigate = useNavigate();
-  
+
   // Debounced values for async validation
   const debouncedEmail = useDebounce(formData.email, 500);
   const debouncedPhone = useDebounce(formData.phone, 500);
@@ -79,30 +79,30 @@ const Register = () => {
         setValidation(v => ({ ...v, email: { valid: null, message: '', checking: false } }));
         return;
       }
-      
+
       const emailRegex = /^\S+@\S+\.\S+$/;
       if (!emailRegex.test(debouncedEmail)) {
         setValidation(v => ({ ...v, email: { valid: false, message: 'Please enter a valid email address', checking: false } }));
         return;
       }
-      
+
       setValidation(v => ({ ...v, email: { ...v.email, checking: true } }));
-      
+
       try {
         const result = await authService.checkEmail(debouncedEmail);
-        setValidation(v => ({ 
-          ...v, 
-          email: { 
-            valid: result.available, 
+        setValidation(v => ({
+          ...v,
+          email: {
+            valid: result.available,
             message: result.available ? '' : 'Email already registered',
-            checking: false 
-          } 
+            checking: false
+          }
         }));
       } catch (error) {
         setValidation(v => ({ ...v, email: { valid: null, message: '', checking: false } }));
       }
     };
-    
+
     checkEmail();
   }, [debouncedEmail]);
 
@@ -113,29 +113,29 @@ const Register = () => {
         setValidation(v => ({ ...v, phone: { valid: null, message: '', checking: false } }));
         return;
       }
-      
+
       if (!/^[0-9]{10}$/.test(debouncedPhone)) {
         setValidation(v => ({ ...v, phone: { valid: false, message: 'Please enter a valid 10-digit phone number', checking: false } }));
         return;
       }
-      
+
       setValidation(v => ({ ...v, phone: { ...v.phone, checking: true } }));
-      
+
       try {
         const result = await authService.checkPhone(debouncedPhone);
-        setValidation(v => ({ 
-          ...v, 
-          phone: { 
-            valid: result.available, 
+        setValidation(v => ({
+          ...v,
+          phone: {
+            valid: result.available,
             message: result.available ? '' : 'Phone number already exists',
-            checking: false 
-          } 
+            checking: false
+          }
         }));
       } catch (error) {
         setValidation(v => ({ ...v, phone: { valid: null, message: '', checking: false } }));
       }
     };
-    
+
     checkPhone();
   }, [debouncedPhone]);
 
@@ -145,7 +145,7 @@ const Register = () => {
       setValidation(v => ({ ...v, password: { valid: null, message: '', strength: 0 } }));
       return;
     }
-    
+
     let strength = 0;
     const checks = {
       length: formData.password.length >= 8,
@@ -153,25 +153,25 @@ const Register = () => {
       number: /\d/.test(formData.password),
       special: /[!@#$%^&*]/.test(formData.password)
     };
-    
+
     if (checks.length) strength++;
     if (checks.uppercase) strength++;
     if (checks.number) strength++;
     if (checks.special) strength++;
-    
+
     const isValid = checks.length && checks.uppercase && checks.number;
     const messages = [];
     if (!checks.length) messages.push('8+ characters');
     if (!checks.uppercase) messages.push('1 uppercase');
     if (!checks.number) messages.push('1 number');
-    
-    setValidation(v => ({ 
-      ...v, 
-      password: { 
-        valid: isValid, 
+
+    setValidation(v => ({
+      ...v,
+      password: {
+        valid: isValid,
         message: isValid ? '' : `Required: ${messages.join(', ')}`,
-        strength 
-      } 
+        strength
+      }
     }));
   }, [formData.password]);
 
@@ -181,7 +181,7 @@ const Register = () => {
       setValidation(v => ({ ...v, confirmPassword: { valid: null, message: '' } }));
       return;
     }
-    
+
     if (formData.password !== formData.confirmPassword) {
       setValidation(v => ({ ...v, confirmPassword: { valid: false, message: 'Passwords do not match' } }));
     } else {
@@ -189,11 +189,11 @@ const Register = () => {
     }
   }, [formData.password, formData.confirmPassword]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name.replace('register-', '')]: e.target.value });
-  };
+  const handleChange = useCallback((e) => {
+    setFormData(prev => ({ ...prev, [e.target.name.replace('register-', '')]: e.target.value }));
+  }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
 
     // Check all validations
@@ -234,23 +234,23 @@ const Register = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [formData, validation, register, navigate]);
 
   // Google OAuth - Same handler as Login page
   const handleGoogleSuccess = async (credentialResponse) => {
     setGoogleLoading(true);
     try {
       console.log('Google credential received:', credentialResponse.credential ? 'Yes' : 'No');
-      
+
       if (!credentialResponse.credential) {
         throw new Error('No credential received from Google');
       }
-      
+
       const response = await googleLogin(credentialResponse.credential);
       console.log('Google signup response:', response);
-      
+
       toast.success('Google sign-up successful!');
-      
+
       // STRICT Role-based redirect
       if (response.user.role === 'admin') {
         navigate('/admin/dashboard', { replace: true });
@@ -260,7 +260,7 @@ const Register = () => {
     } catch (error) {
       console.error('Google sign-up error:', error);
       console.error('Error response:', error.response?.data);
-      
+
       const errorMessage = error.response?.data?.message || error.message || 'Google sign-up failed';
       toast.error(errorMessage);
     } finally {
@@ -274,7 +274,7 @@ const Register = () => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="auth-page auth-register"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -455,8 +455,8 @@ const Register = () => {
             {validation.confirmPassword.message && <span className="validation-message error">{validation.confirmPassword.message}</span>}
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="btn btn-primary btn-lg auth-submit"
             disabled={loading || !validation.name.valid || !validation.email.valid || !validation.phone.valid || !validation.password.valid || !validation.confirmPassword.valid}
           >

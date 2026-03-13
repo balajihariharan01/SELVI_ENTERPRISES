@@ -38,7 +38,7 @@ const productSchema = new mongoose.Schema({
     required: [true, 'Please provide product category'],
     lowercase: true,
     validate: {
-      validator: function(v) {
+      validator: function (v) {
         // Allow any category - flexible system
         return v && v.trim().length > 0;
       },
@@ -79,7 +79,7 @@ const productSchema = new mongoose.Schema({
     required: [true, 'Please provide unit of measurement'],
     lowercase: true,
     validate: {
-      validator: function(v) {
+      validator: function (v) {
         // Allow any unit - flexible system
         return v && v.trim().length > 0;
       },
@@ -127,33 +127,42 @@ const productSchema = new mongoose.Schema({
 });
 
 // Static method to get all available categories
-productSchema.statics.getCategories = function() {
+productSchema.statics.getCategories = function () {
   return PRODUCT_CATEGORIES;
 };
 
 // Static method to get all available units
-productSchema.statics.getUnits = function() {
+productSchema.statics.getUnits = function () {
   return PRODUCT_UNITS;
 };
 
 // Update timestamp on save
-productSchema.pre('save', function(next) {
+productSchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   next();
 });
 
 // Virtual for checking low stock
-productSchema.virtual('isLowStock').get(function() {
+productSchema.virtual('isLowStock').get(function () {
   return this.stockQuantity <= this.lowStockThreshold;
 });
 
 // Virtual for checking in stock
-productSchema.virtual('inStock').get(function() {
+productSchema.virtual('inStock').get(function () {
   return this.stockQuantity > 0;
 });
 
 // Enable virtuals in JSON
 productSchema.set('toJSON', { virtuals: true });
 productSchema.set('toObject', { virtuals: true });
+
+// Add indexes for optimized searching and filtering
+productSchema.index({ category: 1 });
+productSchema.index({ status: 1 });
+productSchema.index({ brand: 1 });
+productSchema.index({ price: 1 });
+productSchema.index({ featured: 1 });
+productSchema.index({ createdAt: -1 });
+productSchema.index({ productName: 'text', brand: 'text', description: 'text' }); // For full-text search
 
 module.exports = mongoose.model('Product', productSchema);
