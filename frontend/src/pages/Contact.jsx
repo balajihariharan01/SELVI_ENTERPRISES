@@ -154,143 +154,101 @@ const Contact = () => {
           <div className="contact-grid">
             {/* Contact Form */}
             <motion.div
-              className="contact-form-wrapper animate-on-scroll"
+              className="contact-form-wrapper !bg-white !p-12 !rounded-[2.5rem] !shadow-2xl !border !border-slate-100 max-md:!p-6 animate-on-scroll"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4 }}
             >
-              <div className="form-header">
-                <h2 className="form-title">Send Us a Message</h2>
-                <p className="form-subtitle">Fill out the form below and we'll get back to you as soon as possible.</p>
+              <div className="form-header !mb-10">
+                <h2 className="form-title !text-3xl !font-black !text-slate-900 !mb-4">Transmission Matrix</h2>
+                <p className="form-subtitle !text-slate-500 !text-sm">Initiate an encrypted inquiry thread with our support collective.</p>
               </div>
 
               {submitted ? (
-                <div className="success-message">
-                  <div className="success-icon">
+                <div className="success-message !text-center !py-12">
+                  <div className="success-icon !w-20 !h-20 !bg-emerald-600 !text-white !rounded-full !flex !items-center !justify-center !mx-auto !mb-6 !text-3xl">
                     <FiCheck />
                   </div>
-                  <h3>Message Sent!</h3>
-                  <p>Thank you for reaching out. We'll respond to your inquiry within 24 hours.</p>
+                  <h3 className="!text-2xl !font-black !text-slate-900 !mb-4">Data Transmitted</h3>
+                  <p className="!text-slate-500">Your logistical query has been queued for executive review. Expected latency: &lt; 24h.</p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="contact-form">
+                <form onSubmit={handleSubmit} className="contact-form !flex !flex-col !gap-6">
                   <div className="form-row">
                     <div className={`form-group ${errors.name ? 'has-error' : ''}`}>
-                      <label className="form-label">
-                        <FiUser className="label-icon" />
-                        Full Name <span className="required">*</span>
+                      <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-400 !mb-3">
+                        <FiUser className="!text-blue-500" /> Executive Identity
                       </label>
                       <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        placeholder="Enter your full name"
-                        className="form-input"
+                        placeholder="John Doe"
+                        className="form-input !w-full !bg-slate-50 !border-0 !p-5 !rounded-2xl !text-sm focus:!ring-2 focus:!ring-blue-500 !transition-all"
                       />
-                      {errors.name && (
-                        <span className="error-message">
-                          <FiAlertCircle /> {errors.name}
-                        </span>
-                      )}
                     </div>
                   </div>
 
-                  <div className="form-row two-cols">
+                  <div className="form-row !grid !grid-cols-2 !gap-6 max-md:!grid-cols-1">
                     <div className={`form-group ${errors.email ? 'has-error' : ''}`}>
-                      <label className="form-label">
-                        <FiMail className="label-icon" />
-                        Email Address <span className="required">*</span>
+                      <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-400 !mb-3">
+                        <FiMail className="!text-blue-500" /> Digital Address
                       </label>
                       <input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        placeholder="your@email.com"
-                        className="form-input"
+                        placeholder="john@enterprise.com"
+                        className="form-input !w-full !bg-slate-50 !border-0 !p-5 !rounded-2xl !text-sm focus:!ring-2 focus:!ring-blue-500 !transition-all"
                       />
-                      {errors.email && (
-                        <span className="error-message">
-                          <FiAlertCircle /> {errors.email}
-                        </span>
-                      )}
                     </div>
 
                     <div className={`form-group ${errors.phone ? 'has-error' : ''}`}>
-                      <label className="form-label">
-                        <FiPhone className="label-icon" />
-                        Phone Number <span className="required">*</span>
+                      <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-400 !mb-3">
+                        <FiPhone className="!text-blue-500" /> Voice Link
                       </label>
                       <input
                         type="tel"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        placeholder="10-digit number"
-                        className="form-input"
-                      />
-                      {errors.phone && (
-                        <span className="error-message">
-                          <FiAlertCircle /> {errors.phone}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label className="form-label">
-                        <FiMessageSquare className="label-icon" />
-                        Subject (Optional)
-                      </label>
-                      <input
-                        type="text"
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleChange}
-                        placeholder="e.g., Bulk Order Inquiry"
-                        className="form-input"
+                        placeholder="+91 XXXXX XXXXX"
+                        className="form-input !w-full !bg-slate-50 !border-0 !p-5 !rounded-2xl !text-sm focus:!ring-2 focus:!ring-blue-500 !transition-all"
                       />
                     </div>
                   </div>
 
                   <div className="form-row">
                     <div className={`form-group ${errors.message ? 'has-error' : ''}`}>
-                      <label className="form-label">
-                        <FiMessageSquare className="label-icon" />
-                        Your Message <span className="required">*</span>
+                      <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-400 !mb-3">
+                        <FiMessageSquare className="!text-blue-500" /> Technical Brief
                       </label>
                       <textarea
                         name="message"
                         value={formData.message}
                         onChange={handleChange}
-                        placeholder="Tell us about your requirements, questions, or feedback..."
-                        className="form-textarea"
-                        rows="5"
+                        placeholder="Specify your material requirements or logistical challenges..."
+                        className="form-textarea !w-full !bg-slate-50 !border-0 !p-5 !rounded-2xl !text-sm !min-h-[150px] focus:!ring-2 focus:!ring-blue-500 !transition-all"
                       ></textarea>
-                      {errors.message && (
-                        <span className="error-message">
-                          <FiAlertCircle /> {errors.message}
-                        </span>
-                      )}
                     </div>
                   </div>
 
                   <button
                     type="submit"
-                    className={`submit-btn ${loading ? 'loading' : ''}`}
+                    className={`submit-btn !w-full !bg-slate-900 !text-white !p-6 !rounded-2xl !text-sm !font-black !uppercase !tracking-widest !flex !items-center !justify-center !gap-3 hover:!bg-blue-600 !transition-all active:!scale-95 ${loading ? 'loading' : ''}`}
                     disabled={loading}
                   >
                     {loading ? (
                       <>
-                        <span className="btn-spinner"></span>
-                        Sending...
+                        <span className="btn-spinner !w-5 !h-5 !border-2 !border-white/20 !border-t-white !rounded-full !animate-spin"></span>
+                        Transmitting...
                       </>
                     ) : (
                       <>
-                        <FiSend /> Send Message
+                        <FiSend /> Execute Data Packet
                       </>
                     )}
                   </button>
@@ -300,99 +258,52 @@ const Contact = () => {
 
             {/* Contact Information */}
             <motion.div
-              className="contact-info-wrapper animate-on-scroll"
+              className="contact-info-wrapper !grid !grid-cols-1 !gap-6 animate-on-scroll"
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.1 }}
             >
-              <div className="info-card address-card">
-                <div className="info-icon">
+              <div className="info-card !bg-white !p-8 !rounded-3xl !shadow-sm !border !border-slate-100">
+                <div className="info-icon !w-12 !h-12 !bg-blue-600 !text-white !rounded-xl !flex !items-center !justify-center !mb-6">
                   <FiMapPin />
                 </div>
-                <h3 className="info-title">Visit Our Store</h3>
-                <div className="info-content">
-                  <p className="store-name">{BUSINESS_CONFIG.name}</p>
-                  <p>{BUSINESS_CONFIG.location.landmark}</p>
-                  <p>{BUSINESS_CONFIG.location.street}</p>
+                <h3 className="info-title !text-xl !font-black !text-slate-900 !mb-4">Physical Node</h3>
+                <div className="info-content !text-slate-500 !text-sm !leading-relaxed">
+                  <p className="!font-black !text-slate-900">{BUSINESS_CONFIG.name}</p>
+                  <p>{BUSINESS_CONFIG.location.landmark}, {BUSINESS_CONFIG.location.street}</p>
                   <p>{BUSINESS_CONFIG.location.city} - {BUSINESS_CONFIG.location.pincode}</p>
-                  <p>{BUSINESS_CONFIG.location.state}, India</p>
                 </div>
+              </div>
+
+              <div className="info-card !bg-white !p-8 !rounded-3xl !shadow-sm !border !border-slate-100">
+                <div className="info-icon !w-12 !h-12 !bg-emerald-600 !text-white !rounded-xl !flex !items-center !justify-center !mb-6">
+                  <FaWhatsapp />
+                </div>
+                <h3 className="info-title !text-xl !font-black !text-slate-900 !mb-4">Express Chat</h3>
                 <a
-                  href={BUSINESS_CONFIG.location.googleMapsUrl}
+                  href={getWhatsAppLink('Hi, I need assistance with material procurement.')}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="info-link"
+                  className="!inline-flex !items-center !gap-2 !bg-emerald-600 !text-white !px-6 !py-3 !rounded-full !text-xs !font-black !uppercase !tracking-widest"
                 >
-                  View on Google Maps →
+                  <FaWhatsapp /> Initiate WhatsApp Channel
                 </a>
               </div>
 
-              <div className="info-card phone-card">
-                <div className="info-icon">
-                  <FiPhone />
-                </div>
-                <h3 className="info-title">Call Us</h3>
-                <div className="info-content">
-                  {BUSINESS_CONFIG.contact.phones.map((phone, index) => (
-                    <a
-                      key={index}
-                      href={`tel:${phone.replace(/\s/g, '')}`}
-                      className="phone-link"
-                    >
-                      {phone}
-                    </a>
-                  ))}
-                </div>
-              </div>
-
-              <div className="info-card email-card">
-                <div className="info-icon">
-                  <FiMail />
-                </div>
-                <h3 className="info-title">Email Us</h3>
-                <div className="info-content">
-                  <a
-                    href={`mailto:${BUSINESS_CONFIG.contact.email}`}
-                    className="email-link"
-                  >
-                    {BUSINESS_CONFIG.contact.email}
-                  </a>
-                </div>
-              </div>
-
-              <div className="info-card whatsapp-card">
-                <div className="info-icon whatsapp">
-                  <FaWhatsapp />
-                </div>
-                <h3 className="info-title">WhatsApp</h3>
-                <div className="info-content">
-                  <p>Quick response guaranteed!</p>
-                  <a
-                    href={getWhatsAppLink('Hi, I would like to inquire about your products.')}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="whatsapp-btn"
-                  >
-                    <FaWhatsapp /> Chat on WhatsApp
-                  </a>
-                </div>
-              </div>
-
-              <div className="info-card hours-card">
-                <div className="info-icon">
+              <div className="info-card !bg-slate-900 !p-8 !rounded-3xl !shadow-sm">
+                <div className="info-icon !w-12 !h-12 !bg-blue-500 !text-white !rounded-xl !flex !items-center !justify-center !mb-6">
                   <FiClock />
                 </div>
-                <h3 className="info-title">Business Hours</h3>
-                <div>
-                  <div>
-                    <span>Monday - Saturday </span>
-                    <span> {"   " + BUSINESS_CONFIG.businessHours.weekdays}</span>
+                <h3 className="info-title !text-xl !font-black !text-white !mb-4">Operation Timeline</h3>
+                <div className="!text-slate-400 !text-xs !font-bold !uppercase !tracking-widest !flex !flex-col !gap-2">
+                  <div className="!flex !justify-between">
+                    <span>Mon - Sat</span>
+                    <span className="!text-blue-400">{BUSINESS_CONFIG.businessHours.weekdays}</span>
                   </div>
-
-                  <div className="hours-row">
+                  <div className="!flex !justify-between">
                     <span>Sunday</span>
-                    <span>Holiday</span>
+                    <span className="!text-red-500">Logistics Offline</span>
                   </div>
                 </div>
               </div>

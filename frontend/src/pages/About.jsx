@@ -80,52 +80,37 @@ const About = () => {
       </section>
 
       {/* Company Introduction */}
-      <section className="about-section intro-section">
+      <section className="about-section intro-section !bg-white !py-24 max-md:!py-12">
         <div className="container">
-          <div className="intro-grid animate-on-scroll">
+          <div className="intro-grid !grid !grid-cols-2 !gap-20 !items-center max-md:!grid-cols-1 max-md:!gap-12 animate-on-scroll">
             <div className="intro-content">
-              <span className="section-badge">Who We Are</span>
-              <h2 className="section-title">
+              <span className="section-badge !inline-block !bg-slate-100 !text-blue-600 !px-4 !py-1 !rounded-full !text-[10px] !font-black !uppercase !tracking-widest !mb-6">Institutional Identity</span>
+              <h2 className="section-title !text-4xl !font-black !text-slate-900 !mb-8 max-md:!text-3xl">
                 {BUSINESS_CONFIG.name}
-                <span className="title-underline"></span>
               </h2>
-              <p className="intro-text">
-                <strong>{BUSINESS_CONFIG.name}</strong> is a leading supplier of construction materials
-                based in the scenic town of Ooty, Tamil Nadu. Since our establishment, we have been
-                committed to providing top-quality steel, cement, and building supplies to support
-                construction projects of all sizes.
+              <p className="intro-text !text-slate-600 !text-lg !leading-relaxed !mb-6">
+                <strong>{BUSINESS_CONFIG.name}</strong> stands as an industrial vanguard in material logistics. Since our inception, we have optimized the procurement pipelines for high-grade steel and cement across the technical terrain of Ooty.
               </p>
-              <p className="intro-text">
-                Our extensive product range, competitive pricing, and exceptional customer service
-                have made us the go-to choice for contractors, builders, and individual homeowners
-                across the Nilgiris district.
-              </p>
-              <div className="intro-highlights">
-                <div className="highlight-item">
-                  <FiCheck className="highlight-icon" />
-                  <span>Premium Quality Materials</span>
-                </div>
-                <div className="highlight-item">
-                  <FiCheck className="highlight-icon" />
-                  <span>Competitive Market Prices</span>
-                </div>
-                <div className="highlight-item">
-                  <FiCheck className="highlight-icon" />
-                  <span>Reliable Delivery Service</span>
-                </div>
-                <div className="highlight-item">
-                  <FiCheck className="highlight-icon" />
-                  <span>Expert Product Guidance</span>
-                </div>
+              <div className="intro-highlights !grid !grid-cols-2 !gap-4 max-md:!grid-cols-1">
+                {[
+                  'Strategic Sourcing',
+                  'Technical Precision',
+                  'Express Logistics',
+                  'Executive Guidance'
+                ].map((item) => (
+                  <div key={item} className="highlight-item !flex !items-center !gap-3 !bg-slate-50 !p-4 !rounded-xl">
+                    <FiCheck className="!text-blue-500" />
+                    <span className="!text-xs !font-bold !text-slate-700">{item}</span>
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="intro-image">
-              <div className="image-frame">
-                <FaHardHat className="frame-icon" />
-                <div className="frame-text">
-                  <span>Quality</span>
-                  <span>Construction</span>
-                  <span>Materials</span>
+            <div className="intro-image !relative">
+              <div className="image-frame !bg-slate-900 !aspect-square !rounded-3xl !flex !flex-col !items-center !justify-center !gap-6 !shadow-2xl max-md:!max-w-[280px] max-md:!mx-auto">
+                <FaHardHat className="!text-6xl !text-blue-500" />
+                <div className="frame-text !text-center">
+                  <span className="!block !text-white !text-xl !font-black !uppercase !tracking-widest">Industrial</span>
+                  <span className="!block !text-white !text-xl !font-black !uppercase !tracking-widest">Logistics</span>
                 </div>
               </div>
             </div>
@@ -134,29 +119,25 @@ const About = () => {
       </section>
 
       {/* Vision & Mission */}
-      <section className="about-section vision-mission-section">
+      <section className="about-section vision-mission-section !bg-slate-50 !py-24 max-md:!py-12">
         <div className="container">
-          <div className="vm-grid">
-            <div className="vm-card animate-on-scroll">
-              <div className="vm-icon-wrapper">
-                <FiEye className="vm-icon" />
+          <div className="vm-grid !grid !grid-cols-2 !gap-10 max-md:!grid-cols-1">
+            <div className="vm-card !bg-white !p-12 !rounded-3xl !shadow-sm max-md:!p-8 animate-on-scroll">
+              <div className="vm-icon-wrapper !w-16 !h-16 !bg-blue-600 !rounded-2xl !flex !items-center !justify-center !mb-8">
+                <FiEye className="!text-white !text-2xl" />
               </div>
-              <h3 className="vm-title">Our Vision</h3>
-              <p className="vm-text">
-                To be the most trusted and reliable construction materials supplier in South India,
-                known for quality, transparency, and customer satisfaction. We aim to contribute to
-                building strong foundations for homes, businesses, and infrastructure projects.
+              <h3 className="vm-title !text-2xl !font-black !text-slate-900 !mb-6">Global Vision</h3>
+              <p className="vm-text !text-slate-600 !leading-relaxed">
+                To engineer the most resilient procurement ecosystem in the construction industry, defined by technical transparency and operational excellence.
               </p>
             </div>
-            <div className="vm-card animate-on-scroll">
-              <div className="vm-icon-wrapper mission">
-                <FiTarget className="vm-icon" />
+            <div className="vm-card !bg-white !p-12 !rounded-3xl !shadow-sm max-md:!p-8 animate-on-scroll">
+              <div className="vm-icon-wrapper mission !w-16 !h-16 !bg-blue-500 !rounded-2xl !flex !items-center !justify-center !mb-8">
+                <FiTarget className="!text-white !text-2xl" />
               </div>
-              <h3 className="vm-title">Our Mission</h3>
-              <p className="vm-text">
-                To provide construction professionals and homeowners with access to premium building
-                materials at fair prices, backed by honest guidance and timely delivery. We strive
-                to simplify the material procurement process for every customer we serve.
+              <h3 className="vm-title !text-2xl !font-black !text-slate-900 !mb-6">Institutional Mission</h3>
+              <p className="vm-text !text-slate-600 !leading-relaxed">
+                To deploy high-performance materials through validated logistical pipelines, ensuring project stability for stakeholders across the Nilgiris terrain.
               </p>
             </div>
           </div>
@@ -277,25 +258,22 @@ const About = () => {
       </section>
 
       {/* Proprietors Section */}
-      <section className="about-section proprietors-section">
+      <section className="about-section proprietors-section !bg-slate-50 !py-24 max-md:!py-12">
         <div className="container">
-          <div className="section-header animate-on-scroll">
-            <span className="section-badge">Leadership</span>
-            <h2 className="section-title">
-              Meet Our Proprietors
-              <span className="title-underline"></span>
-            </h2>
+          <div className="section-header !text-center !mb-16 animate-on-scroll">
+            <span className="section-badge !inline-block !bg-blue-100 !text-blue-600 !px-4 !py-1 !rounded-full !text-[10px] !font-black !uppercase !tracking-widest !mb-4">Executive Leadership</span>
+            <h2 className="section-title !text-4xl !font-black !text-slate-900">Proprietors Registry</h2>
           </div>
-          <div className="proprietors-grid">
+          <div className="proprietors-grid !grid !grid-cols-2 !gap-12 max-md:!grid-cols-1 max-md:!gap-8">
             {BUSINESS_CONFIG.owners.map((owner, index) => (
-              <div key={index} className="proprietor-card animate-on-scroll">
-                <div className="proprietor-avatar">
+              <div key={index} className="proprietor-card !bg-white !p-10 !rounded-3xl !text-center !shadow-sm animate-on-scroll">
+                <div className="proprietor-avatar !w-20 !h-20 !bg-slate-900 !text-white !rounded-full !flex !items-center !justify-center !mx-auto !mb-6 !text-3xl !font-black">
                   {owner.name.charAt(0)}
                 </div>
-                <h3 className="proprietor-name">{owner.name}</h3>
-                <p className="proprietor-role">Proprietor</p>
-                <a href={`tel:${owner.phone.replace(/\s/g, '')}`} className="proprietor-phone">
-                  {owner.phone}
+                <h3 className="proprietor-name !text-xl !font-black !text-slate-900 !mb-2">{owner.name}</h3>
+                <p className="proprietor-role !text-slate-500 !text-xs !font-bold !uppercase !tracking-widest !mb-6">Senior Partner</p>
+                <a href={`tel:${owner.phone.replace(/\s/g, '')}`} className="proprietor-phone !inline-flex !items-center !gap-2 !bg-blue-600 !text-white !px-6 !py-3 !rounded-full !text-sm !font-bold !transition-all hover:!bg-blue-700">
+                  <FiPhone /> {owner.phone}
                 </a>
               </div>
             ))}
