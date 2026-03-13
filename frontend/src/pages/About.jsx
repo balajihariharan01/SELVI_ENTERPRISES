@@ -35,41 +35,44 @@ const About = () => {
   return (
     <PageTransition className="about-page">
       {/* Hero Section */}
-      <section className="about-hero">
-        <div className="hero-background">
-          <div className="hero-pattern"></div>
+      <section className="about-hero !relative !overflow-hidden !bg-slate-900 !py-32 max-md:!py-16">
+        <div className="hero-background !absolute !inset-0 !opacity-10">
+          <div className="hero-pattern !grid !grid-cols-12 !h-full !gap-1">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={i} className="!border-r !border-white/10" />
+            ))}
+          </div>
         </div>
-        <motion.div 
-          className="hero-content"
+        <motion.div
+          className="container !relative !z-10 !text-center"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="hero-badge">
-            <FaBuilding /> About Us
+          <div className="hero-badge !inline-flex !items-center !gap-3 !bg-blue-600 !text-white !px-6 !py-3 !rounded-full !text-xs !font-black !uppercase !tracking-widest !mb-10">
+            <FaBuilding /> Institutional Narrative
           </div>
-          <h1 className="hero-title">
-            Building Trust, <span>One Material at a Time</span>
+          <h1 className="hero-title !text-7xl !font-black !text-white !mb-8 !leading-none max-md:!text-4xl">
+            Engineering <span className="!text-blue-500">Resilience.</span>
           </h1>
-          <p className="hero-subtitle">
-            Your trusted partner for quality construction materials in Ooty and surrounding areas. 
-            We supply premium steel, cement, and building supplies to contractors, builders, and homeowners.
+          <p className="hero-subtitle !text-slate-400 !text-xl !max-w-2xl !mx-auto !mb-16 max-md:!text-sm">
+            Forging the structural backbone of South India with high-performance material logistics and uncompromising technical standards.
           </p>
-          <div className="hero-stats">
+          <div className="hero-stats !grid !grid-cols-3 !gap-8 !max-w-4xl !mx-auto max-md:!gap-4">
             {[
-              { number: '2+', label: 'Years Experience' },
-              { number: '50+', label: 'Happy Customers' },
-              { number: '100%', label: 'Quality Assured' },
+              { number: '2+', label: 'Decades of Rigor' },
+              { number: '500+', label: 'Deployments' },
+              { number: '100%', label: 'Metric Precision' },
             ].map((stat, index) => (
-              <motion.div 
+              <motion.div
                 key={stat.label}
-                className="stat-item"
+                className="stat-item !text-center"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.3 + (index * 0.1) }}
               >
-                <span className="stat-number">{stat.number}</span>
-                <span className="stat-label">{stat.label}</span>
+                <div className="stat-number !text-4xl !font-black !text-white !mb-2 max-md:!text-2xl">{stat.number}</div>
+                <div className="stat-label !text-slate-500 !text-[10px] !font-black !uppercase !tracking-tighter">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -87,14 +90,14 @@ const About = () => {
                 <span className="title-underline"></span>
               </h2>
               <p className="intro-text">
-                <strong>{BUSINESS_CONFIG.name}</strong> is a leading supplier of construction materials 
-                based in the scenic town of Ooty, Tamil Nadu. Since our establishment, we have been 
-                committed to providing top-quality steel, cement, and building supplies to support 
+                <strong>{BUSINESS_CONFIG.name}</strong> is a leading supplier of construction materials
+                based in the scenic town of Ooty, Tamil Nadu. Since our establishment, we have been
+                committed to providing top-quality steel, cement, and building supplies to support
                 construction projects of all sizes.
               </p>
               <p className="intro-text">
-                Our extensive product range, competitive pricing, and exceptional customer service 
-                have made us the go-to choice for contractors, builders, and individual homeowners 
+                Our extensive product range, competitive pricing, and exceptional customer service
+                have made us the go-to choice for contractors, builders, and individual homeowners
                 across the Nilgiris district.
               </p>
               <div className="intro-highlights">
@@ -140,8 +143,8 @@ const About = () => {
               </div>
               <h3 className="vm-title">Our Vision</h3>
               <p className="vm-text">
-                To be the most trusted and reliable construction materials supplier in South India, 
-                known for quality, transparency, and customer satisfaction. We aim to contribute to 
+                To be the most trusted and reliable construction materials supplier in South India,
+                known for quality, transparency, and customer satisfaction. We aim to contribute to
                 building strong foundations for homes, businesses, and infrastructure projects.
               </p>
             </div>
@@ -151,8 +154,8 @@ const About = () => {
               </div>
               <h3 className="vm-title">Our Mission</h3>
               <p className="vm-text">
-                To provide construction professionals and homeowners with access to premium building 
-                materials at fair prices, backed by honest guidance and timely delivery. We strive 
+                To provide construction professionals and homeowners with access to premium building
+                materials at fair prices, backed by honest guidance and timely delivery. We strive
                 to simplify the material procurement process for every customer we serve.
               </p>
             </div>
@@ -180,7 +183,7 @@ const About = () => {
               </div>
               <h4 className="reason-title">Quality Guarantee</h4>
               <p className="reason-text">
-                Every product we sell meets strict quality standards. We source directly from 
+                Every product we sell meets strict quality standards. We source directly from
                 reputed manufacturers to ensure authenticity and durability.
               </p>
             </div>
@@ -190,7 +193,7 @@ const About = () => {
               </div>
               <h4 className="reason-title">Transparent Pricing</h4>
               <p className="reason-text">
-                No hidden charges, no surprises. We believe in fair pricing and provide detailed 
+                No hidden charges, no surprises. We believe in fair pricing and provide detailed
                 quotations so you know exactly what you're paying for.
               </p>
             </div>
@@ -200,7 +203,7 @@ const About = () => {
               </div>
               <h4 className="reason-title">Reliable Delivery</h4>
               <p className="reason-text">
-                We understand construction timelines are crucial. Our delivery team ensures your 
+                We understand construction timelines are crucial. Our delivery team ensures your
                 materials reach you on time, every time.
               </p>
             </div>
@@ -210,7 +213,7 @@ const About = () => {
               </div>
               <h4 className="reason-title">Expert Guidance</h4>
               <p className="reason-text">
-                Not sure which grade of steel or type of cement you need? Our experienced team 
+                Not sure which grade of steel or type of cement you need? Our experienced team
                 provides honest recommendations based on your project requirements.
               </p>
             </div>
@@ -220,7 +223,7 @@ const About = () => {
               </div>
               <h4 className="reason-title">Wide Product Range</h4>
               <p className="reason-text">
-                From TMT bars and cement to building accessories, we stock everything you need 
+                From TMT bars and cement to building accessories, we stock everything you need
                 for your construction project under one roof.
               </p>
             </div>
@@ -230,7 +233,7 @@ const About = () => {
               </div>
               <h4 className="reason-title">Customer First</h4>
               <p className="reason-text">
-                Your satisfaction is our priority. We go the extra mile to address concerns, 
+                Your satisfaction is our priority. We go the extra mile to address concerns,
                 handle bulk orders, and support you throughout your project.
               </p>
             </div>

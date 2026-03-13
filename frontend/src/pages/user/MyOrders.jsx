@@ -75,88 +75,91 @@ const MyOrders = () => {
 
   return (
     <PageTransition className="my-orders-page">
-      <motion.div 
-        className="page-header"
+      <motion.div
+        className="page-header max-md:!py-8 max-md:!px-4 !bg-gradient-to-r !from-blue-600 !to-indigo-700 !text-white"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="container">
-          <h1>My Orders</h1>
-          <p>Track and manage your orders</p>
+        <div className="container !max-w-7xl !mx-auto">
+          <h1 className="max-md:!text-3xl !font-black !mb-2">My Orders</h1>
+          <p className="max-md:!text-sm !opacity-90">Track and manage your orders</p>
         </div>
       </motion.div>
 
-      <div className="container">
+      <div className="container !max-w-7xl !mx-auto !py-8 max-md:!px-4">
         {orders.length === 0 ? (
-          <motion.div 
-            className="empty-state"
+          <motion.div
+            className="empty-state !py-20 !text-center"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
           >
-            <FiPackage size={80} />
-            <h2>No orders yet</h2>
-            <p>You haven't placed any orders yet. Start shopping now!</p>
-            <Link to="/products" className="btn btn-primary btn-lg">
+            <FiPackage size={80} className="!mx-auto !text-gray-200 !mb-6" />
+            <h2 className="!text-2xl !font-bold !text-slate-900 !mb-3">No orders yet</h2>
+            <p className="!text-gray-500 !mb-8">You haven't placed any orders yet. Start shopping now!</p>
+            <Link to="/products" className="!inline-flex !items-center !justify-center !px-8 !py-4 !bg-blue-600 !text-white !rounded-2xl !font-bold !shadow-lg !shadow-blue-200">
               Browse Products
             </Link>
           </motion.div>
         ) : (
-          <div className="orders-list">
+          <div className="orders-list !grid !grid-cols-1 !gap-6">
             {orders.map((order, index) => (
-              <motion.div 
-                key={order._id} 
-                className="order-card"
+              <motion.div
+                key={order._id}
+                className="order-card !bg-white !rounded-3xl !p-6 !shadow-sm !border !border-gray-100 max-md:!p-5"
                 variants={cardVariants}
                 initial="initial"
                 animate="animate"
                 whileHover="hover"
                 custom={index}
               >
-                <div className="order-header">
-                  <div className="order-info">
-                    <span className="order-number">Order #{order.orderNumber}</span>
-                    <span className="order-date">{formatDate(order.createdAt)}</span>
+                <div className="order-header !flex !justify-between !items-start !mb-6 max-md:!flex-col max-md:!gap-4">
+                  <div className="order-info !flex !flex-col !gap-1">
+                    <span className="order-number !text-lg !font-black !text-slate-900">#{order.orderNumber}</span>
+                    <span className="order-date !text-xs !text-gray-400 !font-medium">{formatDate(order.createdAt)}</span>
                   </div>
-                  <div className="order-status-badges">
-                    <span className={`badge badge-${getStatusColor(order.orderStatus)}`}>
+                  <div className="order-status-badges !flex !items-center !gap-2">
+                    <span className={`!px-4 !py-1.5 !rounded-full !text-[11px] !font-bold !uppercase !tracking-wider badge-${getStatusColor(order.orderStatus)}`}>
                       {order.orderStatus}
                     </span>
                     {order.orderStatus === 'pending' && order.isModifiable && (
-                      <span className="badge badge-editable" title={`${order.modificationTimeRemaining || 0} hours remaining to modify`}>
+                      <span className="!px-3 !py-1.5 !bg-amber-100 !text-amber-600 !rounded-full !text-[11px] !font-bold !flex !items-center !gap-1">
                         ✏️ Editable
                       </span>
                     )}
                   </div>
                 </div>
 
-                <div className="order-items">
+                <div className="order-items !py-6 !border-y !border-dashed !border-gray-100 !flex !flex-col !gap-4">
                   {order.items.slice(0, 2).map((item, index) => (
-                    <div key={index} className="order-item">
-                      <span className="item-name">{item.productName}</span>
-                      <span className="item-qty">x {item.quantity} {item.unit}</span>
-                      <span className="item-price">₹{item.subtotal.toLocaleString()}</span>
+                    <div key={index} className="order-item !flex !justify-between !items-center !gap-4">
+                      <div className="!flex-1">
+                        <span className="item-name !text-sm !font-bold !text-slate-700 !block !mb-0.5">{item.productName}</span>
+                        <span className="item-qty !text-[11px] !text-gray-400 !font-semibold">Quantity: {item.quantity} {item.unit}</span>
+                      </div>
+                      <span className="item-price !text-sm !font-black !text-slate-900">₹{item.subtotal.toLocaleString()}</span>
                     </div>
                   ))}
                   {order.items.length > 2 && (
-                    <div className="more-items">
-                      +{order.items.length - 2} more item(s)
+                    <div className="more-items !text-[11px] !font-bold !text-blue-600 !bg-blue-50 !py-1 !px-3 !rounded-full !w-fit">
+                      + {order.items.length - 2} more item(s)
                     </div>
                   )}
                 </div>
 
-                <div className="order-footer">
-                  <div className="order-total">
-                    <span>Total:</span>
-                    <span className="total-amount">₹{order.totalAmount.toLocaleString()}</span>
+                <div className="order-footer !mt-6 !flex !justify-between !items-center max-md:!flex-col max-md:!gap-5">
+                  <div className="order-total !flex !flex-col max-md:!text-center">
+                    <span className="!text-[10px] !text-gray-400 !font-bold !uppercase !tracking-widest !mb-0.5">Total Amount</span>
+                    <span className="total-amount !text-2xl !font-black !text-blue-600">₹{order.totalAmount.toLocaleString()}</span>
                   </div>
                   <motion.div
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="max-md:!w-full"
                   >
-                    <Link to={`/orders/${order._id}`} className="btn btn-outline btn-sm">
-                      <FiEye /> View Details
+                    <Link to={`/orders/${order._id}`} className="!flex !items-center !justify-center !gap-2 !px-8 !py-4 !bg-slate-900 !text-white !rounded-2xl !font-bold !text-sm !transition-all hover:!bg-blue-600 max-md:!w-full">
+                      <FiEye /> View Order Details
                     </Link>
                   </motion.div>
                 </div>

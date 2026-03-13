@@ -47,7 +47,7 @@ const CustomerRecords = () => {
 
   const confirmAction = async () => {
     if (!selectedCustomer) return;
-    
+
     setActionLoading(true);
     try {
       if (actionType === 'deactivate') {
@@ -72,8 +72,8 @@ const CustomerRecords = () => {
 
   const filteredCustomers = customers.filter(customer => {
     const matchesSearch = customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         customer.phone?.includes(searchTerm);
+      customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.phone?.includes(searchTerm);
     return matchesSearch;
   });
 
@@ -95,51 +95,52 @@ const CustomerRecords = () => {
 
   return (
     <div className="customer-records">
-      <div className="page-title">
+      <div className="page-title max-md:!flex-col max-md:!items-start max-md:!gap-2 max-md:!p-4">
         <div>
-          <h1>Customer Records</h1>
-          <p>View and manage registered customers</p>
+          <h1 className="max-md:!text-2xl">Customer Records</h1>
+          <p className="max-md:!text-sm">View and manage registered customers</p>
         </div>
       </div>
 
       {/* Stats */}
-      <div className="customer-stats">
-        <div className="stat-card">
-          <div className="stat-icon">
+      <div className="customer-stats max-md:!grid max-md:!grid-cols-2 max-md:!gap-3 max-md:!p-4">
+        <div className="stat-card max-md:!p-4 max-md:!flex-col max-md:!text-center">
+          <div className="stat-icon max-md:!mx-auto">
             <FiUser />
           </div>
           <div className="stat-content">
-            <span className="stat-value">{stats.total}</span>
-            <span className="stat-label">Total Customers</span>
+            <span className="stat-value max-md:!text-xl">{stats.total}</span>
+            <span className="stat-label max-md:!text-[10px]">Total</span>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon active">
+        <div className="stat-card max-md:!p-4 max-md:!flex-col max-md:!text-center">
+          <div className="stat-icon active max-md:!mx-auto">
             <FiUser />
           </div>
           <div className="stat-content">
-            <span className="stat-value">{stats.activeThisMonth}</span>
-            <span className="stat-label">Active This Month</span>
+            <span className="stat-value max-md:!text-xl">{stats.activeThisMonth}</span>
+            <span className="stat-label max-md:!text-[10px]">Active</span>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-icon orders">
+        <div className="stat-card max-md:!p-4 max-md:!flex-col max-md:!text-center max-md:!col-span-2">
+          <div className="stat-icon orders max-md:!mx-auto">
             <FiShoppingBag />
           </div>
           <div className="stat-content">
-            <span className="stat-value">{stats.totalOrders}</span>
-            <span className="stat-label">Total Orders</span>
+            <span className="stat-value max-md:!text-xl">{stats.totalOrders}</span>
+            <span className="stat-label max-md:!text-[10px]">Total Orders</span>
           </div>
         </div>
       </div>
 
       {/* Search */}
-      <div className="filters-bar">
-        <div className="search-box">
+      <div className="filters-bar max-md:!p-4">
+        <div className="search-box max-md:!w-full">
           <FiSearch />
           <input
             type="text"
-            placeholder="Search by name, email or phone..."
+            placeholder="Search customers..."
+            className="max-md:!text-sm"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -147,64 +148,72 @@ const CustomerRecords = () => {
       </div>
 
       {/* Customers Grid */}
-      <div className="customers-grid">
+      <div className="customers-grid max-md:!grid-cols-1 max-md:!gap-4 max-md:!p-4">
         {filteredCustomers.map(customer => (
-          <div key={customer._id} className="customer-card">
-            <div className="customer-avatar">
-              {customer.name.charAt(0).toUpperCase()}
-            </div>
-            <div className="customer-info">
-              <h3>{customer.name}</h3>
-              <div className="customer-detail">
-                <FiMail />
-                <span>{customer.email}</span>
+          <div key={customer._id} className="customer-card max-md:!p-5 max-md:!rounded-2xl !shadow-sm !border !border-gray-100">
+            <div className="!flex !items-center !gap-4 !mb-4">
+              <div className="customer-avatar !m-0 !w-12 !h-12 !text-lg">
+                {customer.name.charAt(0).toUpperCase()}
               </div>
-              <div className="customer-detail">
-                <FiPhone />
+              <div className="!flex-1">
+                <h3 className="!text-lg !font-bold !text-slate-900 !m-0">{customer.name}</h3>
+                <span className={`!text-[10px] !font-bold !uppercase !px-2 !py-0.5 !rounded-full ${customer.isActive !== false ? '!bg-green-100 !text-green-600' : '!bg-red-100 !text-red-600'}`}>
+                  {customer.isActive !== false ? 'Active' : 'Inactive'}
+                </span>
+              </div>
+            </div>
+
+            <div className="!grid !grid-cols-1 !gap-2 !py-3 !border-y !border-dashed !border-gray-100">
+              <div className="!flex !items-center !gap-2 !text-xs !text-slate-600">
+                <FiMail size={12} className="!text-gray-400" />
+                <span className="!break-all">{customer.email}</span>
+              </div>
+              <div className="!flex !items-center !gap-2 !text-xs !text-slate-600">
+                <FiPhone size={12} className="!text-gray-400" />
                 <span>{customer.phone || 'Not provided'}</span>
               </div>
+              {customer.address?.city && (
+                <div className="!flex !items-center !gap-2 !text-xs !text-slate-600">
+                  <span className="!text-gray-400">📍</span>
+                  <span>{customer.address.city}, {customer.address.state}</span>
+                </div>
+              )}
             </div>
-            <div className="customer-meta">
-              <div className="meta-item">
-                <span className="meta-label">Orders</span>
-                <span className="meta-value">{customer.orderCount || 0}</span>
+
+            <div className="!flex !justify-between !items-center !mt-4 !mb-4">
+              <div className="!text-center !flex-1">
+                <small className="!text-[10px] !text-gray-400 !block !uppercase">Orders</small>
+                <span className="!text-sm !font-bold">{customer.orderCount || 0}</span>
               </div>
-              <div className="meta-item">
-                <span className="meta-label">Total Spent</span>
-                <span className="meta-value">₹{(customer.totalSpent || 0).toLocaleString()}</span>
+              <div className="!w-[1px] !h-8 !bg-gray-100"></div>
+              <div className="!text-center !flex-1">
+                <small className="!text-[10px] !text-gray-400 !block !uppercase">Spent</small>
+                <span className="!text-sm !font-bold">₹{(customer.totalSpent || 0).toLocaleString()}</span>
               </div>
-              <div className="meta-item">
-                <span className="meta-label">Member Since</span>
-                <span className="meta-value">{formatDate(customer.createdAt)}</span>
+              <div className="!w-[1px] !h-8 !bg-gray-100"></div>
+              <div className="!text-center !flex-1">
+                <small className="!text-[10px] !text-gray-400 !block !uppercase">Since</small>
+                <span className="!text-sm !font-bold">{formatDate(customer.createdAt)}</span>
               </div>
             </div>
-            {customer.address?.city && (
-              <div className="customer-address">
-                📍 {customer.address.city}, {customer.address.state}
-              </div>
-            )}
-            <div className="customer-actions">
+
+            <div className="!mt-auto">
               {customer.isActive !== false ? (
-                <button 
-                  className="btn btn-outline btn-sm btn-deactivate"
+                <button
+                  className="!w-full !flex !items-center !justify-center !gap-2 !py-3.5 !rounded-xl !bg-red-50 !text-red-600 !text-xs !font-bold"
                   onClick={() => handleAction(customer, 'deactivate')}
-                  title="Deactivate customer account"
                 >
-                  <FiUserX size={14} /> Deactivate
+                  <FiUserX size={14} /> Deactivate Account
                 </button>
               ) : (
-                <button 
-                  className="btn btn-outline btn-sm btn-reactivate"
+                <button
+                  className="!w-full !flex !items-center !justify-center !gap-2 !py-3.5 !rounded-xl !bg-green-50 !text-green-600 !text-xs !font-bold"
                   onClick={() => handleAction(customer, 'reactivate')}
-                  title="Reactivate customer account"
                 >
-                  <FiUserCheck size={14} /> Reactivate
+                  <FiUserCheck size={14} /> Reactivate Account
                 </button>
               )}
             </div>
-            {customer.isActive === false && (
-              <div className="customer-status-badge inactive">Inactive</div>
-            )}
           </div>
         ))}
       </div>
@@ -218,7 +227,7 @@ const CustomerRecords = () => {
       )}
 
       {/* Customer Table View */}
-      <div className="table-section">
+      <div className="table-section max-md:!hidden">
         <h2>All Customers</h2>
         <div className="table-container">
           <table className="table">
@@ -257,7 +266,7 @@ const CustomerRecords = () => {
                   <td>{formatDate(customer.createdAt)}</td>
                   <td>
                     {customer.isActive !== false ? (
-                      <button 
+                      <button
                         className="action-btn deactivate"
                         onClick={() => handleAction(customer, 'deactivate')}
                         title="Deactivate"
@@ -265,7 +274,7 @@ const CustomerRecords = () => {
                         <FiUserX size={16} />
                       </button>
                     ) : (
-                      <button 
+                      <button
                         className="action-btn reactivate"
                         onClick={() => handleAction(customer, 'reactivate')}
                         title="Reactivate"
@@ -283,53 +292,53 @@ const CustomerRecords = () => {
 
       {/* Confirmation Modal */}
       {showConfirmModal && (
-        <div className="modal-overlay" onClick={() => setShowConfirmModal(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <div className="modal-icon warning">
+        <div className="modal-overlay !p-0 max-md:!items-end" onClick={() => setShowConfirmModal(false)}>
+          <div className="modal-content max-md:!w-full max-md:!max-w-none max-md:!rounded-t-3xl max-md:!rounded-b-none max-md:!m-0 max-md:!p-6" onClick={e => e.stopPropagation()}>
+            <div className="modal-icon warning !bg-amber-50 !text-amber-500 !w-16 !h-16 !flex !items-center !justify-center !rounded-full !mx-auto !mb-4">
               <FiAlertTriangle size={32} />
             </div>
-            <h3>
-              {actionType === 'deactivate' && 'Deactivate Customer?'}
-              {actionType === 'reactivate' && 'Reactivate Customer?'}
-              {actionType === 'delete' && 'Delete Customer Permanently?'}
+            <h3 className="!text-center !text-xl !font-black !text-slate-900 !mb-2">
+              {actionType === 'deactivate' && 'Deactivate Account?'}
+              {actionType === 'reactivate' && 'Reactivate Account?'}
+              {actionType === 'delete' && 'Delete Permanently?'}
             </h3>
-            <p>
+            <p className="!text-center !text-sm !text-gray-500 !leading-relaxed !px-2">
               {actionType === 'deactivate' && (
                 <>
-                  Are you sure you want to deactivate <strong>{selectedCustomer?.name}</strong>'s account? 
-                  They will no longer be able to login, but their order history will be preserved.
+                  Are you sure you want to deactivate <strong>{selectedCustomer?.name}</strong>'s account?
+                  They will no longer be able to login.
                 </>
               )}
               {actionType === 'reactivate' && (
                 <>
-                  Are you sure you want to reactivate <strong>{selectedCustomer?.name}</strong>'s account?
-                  They will be able to login again.
+                  Reactivate <strong>{selectedCustomer?.name}</strong>?
+                  They will regain full access to their account immediately.
                 </>
               )}
               {actionType === 'delete' && (
                 <>
-                  This action cannot be undone. Are you sure you want to permanently delete 
+                  This action is permanent. Are you sure you want to delete
                   <strong> {selectedCustomer?.name}</strong>?
                 </>
               )}
             </p>
-            <div className="modal-actions">
-              <button 
-                className="btn btn-outline"
-                onClick={() => setShowConfirmModal(false)}
-                disabled={actionLoading}
-              >
-                Cancel
-              </button>
-              <button 
-                className={`btn ${actionType === 'reactivate' ? 'btn-success' : 'btn-danger'}`}
+            <div className="modal-actions !flex !flex-col !gap-3 !mt-8">
+              <button
+                className={`!w-full !py-4 !rounded-xl !font-bold !text-sm ${actionType === 'reactivate' ? '!bg-green-600 !text-white' : '!bg-red-600 !text-white'}`}
                 onClick={confirmAction}
                 disabled={actionLoading}
               >
                 {actionLoading ? 'Processing...' : (
-                  actionType === 'deactivate' ? 'Deactivate' : 
-                  actionType === 'reactivate' ? 'Reactivate' : 'Delete'
+                  actionType === 'deactivate' ? 'Confirm Deactivation' :
+                    actionType === 'reactivate' ? 'Confirm Reactivation' : 'Confirm Delete'
                 )}
+              </button>
+              <button
+                className="!w-full !py-4 !rounded-xl !font-bold !text-sm !text-gray-400 !bg-gray-50"
+                onClick={() => setShowConfirmModal(false)}
+                disabled={actionLoading}
+              >
+                Go Back
               </button>
             </div>
           </div>

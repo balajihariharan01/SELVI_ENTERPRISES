@@ -66,22 +66,22 @@ const Products = () => {
   return (
     <PageTransition className="products-page">
       {/* Page Header */}
-      <motion.div 
-        className="page-header"
+      <motion.div
+        className="page-header !py-16 !bg-slate-900 !text-center max-md:!py-10 max-md:!px-6"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
         <div className="container">
-          <h1>Our Products</h1>
-          <p>Browse our collection of quality construction materials</p>
+          <h1 className="!text-5xl !font-black !text-white !mb-4 max-md:!text-3xl">Material Registry</h1>
+          <p className="!text-slate-400 !text-lg !font-medium max-md:!text-sm">High-Performance Construction Logistics</p>
         </div>
       </motion.div>
 
       <div className="container">
         <div className="products-layout">
           {/* Filters Sidebar */}
-          <aside className="filters-sidebar">
+          <aside className="filters-sidebar max-md:!hidden">
             <div className="filter-section">
               <h3><FiFilter /> Filters</h3>
             </div>
@@ -146,7 +146,7 @@ const Products = () => {
             </div>
 
             {/* Clear Filters */}
-            <button 
+            <button
               className="btn btn-outline btn-sm"
               onClick={() => {
                 setFilters({ category: '', search: '', sort: 'createdAt', inStock: false });
@@ -156,6 +156,42 @@ const Products = () => {
               Clear Filters
             </button>
           </aside>
+
+          {/* Mobile Filters Hub */}
+          <div className="hidden max-md:!flex max-md:!flex-col max-md:!gap-4 max-md:!px-4 max-md:!mb-8">
+            <div className="!relative">
+              <FiSearch className="!absolute !left-5 !top-1/2 !-translate-y-1/2 !text-blue-500" size={18} />
+              <input
+                type="text"
+                placeholder="Quick Query catalog..."
+                value={filters.search}
+                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                className="!w-full !bg-white !border !border-slate-200 !rounded-2xl !pl-14 !pr-6 !py-4 !text-sm !font-medium"
+              />
+            </div>
+            <div className="!grid !grid-cols-2 !gap-3">
+              <select
+                value={filters.category}
+                onChange={(e) => handleFilterChange('category', e.target.value)}
+                className="!bg-white !border !border-slate-200 !rounded-xl !px-4 !py-3 !text-xs !font-black !uppercase !tracking-widest"
+              >
+                <option value="">Categories</option>
+                <option value="cement">Cement</option>
+                <option value="steel">Steel</option>
+                <option value="others">Others</option>
+              </select>
+              <select
+                value={filters.sort}
+                onChange={(e) => handleFilterChange('sort', e.target.value)}
+                className="!bg-white !border !border-slate-200 !rounded-xl !px-4 !py-3 !text-xs !font-black !uppercase !tracking-widest"
+              >
+                <option value="createdAt">Sorting: New</option>
+                <option value="price_asc">Price: Asc</option>
+                <option value="price_desc">Price: Desc</option>
+                <option value="name">Name: A-Z</option>
+              </select>
+            </div>
+          </div>
 
           {/* Products Grid */}
           <div className="products-content">
@@ -170,7 +206,7 @@ const Products = () => {
                 <div className="spinner"></div>
               </div>
             ) : products.length === 0 ? (
-              <motion.div 
+              <motion.div
                 className="empty-state"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}

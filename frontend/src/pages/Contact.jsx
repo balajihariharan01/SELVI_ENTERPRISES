@@ -78,7 +78,7 @@ const Contact = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
@@ -99,7 +99,7 @@ const Contact = () => {
       await contactService.sendContactMessage(formData);
       setSubmitted(true);
       toast.success('Message sent successfully! We will get back to you soon.');
-      
+
       // Reset form after 3 seconds
       setTimeout(() => {
         setFormData({
@@ -122,24 +122,28 @@ const Contact = () => {
   return (
     <PageTransition className="contact-page">
       {/* Hero Section */}
-      <section className="contact-hero">
-        <div className="hero-background">
-          <div className="hero-pattern"></div>
+      <section className="contact-hero !relative !overflow-hidden !bg-slate-900 !py-32 max-md:!py-16">
+        <div className="hero-background !absolute !inset-0 !opacity-10">
+          <div className="hero-pattern !grid !grid-cols-12 !h-full !gap-1">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={i} className="!border-r !border-white/10" />
+            ))}
+          </div>
         </div>
-        <motion.div 
-          className="hero-content"
+        <motion.div
+          className="container !relative !z-10 !text-center"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="hero-badge">
-            <FaBuilding /> Contact Us
+          <div className="hero-badge !inline-flex !items-center !gap-3 !bg-blue-600 !text-white !px-6 !py-3 !rounded-full !text-xs !font-black !uppercase !tracking-widest !mb-10">
+            <FaBuilding /> Global Support Nexus
           </div>
-          <h1 className="hero-title">
-            Get in Touch <span>With Us</span>
+          <h1 className="hero-title !text-7xl !font-black !text-white !mb-8 !leading-none max-md:!text-4xl">
+            Inbound <span className="!text-blue-500">Logistics.</span>
           </h1>
-          <p className="hero-subtitle">
-            Have questions about our products or services? We're here to help you with your construction material needs.
+          <p className="hero-subtitle !text-slate-400 !text-xl !max-w-2xl !mx-auto !mb-16 max-md:!text-sm">
+            Immediate technical deployment and material procurement assistance. Resolve your construction logistics queries with our executive support tier.
           </p>
         </motion.div>
       </section>
@@ -149,7 +153,7 @@ const Contact = () => {
         <div className="container">
           <div className="contact-grid">
             {/* Contact Form */}
-            <motion.div 
+            <motion.div
               className="contact-form-wrapper animate-on-scroll"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -274,8 +278,8 @@ const Contact = () => {
                     </div>
                   </div>
 
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     className={`submit-btn ${loading ? 'loading' : ''}`}
                     disabled={loading}
                   >
@@ -295,7 +299,7 @@ const Contact = () => {
             </motion.div>
 
             {/* Contact Information */}
-            <motion.div 
+            <motion.div
               className="contact-info-wrapper animate-on-scroll"
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -314,9 +318,9 @@ const Contact = () => {
                   <p>{BUSINESS_CONFIG.location.city} - {BUSINESS_CONFIG.location.pincode}</p>
                   <p>{BUSINESS_CONFIG.location.state}, India</p>
                 </div>
-                <a 
-                  href={BUSINESS_CONFIG.location.googleMapsUrl} 
-                  target="_blank" 
+                <a
+                  href={BUSINESS_CONFIG.location.googleMapsUrl}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="info-link"
                 >
@@ -331,9 +335,9 @@ const Contact = () => {
                 <h3 className="info-title">Call Us</h3>
                 <div className="info-content">
                   {BUSINESS_CONFIG.contact.phones.map((phone, index) => (
-                    <a 
-                      key={index} 
-                      href={`tel:${phone.replace(/\s/g, '')}`} 
+                    <a
+                      key={index}
+                      href={`tel:${phone.replace(/\s/g, '')}`}
                       className="phone-link"
                     >
                       {phone}
@@ -348,8 +352,8 @@ const Contact = () => {
                 </div>
                 <h3 className="info-title">Email Us</h3>
                 <div className="info-content">
-                  <a 
-                    href={`mailto:${BUSINESS_CONFIG.contact.email}`} 
+                  <a
+                    href={`mailto:${BUSINESS_CONFIG.contact.email}`}
                     className="email-link"
                   >
                     {BUSINESS_CONFIG.contact.email}
@@ -364,9 +368,9 @@ const Contact = () => {
                 <h3 className="info-title">WhatsApp</h3>
                 <div className="info-content">
                   <p>Quick response guaranteed!</p>
-                  <a 
-                    href={getWhatsAppLink('Hi, I would like to inquire about your products.')} 
-                    target="_blank" 
+                  <a
+                    href={getWhatsAppLink('Hi, I would like to inquire about your products.')}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="whatsapp-btn"
                   >
@@ -383,9 +387,9 @@ const Contact = () => {
                 <div>
                   <div>
                     <span>Monday - Saturday </span>
-                    <span> { "   " + BUSINESS_CONFIG.businessHours.weekdays}</span>
+                    <span> {"   " + BUSINESS_CONFIG.businessHours.weekdays}</span>
                   </div>
-                  
+
                   <div className="hours-row">
                     <span>Sunday</span>
                     <span>Holiday</span>

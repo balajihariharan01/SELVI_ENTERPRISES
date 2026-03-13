@@ -15,7 +15,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
-  
+
   const { addToCart, isInCart, getItemQuantity } = useCart();
   const { isAuthenticated, isAdmin } = useAuth();
 
@@ -98,69 +98,61 @@ const ProductDetail = () => {
 
         <div className="product-detail-layout">
           {/* Product Image */}
-          <motion.div 
-            className="product-detail-image"
+          <motion.div
+            className="product-detail-image !flex-1 !relative !overflow-hidden !rounded-[3rem] !shadow-2xl max-md:!mb-10 max-md:!rounded-3xl"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <img 
-              src={product.image !== 'default-product.jpg' 
-                ? product.image 
+            <img
+              src={product.image !== 'default-product.jpg'
+                ? product.image
                 : `https://via.placeholder.com/600x400?text=${encodeURIComponent(product.productName)}`
-              } 
+              }
               alt={product.productName}
+              className="!w-full !h-full !object-cover !transition-transform !duration-700 hover:!scale-110"
             />
-            {!inStock && <div className="stock-overlay">Out of Stock</div>}
+            {!inStock && <div className="stock-overlay !absolute !inset-0 !bg-slate-900/60 !backdrop-blur-sm !flex !items-center !justify-center !text-white !font-black !text-2xl !uppercase !tracking-[0.2em]">Out of Stock</div>}
           </motion.div>
 
           {/* Product Info */}
-          <motion.div 
-            className="product-detail-info"
+          <motion.div
+            className="product-detail-info !flex-1 max-md:!px-4"
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <span className="product-category-badge">{product.category}</span>
-            <h1>{product.productName}</h1>
-            <p className="product-brand">By {product.brand}</p>
+            <span className="product-category-badge !bg-blue-600 !text-white !px-6 !py-2 !rounded-full !text-[10px] !font-black !uppercase !tracking-[0.2em] !mb-6 !inline-block">
+              {product.category} Registry
+            </span>
+            <h1 className="!text-5xl !font-black !text-slate-900 !leading-tight !mb-4 max-md:!text-3xl">{product.productName}</h1>
+            <p className="product-brand !text-slate-400 !font-bold !uppercase !tracking-widest !mb-8">By {product.brand}</p>
 
             {product.description && (
-              <p className="product-description">{product.description}</p>
+              <p className="product-description !text-slate-600 !text-lg !leading-relaxed !mb-10 max-md:!text-base">{product.description}</p>
             )}
 
-            <div className="product-price-section">
-              <span className="price">₹{product.price.toLocaleString()}</span>
-              <span className="unit">per {product.unit}</span>
-            </div>
-
-            <div className="product-stock-info">
-              {inStock ? (
-                <span className={`stock-status ${product.isLowStock ? 'low' : 'in-stock'}`}>
-                  {product.isLowStock 
-                    ? `Low Stock - Only ${product.stockQuantity} ${product.unit} left`
-                    : `In Stock - ${product.stockQuantity} ${product.unit} available`
-                  }
-                </span>
-              ) : (
-                <span className="stock-status out">Out of Stock</span>
-              )}
+            <div className="product-price-section !bg-slate-50 !p-8 !rounded-3xl !mb-10 !flex !items-baseline !gap-3">
+              <span className="price !text-4xl !font-black !text-blue-600">₹{product.price.toLocaleString()}</span>
+              <span className="unit !text-slate-400 !font-bold !uppercase !tracking-widest">per {product.unit}</span>
             </div>
 
             {!isAdmin && inStock && (
-              <>
+              <div className="!bg-white !border !border-slate-100 !p-8 !rounded-[2.5rem] !shadow-sm !mb-12">
                 {/* Quantity Selector */}
-                <div className="quantity-section">
-                  <label>Quantity ({product.unit})</label>
-                  <div className="quantity-selector">
-                    <button 
+                <div className="quantity-section !mb-8">
+                  <label className="!text-[10px] !font-black !text-slate-400 !uppercase !tracking-[0.2em] !mb-4 !block">Quantity in {product.unit}</label>
+                  <div className="quantity-selector !flex !items-center !gap-6">
+                    <button
+                      className="!w-14 !h-14 !bg-slate-50 !rounded-2xl !flex !items-center !justify-center !text-slate-900 active:!bg-slate-100 !transition-all"
                       onClick={() => handleQuantityChange(-1)}
                       disabled={quantity <= (product.minOrderQuantity || 1)}
                     >
-                      <FiMinus />
+                      <FiMinus size={20} />
                     </button>
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
+                      className="!w-24 !text-center !text-2xl !font-black !text-slate-900 !bg-transparent !outline-none"
                       value={quantity}
                       onChange={(e) => {
                         const val = parseInt(e.target.value);
@@ -168,44 +160,43 @@ const ProductDetail = () => {
                           setQuantity(val);
                         }
                       }}
-                      min={product.minOrderQuantity || 1}
-                      max={product.stockQuantity}
                     />
-                    <button 
+                    <button
+                      className="!w-14 !h-14 !bg-slate-50 !rounded-2xl !flex !items-center !justify-center !text-slate-900 active:!bg-slate-100 !transition-all"
                       onClick={() => handleQuantityChange(1)}
                       disabled={quantity >= product.stockQuantity}
                     >
-                      <FiPlus />
+                      <FiPlus size={20} />
                     </button>
                   </div>
-                  <span className="min-order">
-                    Min. order: {product.minOrderQuantity || 1} {product.unit}
-                  </span>
                 </div>
 
-                {/* Total Price */}
-                <div className="total-section">
-                  <span>Total:</span>
-                  <span className="total-price">₹{(product.price * quantity).toLocaleString()}</span>
-                </div>
+                {/* Logistics CTA */}
+                <div className="!flex !flex-col !gap-6">
+                  <div className="!flex !justify-between !items-center">
+                    <span className="!text-slate-400 !font-black !text-[10px] !uppercase !tracking-widest">Commission Total</span>
+                    <span className="!text-2xl !font-black !text-blue-600">₹{(product.price * quantity).toLocaleString()}</span>
+                  </div>
 
-                {/* Add to Cart Button */}
-                <button 
-                  className={`btn btn-primary btn-lg add-to-cart ${inCart ? 'in-cart' : ''}`}
-                  onClick={handleAddToCart}
-                  disabled={!inStock}
-                >
-                  {inCart ? (
-                    <>
-                      <FiCheck /> In Cart ({cartQuantity} {product.unit})
-                    </>
-                  ) : (
-                    <>
-                      <FiShoppingCart /> Add to Cart
-                    </>
-                  )}
-                </button>
-              </>
+                  <button
+                    className={`!w-full !py-6 !rounded-2xl !text-sm !font-black !uppercase !tracking-[0.2em] !flex !items-center !justify-center !gap-3 !shadow-2xl !transition-all active:!scale-[0.98] ${inCart
+                        ? '!bg-emerald-500 !text-white !shadow-emerald-500/20'
+                        : '!bg-slate-900 !text-white !shadow-slate-900/20'
+                      }`}
+                    onClick={handleAddToCart}
+                  >
+                    {inCart ? (
+                      <>
+                        <FiCheck size={20} /> Deploying in Vault
+                      </>
+                    ) : (
+                      <>
+                        <FiShoppingCart size={20} /> Initiate procurement
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
             )}
 
             {/* Product Details */}

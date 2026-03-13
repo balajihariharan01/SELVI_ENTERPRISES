@@ -19,7 +19,7 @@ const Checkout = () => {
   const { cart, getCartTotal, clearCart } = useCart();
   const { user, refreshUser, isEmailVerified } = useAuth();
   const navigate = useNavigate();
-  
+
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('cod');
   const [clientSecret, setClientSecret] = useState('');
@@ -27,11 +27,11 @@ const Checkout = () => {
   const [orderCreated, setOrderCreated] = useState(false);
   const [creatingPaymentIntent, setCreatingPaymentIntent] = useState(false);
   const [sendingVerification, setSendingVerification] = useState(false);
-  
+
   // Store order details after creation to persist across payment flow
   const [orderTotal, setOrderTotal] = useState(0);
   const [orderItems, setOrderItems] = useState([]);
-  
+
   const [formData, setFormData] = useState({
     name: user?.name || '',
     phone: user?.phone || '',
@@ -91,7 +91,7 @@ const Checkout = () => {
 
       const response = await orderService.createOrder(orderData);
       const createdOrder = response.order;
-      
+
       if (paymentMethod === 'cod') {
         // COD: Clear cart and navigate to order detail
         clearCart();
@@ -101,13 +101,13 @@ const Checkout = () => {
         // Online payment: Store order details BEFORE clearing cart
         const currentTotal = getCartTotal();
         const currentItems = [...cart]; // Clone cart items
-        
+
         // Debug logs (temporary)
         console.log('=== CHECKOUT DEBUG ===');
         console.log('Cart items:', currentItems);
         console.log('Calculated total:', currentTotal);
         console.log('Order totalAmount:', createdOrder.totalAmount);
-        
+
         setOrderTotal(createdOrder.totalAmount); // Use server-calculated total for security
         setOrderItems(currentItems);
         setOrderId(createdOrder._id);
@@ -120,10 +120,10 @@ const Checkout = () => {
             createdOrder.totalAmount,
             user?.email
           );
-          
+
           console.log('Payment Intent created, clientSecret received');
           console.log('Amount sent to Stripe:', createdOrder.totalAmount);
-          
+
           setClientSecret(paymentResponse.clientSecret);
           clearCart(); // Clear cart AFTER storing order details
         } catch (paymentError) {
@@ -184,318 +184,294 @@ const Checkout = () => {
 
   return (
     <div className="checkout-page">
-      <div className="page-header">
-        <div className="container">
-          <h1>Checkout</h1>
-          <p>{orderCreated ? 'Complete your payment' : 'Enter your delivery details'}</p>
+      <div className="page-header !bg-slate-900 !text-white !py-12 max-md:!py-10 max-md:!px-4">
+        <div className="container !max-w-7xl !mx-auto">
+          <h1 className="!text-3xl !font-black !mb-2 max-md:!text-2xl">Checkout</h1>
+          <p className="!text-slate-400 !text-sm">{orderCreated ? 'Secure Payment Processing' : 'Finalize Your Order Details'}</p>
         </div>
       </div>
 
-      <div className="container">
-        <Link to={orderCreated ? `/orders/${orderId}` : '/cart'} className="back-link">
-          <FiArrowLeft /> {orderCreated ? 'View Order' : 'Back to Cart'}
+      <div className="container !max-w-7xl !mx-auto !py-10 max-md:!px-4">
+        <Link to={orderCreated ? `/orders/${orderId}` : '/cart'} className="!inline-flex !items-center !gap-2 !text-blue-600 !text-sm !font-bold !mb-8 hover:!text-blue-700">
+          <FiArrowLeft /> {orderCreated ? 'Back to Order Ref' : 'Returns to Cart'}
         </Link>
 
-        <div className="checkout-layout">
+        <div className="checkout-layout !flex !gap-10 max-md:!flex-col">
           {/* Email Verification Gate */}
           {!isEmailVerified && (
-            <div className="verification-gate">
-              <div className="verification-gate-content">
-                <div className="verification-gate-icon">
+            <div className="verification-gate !w-full !bg-white !rounded-3xl !p-12 !shadow-2xl !shadow-blue-50 !border !border-blue-100 !text-center max-md:!p-8">
+              <div className="verification-gate-content !max-w-lg !mx-auto">
+                <div className="verification-gate-icon !w-20 !h-20 !bg-blue-50 !text-blue-600 !rounded-full !flex !items-center !justify-center !text-4xl !mx-auto !mb-8 !animate-pulse">
                   <FiAlertCircle />
                 </div>
-                <h3>Email Verification Required</h3>
-                <p>
-                  Please verify your email address before placing an order. 
-                  This helps us send you order updates and important notifications.
+                <h3 className="!text-2xl !font-black !text-slate-900 !mb-4">Verification Required</h3>
+                <p className="!text-slate-500 !text-sm !leading-relaxed !mb-10">
+                  To ensure secure transactions and order updates, please verify your email address before finalizing your purchase.
                 </p>
-                <div className="verification-gate-email">
-                  <FiMail />
-                  <span>{user?.email}</span>
+                <div className="verification-gate-email !bg-slate-50 !p-4 !rounded-2xl !inline-flex !items-center !gap-3 !mb-10 !border !border-gray-100">
+                  <FiMail className="!text-blue-600" />
+                  <span className="!text-sm !font-black !text-slate-700">{user?.email}</span>
                 </div>
-                <div className="verification-gate-actions">
+                <div className="verification-gate-actions !flex !flex-col !gap-4">
                   <button
                     type="button"
-                    className="btn btn-primary"
+                    className="!w-full !py-5 !bg-blue-600 !text-white !rounded-2xl !font-black !text-base !shadow-xl !shadow-blue-100 hover:!bg-blue-700"
                     onClick={handleSendVerification}
                     disabled={sendingVerification}
                   >
-                    <FiSend />
-                    {sendingVerification ? 'Sending...' : 'Send Verification Email'}
+                    {sendingVerification ? 'Sending Link...' : 'Send Verification Email'}
                   </button>
                   <button
                     type="button"
-                    className="btn btn-outline"
+                    className="!w-full !py-4 !bg-slate-50 !text-slate-600 !rounded-2xl !font-bold !text-sm"
                     onClick={async () => {
                       await refreshUser();
-                      toast.success('Status refreshed');
+                      toast.success('Account status re-synced');
                     }}
                   >
-                    I've Verified - Refresh
+                    I Have Verified - Refresh Now
                   </button>
                 </div>
-                <p className="verification-gate-hint">
-                  Already verified? Click "I've Verified - Refresh" to continue.
-                </p>
               </div>
             </div>
           )}
 
           {/* Main Section - Only show if email is verified */}
           {isEmailVerified && (
-          <div className="checkout-form-section">
-            {!orderCreated ? (
-              // Step 1: Shipping & Payment Method Selection
-              <form onSubmit={handleSubmit} className="checkout-form">
-                <h3>Delivery Address</h3>
+            <div className="checkout-form-section !flex-1">
+              {!orderCreated ? (
+                // Step 1: Shipping & Payment Method Selection
+                <form onSubmit={handleSubmit} className="checkout-form !bg-white !rounded-3xl !p-10 !shadow-sm !border !border-gray-100 max-md:!p-6">
+                  <h3 className="!text-xl !font-black !text-slate-900 !mb-8 !flex !items-center !gap-3"><FiTruck className="!text-blue-600" /> Delivery Logistics</h3>
 
-                <div className="form-row">
-                  <div className="form-group">
-                    <label className="form-label">Full Name</label>
-                    <div className="input-icon">
-                      <FiUser />
+                  <div className="!grid !grid-cols-2 !gap-6 !mb-8 max-md:!grid-cols-1">
+                    <div className="form-group !flex !flex-col !gap-2">
+                      <label className="!text-[10px] !font-bold !text-gray-400 !uppercase !tracking-widest">Consignee Name</label>
+                      <div className="!relative">
+                        <FiUser className="!absolute !left-5 !top-1/2 !-translate-y-1/2 !text-gray-400" />
+                        <input
+                          type="text"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleChange}
+                          className="!w-full !pl-12 !pr-5 !py-4 !bg-slate-50 !border-0 !rounded-2xl !text-sm !font-bold focus:!ring-2 focus:!ring-blue-600"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-group !flex !flex-col !gap-2">
+                      <label className="!text-[10px] !font-bold !text-gray-400 !uppercase !tracking-widest">Phone Number</label>
+                      <div className="!relative">
+                        <FiPhone className="!absolute !left-5 !top-1/2 !-translate-y-1/2 !text-gray-400" />
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          pattern="[0-9]{10}"
+                          maxLength={10}
+                          className="!w-full !pl-12 !pr-5 !py-4 !bg-slate-50 !border-0 !rounded-2xl !text-sm !font-bold focus:!ring-2 focus:!ring-blue-600"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-group !mb-8 !flex !flex-col !gap-2">
+                    <label className="!text-[10px] !font-bold !text-gray-400 !uppercase !tracking-widest">Complete Address</label>
+                    <div className="!relative">
+                      <FiMapPin className="!absolute !left-5 !top-5 !text-gray-400" />
+                      <textarea
+                        name="street"
+                        value={formData.street}
+                        onChange={handleChange}
+                        rows={2}
+                        className="!w-full !pl-12 !pr-5 !py-4 !bg-slate-50 !border-0 !rounded-2xl !text-sm !font-bold focus:!ring-2 focus:!ring-blue-600"
+                        required
+                      ></textarea>
+                    </div>
+                  </div>
+
+                  <div className="!grid !grid-cols-3 !gap-4 !mb-10 max-md:!grid-cols-1">
+                    <div className="form-group !flex !flex-col !gap-2">
+                      <label className="!text-[10px] !font-bold !text-gray-400 !uppercase">City</label>
                       <input
                         type="text"
-                        name="name"
-                        value={formData.name}
+                        name="city"
+                        value={formData.city}
                         onChange={handleChange}
-                        placeholder="Enter your name"
-                        className="form-input"
+                        className="!w-full !px-5 !py-4 !bg-slate-50 !border-0 !rounded-2xl !text-sm !font-bold focus:!ring-2 focus:!ring-blue-600"
                         required
                       />
                     </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Phone Number</label>
-                    <div className="input-icon">
-                      <FiPhone />
+                    <div className="form-group !flex !flex-col !gap-2">
+                      <label className="!text-[10px] !font-bold !text-gray-400 !uppercase">State</label>
                       <input
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
+                        type="text"
+                        name="state"
+                        value={formData.state}
                         onChange={handleChange}
-                        placeholder="10-digit phone number"
-                        className="form-input"
-                        pattern="[0-9]{10}"
-                        maxLength={10}
+                        className="!w-full !px-5 !py-4 !bg-slate-50 !border-0 !rounded-2xl !text-sm !font-bold focus:!ring-2 focus:!ring-blue-600"
+                        required
+                      />
+                    </div>
+                    <div className="form-group !flex !flex-col !gap-2">
+                      <label className="!text-[10px] !font-bold !text-gray-400 !uppercase">Pincode</label>
+                      <input
+                        type="text"
+                        name="pincode"
+                        value={formData.pincode}
+                        onChange={handleChange}
+                        pattern="[0-9]{6}"
+                        maxLength={6}
+                        className="!w-full !px-5 !py-4 !bg-slate-50 !border-0 !rounded-2xl !text-sm !font-bold focus:!ring-2 focus:!ring-blue-600"
                         required
                       />
                     </div>
                   </div>
-                </div>
 
-                <div className="form-group">
-                  <label className="form-label">Street Address</label>
-                  <div className="input-icon">
-                    <FiMapPin />
-                    <input
-                      type="text"
-                      name="street"
-                      value={formData.street}
-                      onChange={handleChange}
-                      placeholder="Enter your street address"
-                      className="form-input"
-                      required
-                    />
-                  </div>
-                </div>
+                  <div className="payment-section !mb-10">
+                    <h3 className="!text-xl !font-black !text-slate-900 !mb-8 !flex !items-center !gap-3"><FiCreditCard className="!text-blue-600" /> Payment Gateway</h3>
 
-                <div className="form-row">
-                  <div className="form-group">
-                    <label className="form-label">City</label>
-                    <input
-                      type="text"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleChange}
-                      placeholder="Enter city"
-                      className="form-input"
-                      required
-                    />
-                  </div>
+                    <div className="!grid !grid-cols-2 !gap-4 max-md:!grid-cols-1">
+                      <div
+                        className={`!cursor-pointer !p-6 !rounded-3xl !border-2 !transition-all ${paymentMethod === 'cod' ? '!border-blue-600 !bg-blue-50' : '!border-gray-50 !bg-white'}`}
+                        onClick={() => setPaymentMethod('cod')}
+                      >
+                        <div className="!flex !items-center !gap-4">
+                          <div className={`!w-10 !h-10 !rounded-2xl !flex !items-center !justify-center ${paymentMethod === 'cod' ? '!bg-blue-600 !text-white' : '!bg-gray-100 !text-gray-400'}`}>
+                            <FiTruck />
+                          </div>
+                          <div>
+                            <strong className="!text-sm !block !mb-0.5">Pay on Delivery</strong>
+                            <span className="!text-[10px] !text-gray-400 !uppercase !font-bold">Cash/COD</span>
+                          </div>
+                        </div>
+                      </div>
 
-                  <div className="form-group">
-                    <label className="form-label">State</label>
-                    <input
-                      type="text"
-                      name="state"
-                      value={formData.state}
-                      onChange={handleChange}
-                      placeholder="Enter state"
-                      className="form-input"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Pincode</label>
-                    <input
-                      type="text"
-                      name="pincode"
-                      value={formData.pincode}
-                      onChange={handleChange}
-                      placeholder="6-digit pincode"
-                      className="form-input"
-                      pattern="[0-9]{6}"
-                      maxLength={6}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">Order Notes (Optional)</label>
-                  <textarea
-                    name="notes"
-                    value={formData.notes}
-                    onChange={handleChange}
-                    placeholder="Any special instructions for delivery..."
-                    className="form-input form-textarea"
-                    rows={3}
-                  />
-                </div>
-
-                <div className="payment-section">
-                  <h3>Payment Method</h3>
-                  
-                  <div 
-                    className={`payment-option ${paymentMethod === 'cod' ? 'selected' : ''}`}
-                    onClick={() => setPaymentMethod('cod')}
-                  >
-                    <input 
-                      type="radio" 
-                      name="paymentMethod"
-                      checked={paymentMethod === 'cod'} 
-                      onChange={() => setPaymentMethod('cod')}
-                    />
-                    <FiTruck className="payment-icon" />
-                    <div>
-                      <strong>Cash on Delivery (COD)</strong>
-                      <p>Pay when your order is delivered</p>
+                      <div
+                        className={`!cursor-pointer !p-6 !rounded-3xl !border-2 !transition-all ${paymentMethod === 'online' ? '!border-blue-600 !bg-blue-50' : '!border-gray-50 !bg-white'}`}
+                        onClick={() => setPaymentMethod('online')}
+                      >
+                        <div className="!flex !items-center !gap-4">
+                          <div className={`!w-10 !h-10 !rounded-2xl !flex !items-center !justify-center ${paymentMethod === 'online' ? '!bg-blue-600 !text-white' : '!bg-gray-100 !text-gray-400'}`}>
+                            <FiCreditCard />
+                          </div>
+                          <div>
+                            <strong className="!text-sm !block !mb-0.5">Digital Payment</strong>
+                            <span className="!text-[10px] !text-gray-400 !uppercase !font-bold">Card/UPI/Net</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div 
-                    className={`payment-option ${paymentMethod === 'online' ? 'selected' : ''}`}
-                    onClick={() => setPaymentMethod('online')}
+                  <button
+                    type="submit"
+                    className="!w-full !flex !items-center !justify-center !gap-3 !py-5 !bg-blue-600 !text-white !rounded-2xl !font-black !text-base !shadow-xl !shadow-blue-100 hover:!bg-blue-700 disabled:!opacity-50"
+                    disabled={loading}
                   >
-                    <input 
-                      type="radio" 
-                      name="paymentMethod"
-                      checked={paymentMethod === 'online'} 
-                      onChange={() => setPaymentMethod('online')}
-                    />
-                    <FiCreditCard className="payment-icon" />
-                    <div>
-                      <strong>Pay Online</strong>
-                      <p>Credit/Debit Card, UPI, Net Banking</p>
-                    </div>
-                  </div>
-                </div>
+                    {loading ? (
+                      <>
+                        <FiLoader className="!animate-spin" />
+                        Syncing with server...
+                      </>
+                    ) : paymentMethod === 'cod' ? (
+                      `Place Order - ₹${getCartTotal().toLocaleString()}`
+                    ) : (
+                      `Checkout Securely - ₹${getCartTotal().toLocaleString()}`
+                    )}
+                  </button>
+                </form>
+              ) : (
+                // Step 2: Stripe Payment Form
+                <div className="stripe-payment-section !bg-white !rounded-3xl !p-10 !shadow-sm !border !border-gray-100 max-md:!p-6">
+                  <h3 className="!text-xl !font-black !text-slate-900 !mb-8 !flex !items-center !gap-3">
+                    <FiCreditCard className="!text-blue-600" />
+                    Card Authentication
+                  </h3>
 
-                <button 
-                  type="submit" 
-                  className="btn btn-primary btn-lg place-order-btn"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <FiLoader className="spinner" />
-                      Processing...
-                    </>
-                  ) : paymentMethod === 'cod' ? (
-                    `Place Order - ₹${getCartTotal().toLocaleString()}`
+                  {creatingPaymentIntent ? (
+                    <div className="payment-loading !py-20 !text-center">
+                      <FiLoader className="!inline-block !animate-spin !text-blue-600 !mb-4" size={40} />
+                      <p className="!text-sm !font-bold !text-slate-600">Initializing Stripe Gateway...</p>
+                    </div>
+                  ) : clientSecret ? (
+                    <Elements stripe={stripePromise} options={stripeOptions}>
+                      <CheckoutForm
+                        orderId={orderId}
+                        amount={orderTotal}
+                        onSuccess={handlePaymentSuccess}
+                        onError={handlePaymentError}
+                      />
+                    </Elements>
                   ) : (
-                    `Proceed to Payment - ₹${getCartTotal().toLocaleString()}`
+                    <div className="payment-error-state !text-center !py-10">
+                      <FiAlertCircle className="!inline-block !text-red-500 !mb-4" size={48} />
+                      <p className="!mb-6 !text-gray-500 !text-sm">Session initialization failed.</p>
+                      <button
+                        className="!w-full !py-4 !bg-slate-900 !text-white !rounded-2xl !font-bold"
+                        onClick={() => window.location.reload()}
+                      >
+                        Tap to Reload
+                      </button>
+                    </div>
                   )}
-                </button>
-              </form>
-            ) : (
-              // Step 2: Stripe Payment Form
-              <div className="stripe-payment-section">
-                <h3>
-                  <FiCreditCard />
-                  Secure Payment
-                </h3>
-                
-                {creatingPaymentIntent ? (
-                  <div className="payment-loading">
-                    <FiLoader className="spinner-large" />
-                    <p>Initializing secure payment...</p>
-                  </div>
-                ) : clientSecret ? (
-                  <Elements stripe={stripePromise} options={stripeOptions}>
-                    <CheckoutForm
-                      orderId={orderId}
-                      amount={orderTotal}
-                      onSuccess={handlePaymentSuccess}
-                      onError={handlePaymentError}
-                    />
-                  </Elements>
-                ) : (
-                  <div className="payment-error-state">
-                    <p>Failed to initialize payment. Please try again.</p>
-                    <button 
-                      className="btn btn-primary"
-                      onClick={() => window.location.reload()}
-                    >
-                      Retry
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+                </div>
+              )}
+            </div>
           )}
 
           {/* Order Summary - Only show if email is verified */}
           {isEmailVerified && (
-          <div className="order-summary-section">
-            <div className="order-summary">
-              <h3>Order Summary</h3>
-              
-              <div className="summary-items">
-                {(orderCreated ? orderItems : cart).map(item => (
-                  <div key={item.product._id} className="summary-item">
-                    <div className="summary-item-info">
-                      <span className="summary-item-name">{item.product.productName}</span>
-                      <span className="summary-item-qty">x {item.quantity} {item.product.unit}</span>
+            <div className="order-summary-section !w-96 max-md:!w-full">
+              <div className="order-summary !bg-slate-900 !text-white !rounded-3xl !p-8 !shadow-sm !sticky !top-8 max-md:!relative max-md:!top-0">
+                <h3 className="!text-lg !font-black !mb-8">Order Overview</h3>
+
+                <div className="summary-items !flex !flex-col !gap-6 !mb-8">
+                  {(orderCreated ? orderItems : cart).map(item => (
+                    <div key={item.product._id} className="summary-item !flex !justify-between !items-start !gap-4">
+                      <div className="summary-item-info !flex-1">
+                        <span className="summary-item-name !text-xs !font-bold !block !mb-1 !text-gray-100">{item.product.productName}</span>
+                        <span className="summary-item-qty !text-[10px] !text-gray-500 !font-bold !uppercase">Qty: {item.quantity} {item.product.unit}</span>
+                      </div>
+                      <span className="summary-item-price !text-sm !font-black !text-blue-400">
+                        ₹{(item.product.price * item.quantity).toLocaleString()}
+                      </span>
                     </div>
-                    <span className="summary-item-price">
-                      ₹{(item.product.price * item.quantity).toLocaleString()}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="summary-divider"></div>
-
-              <div className="summary-row">
-                <span>Subtotal</span>
-                <span>₹{(orderCreated ? orderTotal : getCartTotal()).toLocaleString()}</span>
-              </div>
-
-              <div className="summary-row">
-                <span>Delivery</span>
-                <span className="free">Free</span>
-              </div>
-
-              <div className="summary-divider"></div>
-
-              <div className="summary-row total">
-                <span>Total</span>
-                <span>₹{(orderCreated ? orderTotal : getCartTotal()).toLocaleString()}</span>
-              </div>
-
-              {paymentMethod === 'online' && !orderCreated && (
-                <div className="secure-payment-badge">
-                  <FiCreditCard />
-                  <span>Secure payment powered by Stripe</span>
+                  ))}
                 </div>
-              )}
+
+                <div className="summary-divider !h-px !bg-slate-800 !mb-8"></div>
+
+                <div className="!space-y-4 !mb-8">
+                  <div className="summary-row !flex !justify-between !items-center !text-sm">
+                    <span className="!text-gray-400 !font-bold">Subtotal</span>
+                    <span className="!font-bold">₹{(orderCreated ? orderTotal : getCartTotal()).toLocaleString()}</span>
+                  </div>
+
+                  <div className="summary-row !flex !justify-between !items-center !text-sm">
+                    <span className="!text-gray-400 !font-bold">Delivery Fee</span>
+                    <span className="!text-green-400 !font-black !text-[10px] !uppercase">Free</span>
+                  </div>
+                </div>
+
+                <div className="summary-divider !h-px !bg-slate-800 !mb-8"></div>
+
+                <div className="summary-row total !flex !justify-between !items-end">
+                  <span className="!text-[10px] !font-bold !text-gray-400 !uppercase">Total Payable</span>
+                  <span className="!text-3xl !font-black !text-blue-400">₹{(orderCreated ? orderTotal : getCartTotal()).toLocaleString()}</span>
+                </div>
+
+                {paymentMethod === 'online' && !orderCreated && (
+                  <div className="secure-payment-badge !mt-10 !pt-8 !border-t !border-slate-800 !flex !items-center !gap-3 !text-[10px] !text-slate-500 !font-bold !uppercase !tracking-widest">
+                    <FiCreditCard className="!text-blue-600" />
+                    <span>Verified Secure Checkout</span>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
           )}
         </div>
       </div>
