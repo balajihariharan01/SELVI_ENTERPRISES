@@ -257,7 +257,7 @@ exports.googleAuth = async (req, res, next) => {
 
     const payload = ticket.getPayload();
     const { sub: googleId, email, name, picture } = payload;
-    
+
     console.log('Google user info:', { email, name, googleId: googleId.substring(0, 10) + '...' });
 
     // Check if user exists with this Google ID
@@ -266,7 +266,7 @@ exports.googleAuth = async (req, res, next) => {
     if (!user) {
       // Check if email already exists with local auth
       const existingUser = await User.findOne({ email });
-      
+
       if (existingUser) {
         // Link Google account to existing user
         if (existingUser.authProvider === 'local') {
@@ -285,7 +285,7 @@ exports.googleAuth = async (req, res, next) => {
         // Determine role - ONLY authorized email gets admin role
         const userRole = email.toLowerCase() === AUTHORIZED_ADMIN_EMAIL.toLowerCase() ? 'admin' : 'user';
         console.log('Creating new Google user:', email, 'with role:', userRole);
-        
+
         // Create new user with Google
         user = await User.create({
           name,
@@ -390,9 +390,9 @@ exports.updateProfile = async (req, res, next) => {
 
     // Check if phone is being changed and if it's unique
     if (phone) {
-      const existingPhone = await User.findOne({ 
-        phone, 
-        _id: { $ne: req.user.id } 
+      const existingPhone = await User.findOne({
+        phone,
+        _id: { $ne: req.user.id }
       });
       if (existingPhone) {
         return res.status(400).json({
@@ -410,7 +410,7 @@ exports.updateProfile = async (req, res, next) => {
     if (name) updateData.name = name;
     if (address) updateData.address = address;
     if (profileImage) updateData.profilePicture = profileImage;
-    
+
     // If phone is changing, reset phone verification
     if (phone && phone !== user.phone) {
       updateData.phone = phone;
@@ -994,7 +994,7 @@ exports.verifyPhoneOTP = async (req, res, next) => {
       user.phoneOTPExpire = undefined;
       user.phoneOTPAttempts = 0;
       await user.save({ validateBeforeSave: false });
-      
+
       return res.status(400).json({
         success: false,
         message: 'Too many failed attempts. Please request a new OTP.'
@@ -1005,7 +1005,7 @@ exports.verifyPhoneOTP = async (req, res, next) => {
     if (!user.verifyPhoneOTP(otp)) {
       user.phoneOTPAttempts += 1;
       await user.save({ validateBeforeSave: false });
-      
+
       return res.status(400).json({
         success: false,
         message: 'Invalid or expired OTP',
@@ -1046,4 +1046,77 @@ exports.getVerificationStatus = async (req, res, next) => {
     next(error);
   }
 };
+// @desc    Verify email exists for password reset
+// @route   POST /api/auth/verify-email-reset
+// @access  Public
+exports.verifyEmailForReset = async (req, res, next) => {
+  try {
+    const { email } = req.body;
 
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide email'
+      });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Email not registered'
+      });
+    }
+
+    if (user.authProvider === 'google') {
+      return res.status(400).json({
+        success: false,
+        message: 'This account uses Google login. Please sign in with Google.'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Email verified successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Direct password reset (no token)
+// @route   POST /api/auth/direct-reset-password
+// @access  Public
+exports.directResetPassword = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide email and new password'
+      });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    // Hash is handled by Mongoose schema pre-save hook
+    user.password = password;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Password updated successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+};

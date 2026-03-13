@@ -20,7 +20,9 @@ const {
   verifyEmail,
   sendPhoneOTP,
   verifyPhoneOTP,
-  getVerificationStatus
+  getVerificationStatus,
+  verifyEmailForReset,
+  directResetPassword
 } = require('../controllers/authController');
 
 // Validation rules
@@ -60,10 +62,15 @@ router.get('/me', protect, getMe);
 router.put('/profile', protect, updateProfile);
 router.put('/password', protect, changePassword);
 
-// Forgot Password Routes
+// Forgot Password Routes (Direct Reset)
 router.post('/forgot-password', forgotPasswordValidation, forgotPassword);
 router.post('/reset-password/:token', resetPasswordValidation, resetPassword);
 router.get('/verify-reset-token/:token', verifyResetToken);
+router.post('/verify-email-reset', [body('email').isEmail()], verifyEmailForReset);
+router.post('/direct-reset-password', [
+  body('email').isEmail(),
+  body('password').isLength({ min: 8 })
+], directResetPassword);
 
 // Validation Check Routes
 router.post('/check-email', checkEmailAvailability);

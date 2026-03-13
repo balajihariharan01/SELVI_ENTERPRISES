@@ -98,6 +98,18 @@ export const authService = {
   getVerificationStatus: async () => {
     const response = await api.get('/auth/verification-status');
     return response.data;
+  },
+
+  // Verify email for reset (direct reset flow)
+  verifyEmailForReset: async (email) => {
+    const response = await api.post('/auth/verify-email-reset', { email });
+    return response.data;
+  },
+
+  // Direct reset password (no token)
+  directResetPassword: async (email, password) => {
+    const response = await api.post('/auth/direct-reset-password', { email, password });
+    return response.data;
   }
 };
 
