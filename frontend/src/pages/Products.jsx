@@ -67,7 +67,7 @@ const Products = () => {
     <PageTransition className="products-page">
       {/* Page Header */}
       <motion.div
-        className="page-header !py-16 !bg-slate-900 !text-center max-md:!py-10 max-md:!px-6"
+        className="page-header !py-16 !bg-[#0f172a] !text-center max-md:!py-10 max-md:!px-6"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
@@ -173,7 +173,7 @@ const Products = () => {
               <select
                 value={filters.category}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="!bg-white !border !border-slate-200 !rounded-xl !px-4 !py-3 !text-xs !font-black !uppercase !tracking-widest"
+                className="!bg-white !border !border-slate-300 !rounded-xl !px-4 !py-3 !text-xs !font-black !uppercase !tracking-widest !text-slate-900"
               >
                 <option value="">Categories</option>
                 <option value="cement">Cement</option>
@@ -183,7 +183,7 @@ const Products = () => {
               <select
                 value={filters.sort}
                 onChange={(e) => handleFilterChange('sort', e.target.value)}
-                className="!bg-white !border !border-slate-200 !rounded-xl !px-4 !py-3 !text-xs !font-black !uppercase !tracking-widest"
+                className="!bg-white !border !border-slate-300 !rounded-xl !px-4 !py-3 !text-xs !font-black !uppercase !tracking-widest !text-slate-900"
               >
                 <option value="createdAt">Sorting: New</option>
                 <option value="price_asc">Price: Asc</option>

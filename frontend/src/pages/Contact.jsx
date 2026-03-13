@@ -140,7 +140,7 @@ const Contact = () => {
             <FaBuilding /> Global Support Nexus
           </div>
           <h1 className="hero-title !text-7xl !font-black !text-white !mb-8 !leading-none max-md:!text-4xl">
-            Inbound <span className="!text-blue-500">Logistics.</span>
+            Inbound <span className="!text-blue-400">Logistics.</span>
           </h1>
           <p className="hero-subtitle !text-slate-400 !text-xl !max-w-2xl !mx-auto !mb-16 max-md:!text-sm">
             Immediate technical deployment and material procurement assistance. Resolve your construction logistics queries with our executive support tier.
@@ -177,7 +177,7 @@ const Contact = () => {
                 <form onSubmit={handleSubmit} className="contact-form !flex !flex-col !gap-6">
                   <div className="form-row">
                     <div className={`form-group ${errors.name ? 'has-error' : ''}`}>
-                      <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-400 !mb-3">
+                      <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-600 !mb-3">
                         <FiUser className="!text-blue-500" /> Executive Identity
                       </label>
                       <input
@@ -193,7 +193,7 @@ const Contact = () => {
 
                   <div className="form-row !grid !grid-cols-2 !gap-6 max-md:!grid-cols-1">
                     <div className={`form-group ${errors.email ? 'has-error' : ''}`}>
-                      <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-400 !mb-3">
+                      <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-600 !mb-3">
                         <FiMail className="!text-blue-500" /> Digital Address
                       </label>
                       <input
@@ -207,7 +207,7 @@ const Contact = () => {
                     </div>
 
                     <div className={`form-group ${errors.phone ? 'has-error' : ''}`}>
-                      <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-400 !mb-3">
+                      <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-600 !mb-3">
                         <FiPhone className="!text-blue-500" /> Voice Link
                       </label>
                       <input
@@ -223,7 +223,7 @@ const Contact = () => {
 
                   <div className="form-row">
                     <div className={`form-group ${errors.message ? 'has-error' : ''}`}>
-                      <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-400 !mb-3">
+                      <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-600 !mb-3">
                         <FiMessageSquare className="!text-blue-500" /> Technical Brief
                       </label>
                       <textarea

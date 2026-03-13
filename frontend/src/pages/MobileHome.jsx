@@ -110,7 +110,7 @@ const MobileHome = () => {
               Official Material supplier
             </span>
             <h1 className="!text-5xl !font-black !text-white !leading-[1.1] !mb-6">
-              Build The <span className="!text-blue-500">Future</span> With Strength.
+              Build The <span className="!text-blue-400">Future</span> With Strength.
             </h1>
             <p className="!text-slate-400 !text-base !leading-relaxed !mb-10 !max-w-[85%]">
               Direct procurement of premium Steel & Cement from global market leaders. Engineered for durability.
@@ -132,7 +132,7 @@ const MobileHome = () => {
             ].map((m, i) => (
               <div key={i} className="!bg-white/5 !backdrop-blur-sm !border !border-white/5 !p-4 !rounded-2xl !flex !flex-col !items-center !gap-2">
                 <span className="!text-blue-500 !text-lg">{m.icon}</span>
-                <span className="!text-[9px] !font-black !text-slate-500 !uppercase !tracking-wider">{m.label}</span>
+                <span className="!text-[9px] !font-black !text-slate-400 !uppercase !tracking-wider">{m.label}</span>
               </div>
             ))}
           </div>
@@ -205,7 +205,7 @@ const MobileHome = () => {
                 <FiPhone />
               </div>
               <div className="!flex !flex-col">
-                <span className="!text-[10px] !font-black !text-slate-500 !uppercase !tracking-widest !mb-1">Voice Protocol</span>
+                <span className="!text-[10px] !font-black !text-slate-400 !uppercase !tracking-widest !mb-1">Voice Protocol</span>
                 <span className="!text-white !font-black !text-lg">{BUSINESS_CONFIG.contact.phone}</span>
               </div>
             </a>
@@ -230,19 +230,19 @@ const MobileHome = () => {
             <FiHome size={26} />
             <span className="!text-[9px] !font-black !uppercase !tracking-tighter">Core</span>
           </button>
-          <button onClick={() => scrollToSection(productsRef)} className="!flex !flex-col !items-center !gap-2 !text-slate-500 active:!text-blue-500">
+          <button onClick={() => scrollToSection(productsRef)} className="!flex !flex-col !items-center !gap-2 !text-slate-400 active:!text-blue-500">
             <FiLayout size={26} />
             <span className="!text-[9px] !font-black !uppercase !tracking-tighter">Catalog</span>
           </button>
 
           {isAuthenticated ? (
             <>
-              <Link to="/cart" className="!relative !flex !flex-col !items-center !gap-2 !text-slate-500 active:!text-blue-500">
+              <Link to="/cart" className="!relative !flex !flex-col !items-center !gap-2 !text-slate-400 active:!text-blue-500">
                 <FiShoppingCart size={26} />
                 <span className="!text-[9px] !font-black !uppercase !tracking-tighter">Vault</span>
                 {cartCount > 0 && <span className="!absolute !-top-1 !-right-1 !bg-blue-600 !text-[9px] !font-black !w-5 !h-5 !rounded-full !flex !items-center !justify-center !text-white">{cartCount}</span>}
               </Link>
-              <Link to="/profile" className="!flex !flex-col !items-center !gap-2 !text-slate-500 active:!text-blue-500">
+              <Link to="/profile" className="!flex !flex-col !items-center !gap-2 !text-slate-400 active:!text-blue-500">
                 <FiUser size={26} />
                 <span className="!text-[9px] !font-black !uppercase !tracking-tighter">Officer</span>
               </Link>

@@ -8,6 +8,9 @@ import './About.css';
 
 const About = () => {
   const observerRef = useRef(null);
+  // Simplify stats animation to avoid IntersectionObserver issues
+  const [animateStats, setAnimateStats] = useState(false); // Changed initial state to false
+  const statsRef = useRef(null);
 
   useEffect(() => {
     // Intersection Observer for scroll animations
@@ -16,6 +19,13 @@ const About = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('animate-in');
+            // If the intersecting element is the stats section, trigger its animation
+            if (entry.target === statsRef.current) {
+              setAnimateStats(true);
+            }
+          } else {
+            // Optional: remove 'animate-in' if you want elements to re-animate on scroll back
+            // entry.target.classList.remove('animate-in');
           }
         });
       },
@@ -53,7 +63,7 @@ const About = () => {
             <FaBuilding /> Institutional Narrative
           </div>
           <h1 className="hero-title !text-7xl !font-black !text-white !mb-8 !leading-none max-md:!text-4xl">
-            Engineering <span className="!text-blue-500">Resilience.</span>
+            Engineering <span className="!text-blue-400">Resilience.</span>
           </h1>
           <p className="hero-subtitle !text-slate-400 !text-xl !max-w-2xl !mx-auto !mb-16 max-md:!text-sm">
             Forging the structural backbone of South India with high-performance material logistics and uncompromising technical standards.
@@ -72,7 +82,7 @@ const About = () => {
                 transition={{ duration: 0.4, delay: 0.3 + (index * 0.1) }}
               >
                 <div className="stat-number !text-4xl !font-black !text-white !mb-2 max-md:!text-2xl">{stat.number}</div>
-                <div className="stat-label !text-slate-500 !text-[10px] !font-black !uppercase !tracking-tighter">{stat.label}</div>
+                <div className="stat-label !text-slate-400 !text-[10px] !font-black !uppercase !tracking-tighter">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -265,13 +275,13 @@ const About = () => {
             <h2 className="section-title !text-4xl !font-black !text-slate-900">Proprietors Registry</h2>
           </div>
           <div className="proprietors-grid !grid !grid-cols-2 !gap-12 max-md:!grid-cols-1 max-md:!gap-8">
-            {BUSINESS_CONFIG.owners.map((owner, index) => (
+            {BUSINESS_CONFIG?.owners?.map((owner, index) => (
               <div key={index} className="proprietor-card !bg-white !p-10 !rounded-3xl !text-center !shadow-sm animate-on-scroll">
                 <div className="proprietor-avatar !w-20 !h-20 !bg-slate-900 !text-white !rounded-full !flex !items-center !justify-center !mx-auto !mb-6 !text-3xl !font-black">
                   {owner.name.charAt(0)}
                 </div>
                 <h3 className="proprietor-name !text-xl !font-black !text-slate-900 !mb-2">{owner.name}</h3>
-                <p className="proprietor-role !text-slate-500 !text-xs !font-bold !uppercase !tracking-widest !mb-6">Senior Partner</p>
+                <p className="proprietor-role !text-slate-600 !text-xs !font-bold !uppercase !tracking-widest !mb-6">Senior Partner</p>
                 <a href={`tel:${owner.phone.replace(/\s/g, '')}`} className="proprietor-phone !inline-flex !items-center !gap-2 !bg-blue-600 !text-white !px-6 !py-3 !rounded-full !text-sm !font-bold !transition-all hover:!bg-blue-700">
                   <FiPhone /> {owner.phone}
                 </a>

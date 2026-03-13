@@ -15,14 +15,14 @@ export const BUSINESS_CONFIG = {
   // Owners with phone numbers
   owners: [
     { name: 'Anandan S', role: 'Owner', phone: '+91 6380470432' },
-    { name: 'Raghavendran S', role: 'Owner', phone: '+91 7904775217' }
+    { name: 'Raghavendran S', role: 'Owner', phone: '+91 6380470432' }
   ],
 
   // Contact Information
   contact: {
     phone1: '+91 6380470432',
-    phone2: '+91 7904775217',
-    phones: ['+91 6380470432', '+91 7904775217'],
+    phone2: '+91 6380470432',
+    phones: ['+91 6380470432'],
     phone: '6380470432',
     email: 'selvienterprises.ooty@gmail.com',
     whatsapp: '916380470432', // Format for wa.me

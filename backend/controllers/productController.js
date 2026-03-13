@@ -41,14 +41,27 @@ exports.getProducts = async (req, res, next) => {
     if (sort === 'price_desc') sortOption = { price: -1 };
     if (sort === 'name') sortOption = { productName: 1 };
 
-    const products = await Product.find(query)
-      .sort(sortOption)
-      .select('productName category brand price image stockQuantity status featured unit minOrderQuantity lowStockThreshold')
-      .lean();
+    // Pagination
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 100; // Large default but capped
+    const skip = (page - 1) * limit;
+
+    const [products, total] = await Promise.all([
+      Product.find(query)
+        .sort(sortOption)
+        .select('productName category brand price image stockQuantity status featured unit minOrderQuantity lowStockThreshold')
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Product.countDocuments(query)
+    ]);
 
     res.json({
       success: true,
       count: products.length,
+      total,
+      page,
+      pages: Math.ceil(total / limit),
       products
     });
   } catch (error) {
@@ -198,16 +211,27 @@ exports.updateStock = async (req, res, next) => {
 // @access  Private/Admin
 exports.getAllProductsAdmin = async (req, res, next) => {
   try {
-    const products = await Product.find()
-      .sort({ createdAt: -1 })
-      .lean();
+    const [products, statsArray] = await Promise.all([
+      Product.find().sort({ createdAt: -1 }).lean(),
+      Product.aggregate([
+        {
+          $facet: {
+            total: [{ $count: "count" }],
+            active: [{ $match: { status: 'active' } }, { $count: "count" }],
+            inactive: [{ $match: { status: 'inactive' } }, { $count: "count" }],
+            lowStock: [{ $match: { $expr: { $and: [{ $lte: ["$stockQuantity", "$lowStockThreshold"] }, { $gt: ["$stockQuantity", 0] }] } } }, { $count: "count" }],
+            outOfStock: [{ $match: { stockQuantity: 0 } }, { $count: "count" }]
+          }
+        }
+      ])
+    ]);
 
     const stats = {
-      total: products.length,
-      active: products.filter(p => p.status === 'active').length,
-      inactive: products.filter(p => p.status === 'inactive').length,
-      lowStock: products.filter(p => p.stockQuantity <= p.lowStockThreshold && p.stockQuantity > 0).length,
-      outOfStock: products.filter(p => p.stockQuantity === 0).length
+      total: statsArray[0].total[0]?.count || 0,
+      active: statsArray[0].active[0]?.count || 0,
+      inactive: statsArray[0].inactive[0]?.count || 0,
+      lowStock: statsArray[0].lowStock[0]?.count || 0,
+      outOfStock: statsArray[0].outOfStock[0]?.count || 0
     };
 
     res.json({

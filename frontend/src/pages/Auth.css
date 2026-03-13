@@ -225,7 +225,8 @@
 }
 
 .input-icon .form-input::placeholder {
-  color: var(--text-muted);
+  color: #6B7280;
+  /* Darker Slate-500 for better visibility */
 }
 
 /* ===== Password Toggle Button ===== */
@@ -439,6 +440,9 @@
   justify-content: center;
   align-items: center;
   width: 100%;
+  min-height: 50px;
+  /* Ensure space for Google script to render */
+  margin: 0 auto;
 }
 
 .google-btn-wrapper.loading {
@@ -458,8 +462,11 @@
 .google-btn-wrapper iframe {
   width: 100% !important;
   max-width: 100% !important;
+  height: 44px !important;
+  /* Force standard height to prevent cut-off */
   margin: 0 !important;
   display: block !important;
+  border-radius: 8px !important;
 }
 
 .google-loading {
