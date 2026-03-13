@@ -163,8 +163,8 @@ const MobileHome = () => {
               <button
                 key={cat}
                 className={`!px-7 !py-4 !rounded-2xl !text-[10px] !font-black !uppercase !tracking-widest !whitespace-nowrap !transition-all ${activeCategory === cat
-                    ? '!bg-blue-600 !text-white !shadow-lg !shadow-blue-600/20'
-                    : '!bg-white/5 !text-slate-500 !border !border-white/5'
+                  ? '!bg-blue-600 !text-white !shadow-lg !shadow-blue-600/20'
+                  : '!bg-white/5 !text-slate-500 !border !border-white/5'
                   }`}
                 onClick={() => setActiveCategory(cat)}
               >
@@ -200,17 +200,17 @@ const MobileHome = () => {
           </div>
 
           <div className="!flex !flex-col !gap-6">
-            <a href={`tel:${BUSINESS_CONFIG.phone}`} className="!bg-white/5 !backdrop-blur-xl !border !border-white/5 !p-8 !rounded-[2.5rem] !flex !items-center !gap-6 active:!scale-95 !transition-all">
+            <a href={`tel:${BUSINESS_CONFIG.contact.phone}`} className="!bg-white/5 !backdrop-blur-xl !border !border-white/5 !p-8 !rounded-[2.5rem] !flex !items-center !gap-6 active:!scale-95 !transition-all">
               <div className="!w-16 !h-16 !bg-blue-600 !rounded-2xl !flex !items-center !justify-center !text-white !text-2xl">
                 <FiPhone />
               </div>
               <div className="!flex !flex-col">
                 <span className="!text-[10px] !font-black !text-slate-500 !uppercase !tracking-widest !mb-1">Voice Protocol</span>
-                <span className="!text-white !font-black !text-lg">{BUSINESS_CONFIG.phone}</span>
+                <span className="!text-white !font-black !text-lg">{BUSINESS_CONFIG.contact.phone}</span>
               </div>
             </a>
 
-            <a href="https://wa.me/919876543210" className="!bg-emerald-600/10 !backdrop-blur-xl !border !border-emerald-500/20 !p-8 !rounded-[2.5rem] !flex !items-center !gap-6 active:!scale-95 !transition-all">
+            <a href={`https://wa.me/${BUSINESS_CONFIG.contact.whatsapp}`} className="!bg-emerald-600/10 !backdrop-blur-xl !border !border-emerald-500/20 !p-8 !rounded-[2.5rem] !flex !items-center !gap-6 active:!scale-95 !transition-all">
               <div className="!w-16 !h-16 !bg-emerald-600 !rounded-2xl !flex !items-center !justify-center !text-white !text-3xl">
                 📱
               </div>

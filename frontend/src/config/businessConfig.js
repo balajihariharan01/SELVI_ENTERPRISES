@@ -11,23 +11,24 @@ export const BUSINESS_CONFIG = {
   tagline: 'Steel & Cement',
   fullName: 'Selvi Enterprise – Steel & Cement',
   description: 'Your trusted partner for quality steel and cement materials. Serving the construction industry with excellence.',
-  
+
   // Owners with phone numbers
   owners: [
     { name: 'Anandan S', role: 'Owner', phone: '+91 6380470432' },
     { name: 'Raghavendran S', role: 'Owner', phone: '+91 7904775217' }
   ],
-  
+
   // Contact Information
   contact: {
     phone1: '+91 6380470432',
     phone2: '+91 7904775217',
     phones: ['+91 6380470432', '+91 7904775217'],
+    phone: '6380470432',
     email: 'selvienterprises.ooty@gmail.com',
-    whatsapp: '916380470432', // Format for wa.me (country code + number, no spaces/special chars)
-    whatsappDisplay: '+91 6380470432'
+    whatsapp: '916380470432', // Format for wa.me
+    whatsappDisplay: '6380470432'
   },
-  
+
   // Location
   location: {
     area: 'Ooty',
@@ -52,19 +53,19 @@ export const BUSINESS_CONFIG = {
       lng: 76.7145812
     }
   },
-  
+
   // Payment Information
   payment: {
     upiId: 'selvinaga21@okaxis',
     acceptedMethods: ['Cash on Delivery', 'UPI Payment', 'Online Payment']
   },
-  
+
   // Social Media & Links
   social: {
     whatsappLink: 'https://wa.me/916380470432',
     googleMapsLink: 'https://www.google.com/maps/place//@11.4036779,76.7145812,21z/data=!4m2!3m1!4b1entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D'
   },
-  
+
   // Business Hours (optional)
   businessHours: {
     weekdays: '  9:00 AM - 5:00 PM',

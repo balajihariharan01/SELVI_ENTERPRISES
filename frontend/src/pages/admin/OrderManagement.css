@@ -4,6 +4,7 @@
     opacity: 0;
     transform: translateY(15px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -15,6 +16,7 @@
     opacity: 0;
     transform: translateY(12px) scale(0.97);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -26,6 +28,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -81,10 +84,21 @@
   border: 1px solid #e5e7eb;
 }
 
-.stat-card:nth-child(1) { animation-delay: 0.1s; }
-.stat-card:nth-child(2) { animation-delay: 0.15s; }
-.stat-card:nth-child(3) { animation-delay: 0.2s; }
-.stat-card:nth-child(4) { animation-delay: 0.25s; }
+.stat-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.stat-card:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.stat-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.stat-card:nth-child(4) {
+  animation-delay: 0.25s;
+}
 
 .stat-card:hover {
   transform: translateY(-6px);
@@ -92,23 +106,28 @@
   border-color: #BFDBFE;
 }
 
-.stat-card.pending { 
-  border-left: 4px solid #f59e0b; 
+.stat-card.pending {
+  border-left: 4px solid #f59e0b;
 }
+
 .stat-card.pending .stat-icon {
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
   color: #d97706;
 }
-.stat-card.processing { 
-  border-left: 4px solid #3b82f6; 
+
+.stat-card.processing {
+  border-left: 4px solid #3b82f6;
 }
+
 .stat-card.processing .stat-icon {
   background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
   color: #2563eb;
 }
-.stat-card.delivered { 
-  border-left: 4px solid #10b981; 
+
+.stat-card.delivered {
+  border-left: 4px solid #10b981;
 }
+
 .stat-card.delivered .stat-icon {
   background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
   color: #16a34a;
@@ -174,29 +193,34 @@
   font-weight: 700;
 }
 
-.status-badge.pending { 
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); 
-  color: #92400e; 
+.status-badge.pending {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #92400e;
 }
-.status-badge.confirmed { 
-  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%); 
-  color: #4338ca; 
+
+.status-badge.confirmed {
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  color: #4338ca;
 }
-.status-badge.processing { 
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); 
-  color: #1d4ed8; 
+
+.status-badge.processing {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1d4ed8;
 }
-.status-badge.shipped { 
-  background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%); 
-  color: #0d9488; 
+
+.status-badge.shipped {
+  background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%);
+  color: #0d9488;
 }
-.status-badge.delivered { 
-  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); 
-  color: #166534; 
+
+.status-badge.delivered {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  color: #166534;
 }
-.status-badge.cancelled { 
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); 
-  color: #dc2626; 
+
+.status-badge.cancelled {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #dc2626;
 }
 
 .status-select {
@@ -257,8 +281,13 @@
 
 /* Modal */
 @keyframes modalFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes modalSlideIn {
@@ -266,6 +295,7 @@
     opacity: 0;
     transform: translateY(-20px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -409,150 +439,74 @@
 
 /* Responsive */
 @media (max-width: 1024px) {
+  .order-management {
+    padding: 0;
+  }
+
   .order-stats {
     grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .stat-card {
-    animation-delay: 0s !important;
   }
 }
 
 @media (max-width: 768px) {
-  .order-management {
-    animation: none;
-    padding: 0 0.5rem;
-  }
-  
   .page-title {
-    animation: none;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    border-bottom: 0;
   }
 
-  .page-title h1 {
-    font-size: 1.35rem;
-  }
-
-  .page-title p {
-    font-size: 0.85rem;
-  }
-  
   .order-stats {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .stat-card {
-    padding: 1rem;
-    border-radius: 12px;
-  }
-
-  .stat-value {
-    font-size: 1.5rem;
-  }
-
-  .stat-label {
-    font-size: 0.75rem;
-  }
-
-  .order-info-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
 
-  .info-section h3 {
-    font-size: 0.8rem;
-    margin-bottom: 0.6rem;
-    padding-bottom: 0.5rem;
+  /* Table is hidden in JSX via max-md:hidden, CSS ensures standard alignment */
+  .table-container {
+    display: none;
   }
 
-  .info-section p {
-    font-size: 0.85rem;
-    margin-bottom: 0.5rem;
+  .stat-card {
+    padding: 1.5rem;
   }
 
-  .items-table {
-    font-size: 0.8rem;
+  .order-modal {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 28px 28px 0 0;
   }
 
-  .items-table th,
-  .items-table td {
-    padding: 0.6rem 0.5rem;
+  .modal-body {
+    padding: 1.5rem;
   }
 
-  .items-table th {
-    font-size: 0.7rem;
-  }
-
-  .order-totals {
-    padding: 1rem;
-    border-radius: 10px;
-  }
-
-  .total-row {
-    font-size: 0.85rem;
-    padding: 0.4rem 0;
-  }
-
-  .total-row.grand {
-    font-size: 1rem;
-    padding-top: 0.75rem;
-    margin-top: 0.4rem;
+  .order-info-grid {
+    grid-template-columns: 1fr;
   }
 
   .modal-actions {
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .modal-actions .btn-secondary,
+  .status-update {
+    width: 100%;
   }
 
   .status-update {
-    width: 100%;
     flex-direction: column;
-    gap: 0.5rem;
   }
 
-  .modal-actions label {
-    font-size: 0.85rem;
-  }
-
-  .modal-actions .form-select {
-    max-width: 100%;
+  .status-update select {
     width: 100%;
-  }
-
-  .modal-actions .btn-secondary {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .action-buttons {
-    flex-direction: row;
-    gap: 0.5rem;
-  }
-
-  .action-btn {
-    width: 36px;
-    height: 36px;
+    max-width: none;
   }
 }
 
 @media (max-width: 480px) {
-  .order-stats {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
-
-  .stat-card {
-    padding: 0.85rem;
-  }
-
-  .stat-value {
-    font-size: 1.35rem;
-  }
-
-  .stat-label {
-    font-size: 0.7rem;
+  .page-title h1 {
+    font-size: 1.5rem;
   }
 }

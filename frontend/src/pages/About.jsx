@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FiTarget, FiEye, FiAward, FiTruck, FiShield, FiHeart, FiCheck, FiUsers, FiPackage, FiStar } from 'react-icons/fi';
+import { FiTarget, FiEye, FiAward, FiTruck, FiShield, FiHeart, FiCheck, FiUsers, FiPackage, FiStar, FiPhone } from 'react-icons/fi';
 import { FaBuilding, FaHandshake, FaHardHat } from 'react-icons/fa';
 import { BUSINESS_CONFIG } from '../config/businessConfig';
 import { PageTransition } from '../components/animations';

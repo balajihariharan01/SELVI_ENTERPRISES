@@ -1,5 +1,5 @@
 import { FaWhatsapp } from 'react-icons/fa';
-import { getWhatsAppGeneralLink } from '../../config/businessConfig';
+import { getWhatsAppGeneralLink, BUSINESS_CONFIG } from '../../config/businessConfig';
 import './WhatsAppButton.css';
 
 /**
@@ -9,16 +9,16 @@ import './WhatsAppButton.css';
  */
 const WhatsAppButton = ({ message = null, className = '' }) => {
   const handleClick = () => {
-    const whatsappUrl = message 
-      ? `https://wa.me/916380470432?text=${encodeURIComponent(message)}`
+    const whatsappUrl = message
+      ? `https://wa.me/${BUSINESS_CONFIG.contact.whatsapp}?text=${encodeURIComponent(message)}`
       : getWhatsAppGeneralLink();
-    
+
     // Open in new tab - this will open WhatsApp app on mobile, WhatsApp Web on desktop
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
-    <button 
+    <button
       onClick={handleClick}
       className={`whatsapp-float-btn ${className}`}
       aria-label="Chat on WhatsApp"
@@ -33,18 +33,18 @@ const WhatsAppButton = ({ message = null, className = '' }) => {
 /**
  * WhatsApp Link Button (inline use)
  */
-export const WhatsAppLink = ({ 
-  message = null, 
+export const WhatsAppLink = ({
+  message = null,
   children = 'Chat on WhatsApp',
   className = '',
-  showIcon = true 
+  showIcon = true
 }) => {
-  const whatsappUrl = message 
-    ? `https://wa.me/916380470432?text=${encodeURIComponent(message)}`
+  const whatsappUrl = message
+    ? `https://wa.me/${BUSINESS_CONFIG.contact.whatsapp}?text=${encodeURIComponent(message)}`
     : getWhatsAppGeneralLink();
 
   return (
-    <a 
+    <a
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
@@ -59,18 +59,18 @@ export const WhatsAppLink = ({
 /**
  * WhatsApp Chat Button (styled button)
  */
-export const WhatsAppChatButton = ({ 
-  message = null, 
+export const WhatsAppChatButton = ({
+  message = null,
   children = 'Chat on WhatsApp',
   className = '',
   variant = 'primary' // primary, outline
 }) => {
-  const whatsappUrl = message 
-    ? `https://wa.me/916380470432?text=${encodeURIComponent(message)}`
+  const whatsappUrl = message
+    ? `https://wa.me/${BUSINESS_CONFIG.contact.whatsapp}?text=${encodeURIComponent(message)}`
     : getWhatsAppGeneralLink();
 
   return (
-    <a 
+    <a
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
