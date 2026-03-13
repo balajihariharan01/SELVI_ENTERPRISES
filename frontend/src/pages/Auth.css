@@ -12,7 +12,7 @@
   padding: 2rem 1rem;
   position: relative;
   overflow: hidden;
-  
+
   /* Background Image Settings */
   background-image: url('/ooty2.jpg');
   background-size: cover;
@@ -34,22 +34,18 @@
 
 /* Login Page - Steel Blue Overlay */
 .auth-login .auth-overlay {
-  background: linear-gradient(
-    135deg,
-    rgba(10, 22, 40, 0.75) 0%,
-    rgba(21, 54, 96, 0.65) 50%,
-    rgba(10, 22, 40, 0.7) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(10, 22, 40, 0.75) 0%,
+      rgba(21, 54, 96, 0.65) 50%,
+      rgba(10, 22, 40, 0.7) 100%);
 }
 
 /* Register Page - Slightly Lighter Overlay */
 .auth-register .auth-overlay {
-  background: linear-gradient(
-    135deg,
-    rgba(10, 22, 40, 0.65) 0%,
-    rgba(21, 54, 96, 0.55) 50%,
-    rgba(10, 22, 40, 0.6) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(10, 22, 40, 0.65) 0%,
+      rgba(21, 54, 96, 0.55) 50%,
+      rgba(10, 22, 40, 0.6) 100%);
 }
 
 /* Remove old decorative shapes */
@@ -64,21 +60,22 @@
   z-index: 1;
   width: 100%;
   max-width: 440px;
-  
+
   /* Glassmorphism Effect */
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  
+
   /* Soft styling - UNIFORM PADDING (32px/24px) */
   border-radius: 16px;
-  padding: 32px 24px; /* On 8px grid */
-  box-shadow: 
+  padding: 32px 24px;
+  /* On 8px grid */
+  box-shadow:
     0 8px 32px rgba(10, 22, 40, 0.15),
     0 4px 16px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  
+
   /* Smooth Fade-in Animation */
   animation: authCardFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   transition: all 0.3s ease;
@@ -89,6 +86,7 @@
     opacity: 0;
     transform: translateY(20px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -96,7 +94,7 @@
 }
 
 .auth-container:hover {
-  box-shadow: 
+  box-shadow:
     0 16px 48px rgba(10, 22, 40, 0.2),
     0 8px 24px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
@@ -169,36 +167,45 @@
   position: relative;
   display: flex;
   align-items: center;
-  z-index: 1; /* Ensure inputs are above any page overlays */
+  z-index: 1;
+  /* Ensure inputs are above any page overlays */
 }
 
 /* Left icon (decorative) */
-.input-icon > svg:first-child {
+.input-icon>svg:first-child {
   position: absolute;
-  left: 16px; /* On 8px grid */
+  left: 16px;
+  /* On 8px grid */
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-muted);
-  font-size: 1.25rem; /* 20px - standardized */
-  pointer-events: none; /* Icon is decorative, clicks pass through */
+  font-size: 1.25rem;
+  /* 20px - standardized */
+  pointer-events: none;
+  /* Icon is decorative, clicks pass through */
   z-index: 2;
   transition: var(--transition);
 }
 
 /* Input field styling */
 .input-icon .form-input {
-  padding-left: 48px; /* Space for left icon */
-  padding-right: 48px; /* Space for right icon/toggle - CRITICAL FIX */
-  height: 48px; /* Standardized input height */
+  padding-left: 48px;
+  /* Space for left icon */
+  padding-right: 48px;
+  /* Space for right icon/toggle - CRITICAL FIX */
+  height: 48px;
+  /* Standardized input height */
   font-size: 0.9375rem;
   width: 100%;
   border: 2px solid var(--border-color);
-  border-radius: 8px; /* On 8px grid */
+  border-radius: 8px;
+  /* On 8px grid */
   background: #fff;
   color: var(--text-primary);
   transition: var(--transition-smooth);
   position: relative;
-  z-index: 1; /* Input is clickable */
+  z-index: 1;
+  /* Input is clickable */
 }
 
 .input-icon .form-input:hover {
@@ -209,10 +216,11 @@
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 4px var(--primary-100);
-  z-index: 2; /* Focused input above everything */
+  z-index: 2;
+  /* Focused input above everything */
 }
 
-.input-icon:focus-within > svg:first-child {
+.input-icon:focus-within>svg:first-child {
   color: var(--primary);
 }
 
@@ -223,11 +231,14 @@
 /* ===== Password Toggle Button ===== */
 .password-toggle {
   position: absolute;
-  right: 8px; /* On 8px grid, inside input boundary */
+  right: 8px;
+  /* On 8px grid, inside input boundary */
   top: 50%;
   transform: translateY(-50%);
-  width: 32px; /* On 8px grid */
-  height: 32px; /* On 8px grid */
+  width: 32px;
+  /* On 8px grid */
+  height: 32px;
+  /* On 8px grid */
   background: transparent;
   border: none;
   color: var(--text-muted);
@@ -237,8 +248,10 @@
   justify-content: center;
   cursor: pointer;
   transition: var(--transition);
-  border-radius: 4px; /* Subtle rounded corners */
-  z-index: 3; /* Above input for clickability */
+  border-radius: 4px;
+  /* Subtle rounded corners */
+  z-index: 3;
+  /* Above input for clickability */
 }
 
 .password-toggle:hover {
@@ -255,19 +268,23 @@
 .password-toggle svg {
   width: 18px;
   height: 18px;
-  pointer-events: none; /* Clicks go to button, not icon */
+  pointer-events: none;
+  /* Clicks go to button, not icon */
 }
 
 .auth-submit {
   width: 100%;
-  margin-top: 8px; /* On 8px grid */
-  height: 48px; /* Standardized button height */
+  margin-top: 8px;
+  /* On 8px grid */
+  height: 48px;
+  /* Standardized button height */
   font-size: 0.9375rem;
   font-weight: var(--font-semibold);
   background: linear-gradient(135deg, #215898 0%, #153660 100%);
   color: white;
   border: none;
-  border-radius: 8px; /* On 8px grid */
+  border-radius: 8px;
+  /* On 8px grid */
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 16px rgba(33, 88, 152, 0.25);
@@ -409,12 +426,18 @@
 
 /* Google Login */
 .google-auth-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 0;
 }
 
 .google-btn-wrapper {
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
 }
 
@@ -423,12 +446,20 @@
   pointer-events: none;
 }
 
-.google-btn-wrapper > div {
+/* Force all inner layers generated by Google Identity Services to fill the container perfectly */
+.google-btn-wrapper>div,
+.google-btn-wrapper>div>div {
   width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
 
 .google-btn-wrapper iframe {
   width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  display: block !important;
 }
 
 .google-loading {
@@ -448,7 +479,7 @@
   gap: 0.75rem;
 }
 
-.google-login-wrapper > div {
+.google-login-wrapper>div {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -464,7 +495,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Success and Error Icons */
@@ -611,11 +644,13 @@
 /* ===== Validation Icons ===== */
 .validation-icon {
   position: absolute;
-  right: 16px; /* On 8px grid */
+  right: 16px;
+  /* On 8px grid */
   top: 50%;
   transform: translateY(-50%);
   font-size: 1rem;
-  pointer-events: none; /* Decorative only */
+  pointer-events: none;
+  /* Decorative only */
   z-index: 2;
 }
 
@@ -629,21 +664,26 @@
 
 /* When password toggle is present, shift validation icon left */
 .form-group .input-icon .validation-icon {
-  right: 48px; /* 8px grid: space for toggle button (32px) + padding (8px) + gap (8px) */
+  right: 48px;
+  /* 8px grid: space for toggle button (32px) + padding (8px) + gap (8px) */
 }
 
 .form-group:has(.password-toggle) .validation-icon {
-  right: 48px; /* Consistent with above */
+  right: 48px;
+  /* Consistent with above */
 }
 
 /* Validation spinner for loading states */
 .validation-spinner {
   position: absolute;
-  right: 16px; /* On 8px grid */
+  right: 16px;
+  /* On 8px grid */
   top: 50%;
   transform: translateY(-50%);
-  width: 16px; /* On 8px grid */
-  height: 16px; /* On 8px grid */
+  width: 16px;
+  /* On 8px grid */
+  height: 16px;
+  /* On 8px grid */
   border: 2px solid #e5e7eb;
   border-top-color: var(--primary);
   border-radius: 50%;
@@ -749,28 +789,25 @@
     padding: 1.5rem 1rem;
     align-items: flex-start;
     padding-top: 3rem;
-    background-attachment: scroll; /* Better mobile performance */
+    background-attachment: scroll;
+    /* Better mobile performance */
   }
-  
+
   /* Increase overlay opacity for better readability on mobile */
   .auth-login .auth-overlay {
-    background: linear-gradient(
-      135deg,
-      rgba(15, 6, 137, 0.75) 0%,
-      rgba(8, 87, 190, 0.65) 50%,
-      rgba(15, 6, 137, 0.7) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(15, 6, 137, 0.75) 0%,
+        rgba(8, 87, 190, 0.65) 50%,
+        rgba(15, 6, 137, 0.7) 100%);
   }
-  
+
   .auth-register .auth-overlay {
-    background: linear-gradient(
-      135deg,
-      rgba(15, 6, 137, 0.7) 0%,
-      rgba(8, 87, 190, 0.6) 50%,
-      rgba(15, 6, 137, 0.65) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(15, 6, 137, 0.7) 0%,
+        rgba(8, 87, 190, 0.6) 50%,
+        rgba(15, 6, 137, 0.65) 100%);
   }
-  
+
   .auth-container {
     padding: 2rem 1.5rem;
     border-radius: 20px;
@@ -785,7 +822,7 @@
     align-items: flex-start;
     padding-top: 2rem;
   }
-  
+
   .auth-container {
     padding: 1.75rem 1.25rem;
     border-radius: 18px;
@@ -795,16 +832,17 @@
   .auth-header h1 {
     font-size: 1.4rem;
   }
-  
+
   .auth-header p {
     font-size: 0.85rem;
   }
-  
+
   .input-icon .form-input {
     height: 46px;
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px;
+    /* Prevents zoom on iOS */
   }
-  
+
   .auth-submit {
     height: 46px;
   }
