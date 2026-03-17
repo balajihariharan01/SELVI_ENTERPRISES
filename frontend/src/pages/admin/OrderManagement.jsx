@@ -232,7 +232,7 @@ const OrderManagement = () => {
                   <span className="!text-lg !font-black !text-slate-900">{order.orderNumber}</span>
                 </div>
                 <span className={`!px-4 !py-1.5 !rounded-full !text-[10px] !font-black !uppercase !tracking-widest !flex !items-center !gap-2 ${order.orderStatus === 'delivered' ? '!bg-emerald-50 !text-emerald-600' :
-                    order.orderStatus === 'cancelled' ? '!bg-red-50 !text-red-600' : '!bg-blue-50 !text-blue-600'
+                  order.orderStatus === 'cancelled' ? '!bg-red-50 !text-red-600' : '!bg-blue-50 !text-blue-600'
                   }`}>
                   {getStatusIcon(order.orderStatus)}
                   {order.orderStatus}

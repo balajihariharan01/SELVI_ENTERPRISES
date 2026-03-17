@@ -21,14 +21,14 @@ const AdminLayout = () => {
     <div className="admin-layout max-lg:!flex-col max-lg:!min-h-screen">
 
       {/* Mobile Top Header (Visible only on mobile) */}
-      <div className="hidden max-lg:!flex max-lg:!items-center max-lg:!justify-between max-lg:!p-4 max-lg:!bg-[#0f2544] max-lg:!text-white max-lg:!sticky max-lg:!top-0 max-lg:!z-[110] max-lg:!shadow-lg">
+      <div className="hidden max-lg:!flex max-lg:!items-center max-lg:!justify-between max-lg:!p-4 max-lg:!bg-white max-lg:!text-slate-900 max-lg:!sticky max-lg:!top-0 max-lg:!z-[110] max-lg:!border-b max-lg:!border-slate-100 max-lg:!shadow-sm">
         <div className="max-lg:!flex max-lg:!items-center max-lg:!gap-3">
           <Logo className="!w-8 !h-8 !rounded-lg" />
           <span className="!font-bold !text-lg !tracking-tight">Admin Console</span>
         </div>
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="!p-2 !rounded-lg hover:!bg-white/10 !transition-colors !flex !items-center !justify-center"
+          className="!p-2 !rounded-lg hover:!bg-slate-50 !transition-colors !flex !items-center !justify-center !text-slate-600"
           aria-label="Toggle Menu"
         >
           {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}

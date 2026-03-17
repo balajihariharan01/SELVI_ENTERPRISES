@@ -16,12 +16,12 @@
   --admin-shadow: 0 4px 12px rgba(10, 22, 40, 0.06);
   --admin-shadow-lg: 0 8px 24px rgba(10, 22, 40, 0.1);
   --admin-shadow-xl: 0 16px 40px rgba(10, 22, 40, 0.12);
-  --admin-accent: #215898;
-  --admin-accent-light: #EBF3FA;
-  --admin-accent-hover: #153660;
-  --admin-text-primary: #0A1628;
-  --admin-text-secondary: #3D424F;
-  --admin-text-muted: #525866;
+  --admin-accent: #3b82f6;
+  --admin-accent-light: #eff6ff;
+  --admin-accent-hover: #2563eb;
+  --admin-text-primary: #1f2937;
+  --admin-text-secondary: #4b5563;
+  --admin-text-muted: #6b7280;
   --admin-radius: 10px;
   --admin-radius-lg: 14px;
   --admin-transition: all 0.25s ease;
@@ -391,23 +391,110 @@
    SCROLLBAR STYLING
    ═══════════════════════════════════════════════════════════════════════════ */
 
-.admin-sidebar::-webkit-scrollbar,
-.admin-content::-webkit-scrollbar {
-  width: 6px;
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLLBAR & DATA STYLES (Light Theme)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* Professional Tables */
+.table-container {
+  background: var(--admin-surface);
+  border-radius: 12px;
+  border: 1px solid var(--admin-border);
+  box-shadow: var(--admin-shadow-sm);
+  overflow-x: auto;
+  margin-top: 1rem;
 }
 
-.admin-sidebar::-webkit-scrollbar-track,
-.admin-content::-webkit-scrollbar-track {
-  background: transparent;
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+  min-width: 800px;
 }
 
-.admin-sidebar::-webkit-scrollbar-thumb,
-.admin-content::-webkit-scrollbar-thumb {
-  background: var(--admin-border);
-  border-radius: 3px;
+.table th {
+  background: #f8fafc;
+  padding: 1.25rem 1.5rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #f1f5f9;
 }
 
-.admin-sidebar::-webkit-scrollbar-thumb:hover,
-.admin-content::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+.table td {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: middle;
 }
+
+.table tr:hover { background: #f8fafc; }
+.table tr:last-child td { border-bottom: none; }
+
+/* Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.status-badge.pending { background: #fff7ed; color: #c2410c; }
+.status-badge.confirmed { background: #f0fdf4; color: #15803d; }
+.status-badge.processing, .status-badge.shipped { background: #eff6ff; color: #1d4ed8; }
+.status-badge.delivered { background: #f0fdf4; color: #15803d; }
+.status-badge.cancelled { background: #fef2f2; color: #b91c1c; }
+
+/* Modals */
+.modal-overlay {
+  background: rgba(15, 23, 42, 0.3);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 200;
+}
+
+.modal {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e2e8f0;
+  max-width: 800px;
+  width: 100%;
+}
+
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #64748b;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.action-btn:hover {
+  color: #3b82f6;
+  border-color: #3b82f6;
+  background: #eff6ff;
+  transform: translateY(-2px);
+}

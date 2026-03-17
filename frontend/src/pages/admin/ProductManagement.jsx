@@ -302,7 +302,7 @@ const ProductManagement = () => {
             <div className="!relative !z-10">
               <div className="!flex !justify-between !items-start !mb-3">
                 <span className={`!px-3 !py-1 !rounded-full !text-[9px] !font-black !uppercase !tracking-widest ${product.category === 'cement' ? '!bg-blue-50 !text-blue-600' :
-                    product.category === 'steel' ? '!bg-slate-900 !text-white' : '!bg-emerald-50 !text-emerald-600'
+                  product.category === 'steel' ? '!bg-slate-900 !text-white' : '!bg-emerald-50 !text-emerald-600'
                   }`}>
                   {product.category}
                 </span>
