@@ -293,16 +293,18 @@ const Register = () => {
 
         {/* Google Sign Up Button */}
         <div className="google-auth-section">
-          <div className={`google-btn-wrapper ${googleLoading ? 'loading' : ''}`}>
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleError}
-              useOneTap={false}
-              theme="outline"
-              size="large"
-              text="continue_with"
-              shape="rectangular"
-            />
+          <div className={`google-btn-wrapper ${googleLoading ? 'loading' : ''}`} style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                useOneTap={false}
+                theme="outline"
+                size="large"
+                text="continue_with"
+                shape="rectangular"
+              />
+            </div>
           </div>
           {googleLoading && (
             <div className="google-loading">

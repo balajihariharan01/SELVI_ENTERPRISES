@@ -141,6 +141,7 @@ const Products = () => {
 
             {/* Operational Stock Filter */}
             <div className="filter-section">
+              <label>Availability</label>
               <label className="stock-toggle">
                 <input
                   type="checkbox"
