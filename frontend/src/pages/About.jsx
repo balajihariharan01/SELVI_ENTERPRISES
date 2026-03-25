@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FiTarget, FiEye, FiAward, FiTruck, FiShield, FiHeart, FiCheck, FiUsers, FiPackage, FiStar, FiPhone } from 'react-icons/fi';
 import { FaBuilding, FaHandshake, FaHardHat } from 'react-icons/fa';

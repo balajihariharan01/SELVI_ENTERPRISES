@@ -219,6 +219,16 @@ const MobileHome = () => {
                 <span className="!text-white !font-black !text-lg">Open Secure Chat</span>
               </div>
             </a>
+
+            <a href={BUSINESS_CONFIG.location.googleMapsUrl} target="_blank" rel="noopener noreferrer" className="!bg-amber-500/10 !backdrop-blur-xl !border !border-amber-500/20 !p-8 !rounded-[2.5rem] !flex !items-center !gap-6 active:!scale-95 !transition-all">
+              <div className="!w-16 !h-16 !bg-amber-500 !rounded-2xl !flex !items-center !justify-center !text-slate-950 !text-3xl">
+                📍
+              </div>
+              <div className="!flex !flex-col">
+                <span className="!text-[10px] !font-black !text-amber-500 !uppercase !tracking-widest !mb-1">Navigation Core</span>
+                <span className="!text-white !font-black !text-lg">Get Directions</span>
+              </div>
+            </a>
           </div>
         </section>
       </main>
@@ -235,21 +245,26 @@ const MobileHome = () => {
             <span className="!text-[9px] !font-black !uppercase !tracking-tighter">Catalog</span>
           </button>
 
+          <Link to="/about" className="!flex !flex-col !items-center !gap-2 !text-slate-400 active:!text-blue-500">
+            <FiInfo size={24} />
+            <span className="!text-[9px] !font-black !uppercase !tracking-tighter">About</span>
+          </Link>
+          
           {isAuthenticated ? (
             <>
               <Link to="/cart" className="!relative !flex !flex-col !items-center !gap-2 !text-slate-400 active:!text-blue-500">
-                <FiShoppingCart size={26} />
+                <FiShoppingCart size={24} />
                 <span className="!text-[9px] !font-black !uppercase !tracking-tighter">Vault</span>
-                {cartCount > 0 && <span className="!absolute !-top-1 !-right-1 !bg-blue-600 !text-[9px] !font-black !w-5 !h-5 !rounded-full !flex !items-center !justify-center !text-white">{cartCount}</span>}
+                {cartCount > 0 && <span className="!absolute !-top-1 !-right-1 !bg-blue-600 !text-[9px] !font-black !w-4 !h-4 !rounded-full !flex !items-center !justify-center !text-white">{cartCount}</span>}
               </Link>
               <Link to="/profile" className="!flex !flex-col !items-center !gap-2 !text-slate-400 active:!text-blue-500">
-                <FiUser size={26} />
-                <span className="!text-[9px] !font-black !uppercase !tracking-tighter">Officer</span>
+                <FiUser size={24} />
+                <span className="!text-[9px] !font-black !uppercase !tracking-tighter">Profile</span>
               </Link>
             </>
           ) : (
             <Link to="/login" className="!flex !flex-col !items-center !gap-2 !text-blue-500">
-              <FiUser size={26} />
+              <FiUser size={24} />
               <span className="!text-[9px] !font-black !uppercase !tracking-tighter">Login</span>
             </Link>
           )}

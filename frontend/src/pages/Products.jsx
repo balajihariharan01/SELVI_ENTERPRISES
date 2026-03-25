@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiSearch, FiFilter } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiRefreshCw } from 'react-icons/fi';
 import productService from '../services/productService';
 import ProductCard from '../components/ProductCard';
 import { PageTransition } from '../components/animations';
@@ -65,167 +65,136 @@ const Products = () => {
 
   return (
     <PageTransition className="products-page">
-      {/* Page Header */}
-      <motion.div
-        className="page-header !py-16 !bg-[#0f172a] !text-center max-md:!py-10 max-md:!px-6"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="container">
-          <h1 className="!text-5xl !font-black !text-white !mb-4 max-md:!text-3xl">Material Registry</h1>
-          <p className="!text-slate-400 !text-lg !font-medium max-md:!text-sm">High-Performance Construction Logistics</p>
+      {/* Centered Modern Header Section */}
+      <header className="products-header-section">
+        <div className="products-container">
+          <motion.h1 
+            initial={{ opacity: 0, y: -10 }} 
+            animate={{ opacity: 1, y: 0 }}
+            className="header-title"
+          >
+            Material Registry
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }} 
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="header-subtitle"
+          >
+            High-Performance Procurement Systems
+          </motion.p>
         </div>
-      </motion.div>
+      </header>
 
-      <div className="container">
+      <div className="products-container">
         <div className="products-layout">
-          {/* Filters Sidebar */}
-          <aside className="filters-sidebar max-md:!hidden">
-            <div className="filter-section">
-              <h3><FiFilter /> Filters</h3>
-            </div>
+          {/* Marketplace Filter Panel */}
+          <aside className="filters-sidebar">
+            <h3 className="sidebar-title">
+              <FiFilter /> Catalog Bridge
+            </h3>
 
-            {/* Search */}
+            {/* Realtime Search Interface */}
             <div className="filter-section">
-              <label>Search</label>
+              <label>Instant Search</label>
               <form onSubmit={handleSearch} className="search-form">
+                <FiSearch className="search-icon" />
                 <input
                   type="text"
-                  placeholder="Search products..."
+                  placeholder="Material query..."
                   value={filters.search}
                   onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                  className="form-input"
+                  className="search-input"
                 />
-                <button type="submit" className="search-btn">
-                  <FiSearch />
-                </button>
               </form>
             </div>
 
-            {/* Category Filter */}
+            {/* Strategic Category Selection */}
             <div className="filter-section">
-              <label>Category</label>
+              <label>Unit Category</label>
               <select
                 value={filters.category}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="form-select"
+                className="filter-dropdown"
               >
-                <option value="">All Categories</option>
-                <option value="cement">Cement</option>
-                <option value="steel">Steel</option>
-                <option value="others">Others</option>
+                <option value="">All Registries</option>
+                <option value="cement">🧱 Cement Products</option>
+                <option value="steel">🔩 Steel Components</option>
+                <option value="others">📦 Bulk Materials</option>
               </select>
             </div>
 
-            {/* Sort */}
+            {/* Matrix Sequence (Sorting) */}
             <div className="filter-section">
-              <label>Sort By</label>
+              <label>Sequence Matrix</label>
               <select
                 value={filters.sort}
                 onChange={(e) => handleFilterChange('sort', e.target.value)}
-                className="form-select"
+                className="filter-dropdown"
               >
-                <option value="createdAt">Newest First</option>
-                <option value="price_asc">Price: Low to High</option>
-                <option value="price_desc">Price: High to Low</option>
-                <option value="name">Name: A to Z</option>
+                <option value="createdAt">Chronological: Newest</option>
+                <option value="price_asc">Valuation: Low to High</option>
+                <option value="price_desc">Valuation: High to Low</option>
+                <option value="name">Alphanumeric: A-Z</option>
               </select>
             </div>
 
-            {/* In Stock */}
+            {/* Operational Stock Filter */}
             <div className="filter-section">
-              <label className="checkbox-label">
+              <label className="stock-toggle">
                 <input
                   type="checkbox"
                   checked={filters.inStock}
                   onChange={(e) => handleFilterChange('inStock', e.target.checked)}
                 />
-                <span>In Stock Only</span>
+                <span>Operational In-Stock</span>
               </label>
             </div>
 
-            {/* Clear Filters */}
+            {/* Reset Command */}
             <button
-              className="btn btn-outline btn-sm"
+              className="clear-btn"
               onClick={() => {
                 setFilters({ category: '', search: '', sort: 'createdAt', inStock: false });
                 setSearchParams({});
               }}
             >
-              Clear Filters
+              <FiRefreshCw /> Reset Matrices
             </button>
           </aside>
 
-          {/* Mobile Filters Hub */}
-          <div className="hidden max-md:!flex max-md:!flex-col max-md:!gap-4 max-md:!px-4 max-md:!mb-8">
-            <div className="!relative">
-              <FiSearch className="!absolute !left-5 !top-1/2 !-translate-y-1/2 !text-blue-500" size={18} />
-              <input
-                type="text"
-                placeholder="Quick Query catalog..."
-                value={filters.search}
-                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                className="!w-full !bg-white !border !border-slate-200 !rounded-2xl !pl-14 !pr-6 !py-4 !text-sm !font-medium"
-              />
-            </div>
-            <div className="!grid !grid-cols-2 !gap-3">
-              <select
-                value={filters.category}
-                onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="!bg-white !border !border-slate-300 !rounded-xl !px-4 !py-3 !text-xs !font-black !uppercase !tracking-widest !text-slate-900"
-              >
-                <option value="">Categories</option>
-                <option value="cement">Cement</option>
-                <option value="steel">Steel</option>
-                <option value="others">Others</option>
-              </select>
-              <select
-                value={filters.sort}
-                onChange={(e) => handleFilterChange('sort', e.target.value)}
-                className="!bg-white !border !border-slate-300 !rounded-xl !px-4 !py-3 !text-xs !font-black !uppercase !tracking-widest !text-slate-900"
-              >
-                <option value="createdAt">Sorting: New</option>
-                <option value="price_asc">Price: Asc</option>
-                <option value="price_desc">Price: Desc</option>
-                <option value="name">Name: A-Z</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Products Grid */}
-          <div className="products-content">
-            <div className="products-header">
-              <p className="products-count">
-                Showing {products.length} product{products.length !== 1 ? 's' : ''}
+          {/* Product Execution Grid */}
+          <main className="products-grid-hub">
+            <div className="results-meta">
+              <p className="results-count">
+                ACTIVE RECORDS: {products.length} OBJECTS
               </p>
             </div>
 
             {loading ? (
-              <div className="loading">
+              <div className="page-loader">
                 <div className="spinner"></div>
               </div>
             ) : products.length === 0 ? (
-              <motion.div
-                className="empty-state"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="empty-state-icon">📦</div>
-                <h3 className="empty-state-title">No products found</h3>
-                <p className="empty-state-text">
-                  Try adjusting your filters or search criteria
+              <div className="empty-state">
+                <span className="empty-icon">🛰️</span>
+                <h3 className="empty-title">Zero Matches found</h3>
+                <p className="empty-text">
+                  Synchronize your search protocols or re-evaluate the filter matrix.
                 </p>
-              </motion.div>
+              </div>
             ) : (
-              <div className="products-grid">
+              <div className="product-grid">
                 {products.map((product, index) => (
-                  <ProductCard key={product._id} product={product} index={index} />
+                  <ProductCard 
+                    key={product._id} 
+                    product={product} 
+                    index={index} 
+                  />
                 ))}
               </div>
             )}
-          </div>
+          </main>
         </div>
       </div>
     </PageTransition>

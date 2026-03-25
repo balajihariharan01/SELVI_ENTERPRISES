@@ -36,30 +36,17 @@ const ProductCard = ({ product, index = 0 }) => {
   const cardVariants = {
     initial: {
       opacity: 0,
-      y: 30,
-      scale: 0.96
+      y: 30
     },
     animate: {
       opacity: 1,
       y: 0,
-      scale: 1,
       transition: {
-        duration: 0.35,
-        delay: index * 0.08,
-        ease: [0.4, 0, 0.2, 1]
+        duration: 0.4,
+        delay: index * 0.05,
+        ease: [0.25, 1, 0.5, 1]
       }
-    },
-    hover: {
-      y: -8,
-      transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
-    },
-  };
-
-  // Animation for the add to cart button
-  const buttonVariants = {
-    initial: { scale: 1 },
-    hover: { scale: 1.02 },
-    tap: { scale: 0.97 },
+    }
   };
 
   return (
@@ -67,7 +54,7 @@ const ProductCard = ({ product, index = 0 }) => {
       variants={cardVariants}
       initial="initial"
       animate="animate"
-      whileHover="hover"
+      className="product-card-wrapper"
     >
       <Link to={`/products/${product._id}`} className="product-card">
         <div className="product-image">
@@ -77,6 +64,7 @@ const ProductCard = ({ product, index = 0 }) => {
               : `https://via.placeholder.com/300x200?text=${encodeURIComponent(product.productName)}`
             }
             alt={product.productName}
+            loading="lazy"
           />
           {!inStock && <span className="out-of-stock-badge">Out of Stock</span>}
           {product.isLowStock && inStock && (
@@ -85,34 +73,31 @@ const ProductCard = ({ product, index = 0 }) => {
         </div>
 
         <div className="product-info">
-          <span className="product-category">{product.category}</span>
+          <span className="product-category">{product.category} Registry</span>
           <h3 className="product-name">{product.productName}</h3>
           <p className="product-brand">{product.brand}</p>
 
           <div className="product-pricing">
             <span className="product-price">₹{product.price.toLocaleString()}</span>
-            <span className="product-unit">per {product.unit}</span>
+            <span className="product-unit">/{product.unit}</span>
           </div>
 
           {!isAdmin && (
-            <motion.button
+            <button
               className={`add-to-cart-btn ${inCart ? 'in-cart' : ''}`}
               onClick={handleAddToCart}
               disabled={!inStock || inCart}
-              variants={buttonVariants}
-              whileHover={!inCart && inStock ? "hover" : undefined}
-              whileTap={!inCart && inStock ? "tap" : undefined}
             >
               {inCart ? (
                 <>
-                  <FiCheck /> In Cart
+                  <FiCheck size={18} /> In Vault
                 </>
               ) : (
                 <>
-                  <FiShoppingCart /> Add to Cart
+                  <FiShoppingCart size={18} /> Add to Cart
                 </>
               )}
-            </motion.button>
+            </button>
           )}
         </div>
       </Link>

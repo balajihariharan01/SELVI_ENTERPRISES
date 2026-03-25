@@ -90,16 +90,16 @@ const ProductDetail = () => {
     <PageTransition className={`product-detail-page ${getCategoryClass()}`}>
       <div className="container">
         {/* Breadcrumb */}
-        <div className="breadcrumb">
-          <Link to="/products">
-            <FiArrowLeft /> Back to Products
+        <div className="breadcrumb !mb-10">
+          <Link to="/products" className="!inline-flex !items-center !gap-3 !bg-white !text-slate-600 !px-4 !py-3 !rounded-2xl !text-xs !font-black !uppercase !tracking-widest !border !border-slate-100 !shadow-sm hover:!bg-slate-50 !transition-all">
+            <FiArrowLeft size={16} /> Material Registry
           </Link>
         </div>
 
-        <div className="product-detail-layout">
+        <div className="product-detail-layout !items-center">
           {/* Product Image */}
           <motion.div
-            className="product-detail-image !flex-1 !relative !overflow-hidden !rounded-[3rem] !shadow-2xl max-md:!mb-10 max-md:!rounded-3xl"
+            className="product-detail-image !flex-1 !relative !overflow-hidden !rounded-[2.5rem] !shadow-xl max-md:!mb-10 max-md:!rounded-3xl !aspect-square !bg-white"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
@@ -122,26 +122,28 @@ const ProductDetail = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <span className="product-category-badge !bg-blue-600 !text-white !px-6 !py-2 !rounded-full !text-[10px] !font-black !uppercase !tracking-[0.2em] !mb-6 !inline-block">
+            <span className="product-category-badge !bg-blue-50 !text-blue-600 !border !border-blue-100 !px-5 !py-2 !rounded-full !text-[9px] !font-black !uppercase !tracking-[0.2em] !mb-6 !inline-block">
               {product.category} Registry
             </span>
-            <h1 className="!text-5xl !font-black !text-slate-900 !leading-tight !mb-4 max-md:!text-3xl">{product.productName}</h1>
-            <p className="product-brand !text-slate-400 !font-bold !uppercase !tracking-widest !mb-8">By {product.brand}</p>
+            <h1 className="!text-4xl !font-black !text-slate-900 !leading-tight !mb-2 max-md:!text-3xl !tracking-tight">{product.productName}</h1>
+            <p className="product-brand !text-slate-400 !font-bold !uppercase !tracking-widest !mb-6 !text-xs">Manufactured by {product.brand}</p>
 
             {product.description && (
-              <p className="product-description !text-slate-600 !text-lg !leading-relaxed !mb-10 max-md:!text-base">{product.description}</p>
+              <p className="product-description !text-slate-500 !text-base !leading-relaxed !mb-8 max-md:!text-sm !max-w-[450px]">
+                {product.description}
+              </p>
             )}
 
-            <div className="product-price-section !bg-slate-50 !p-8 !rounded-3xl !mb-10 !flex !items-baseline !gap-3">
-              <span className="price !text-4xl !font-black !text-blue-600">₹{product.price.toLocaleString()}</span>
-              <span className="unit !text-slate-400 !font-bold !uppercase !tracking-widest">per {product.unit}</span>
+            <div className="product-price-section !bg-slate-50/50 !p-6 !rounded-2xl !mb-8 !flex !items-baseline !gap-2 !border !border-slate-100/50">
+              <span className="price !text-3xl !font-black !text-blue-600">₹{product.price.toLocaleString()}</span>
+              <span className="unit !text-slate-400 !font-black !text-[10px] !uppercase !tracking-widest">Pricing per {product.unit}</span>
             </div>
 
             {!isAdmin && inStock && (
-              <div className="!bg-white !border !border-slate-100 !p-8 !rounded-[2.5rem] !shadow-sm !mb-12">
+              <div className="!bg-white !border !border-slate-100/80 !p-6 !rounded-[2rem] !shadow-sm !mb-10">
                 {/* Quantity Selector */}
-                <div className="quantity-section !mb-8">
-                  <label className="!text-[10px] !font-black !text-slate-400 !uppercase !tracking-[0.2em] !mb-4 !block">Quantity in {product.unit}</label>
+                <div className="quantity-section !mb-6">
+                  <label className="!text-[9px] !font-black !text-slate-400 !uppercase !tracking-[0.2em] !mb-3 !block">Specify Requirement ({product.unit})</label>
                   <div className="quantity-selector !flex !items-center !gap-6">
                     <button
                       className="!w-14 !h-14 !bg-slate-50 !rounded-2xl !flex !items-center !justify-center !text-slate-900 active:!bg-slate-100 !transition-all"
@@ -173,13 +175,13 @@ const ProductDetail = () => {
 
                 {/* Logistics CTA */}
                 <div className="!flex !flex-col !gap-6">
-                  <div className="!flex !justify-between !items-center">
-                    <span className="!text-slate-400 !font-black !text-[10px] !uppercase !tracking-widest">Commission Total</span>
-                    <span className="!text-2xl !font-black !text-blue-600">₹{(product.price * quantity).toLocaleString()}</span>
+                  <div className="!flex !justify-between !items-center !bg-slate-50 !p-4 !rounded-xl !border !border-slate-100 !mb-2">
+                    <span className="!text-slate-400 !font-black !text-[9px] !uppercase !tracking-widest">Order Evaluation</span>
+                    <span className="!text-xl !font-black !text-blue-600">₹{(product.price * quantity).toLocaleString()}</span>
                   </div>
 
                   <button
-                    className={`!w-full !py-6 !rounded-2xl !text-sm !font-black !uppercase !tracking-[0.2em] !flex !items-center !justify-center !gap-3 !shadow-2xl !transition-all active:!scale-[0.98] ${inCart
+                    className={`!w-full !py-5 !rounded-xl !text-xs !font-black !uppercase !tracking-[0.2em] !flex !items-center !justify-center !gap-3 !shadow-2xl !transition-all active:!scale-[0.98] ${inCart
                         ? '!bg-emerald-500 !text-white !shadow-emerald-500/20'
                         : '!bg-slate-900 !text-white !shadow-slate-900/20'
                       }`}
@@ -187,11 +189,11 @@ const ProductDetail = () => {
                   >
                     {inCart ? (
                       <>
-                        <FiCheck size={20} /> Deploying in Vault
+                        <FiCheck size={18} /> Secured in Vault
                       </>
                     ) : (
                       <>
-                        <FiShoppingCart size={20} /> Initiate procurement
+                        <FiShoppingCart size={18} /> Initiate Fulfillment
                       </>
                     )}
                   </button>

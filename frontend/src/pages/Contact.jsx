@@ -161,8 +161,8 @@ const Contact = () => {
               transition={{ duration: 0.4 }}
             >
               <div className="form-header !mb-10">
-                <h2 className="form-title !text-3xl !font-black !text-slate-900 !mb-4">Transmission Matrix</h2>
-                <p className="form-subtitle !text-slate-500 !text-sm">Initiate an encrypted inquiry thread with our support collective.</p>
+                <h2 className="form-title !text-3xl !font-black !text-slate-900 !mb-4">Send Inquiry</h2>
+                <p className="form-subtitle !text-slate-500 !text-sm">Please fill out the form below to get in touch with us.</p>
               </div>
 
               {submitted ? (
@@ -178,61 +178,65 @@ const Contact = () => {
                   <div className="form-row">
                     <div className={`form-group ${errors.name ? 'has-error' : ''}`}>
                       <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-600 !mb-3">
-                        <FiUser className="!text-blue-500" /> Executive Identity
+                        <FiUser className="!text-blue-500" /> Full Name
                       </label>
                       <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        placeholder="John Doe"
-                        className="form-input !w-full !bg-slate-50 !border-0 !p-5 !rounded-2xl !text-sm focus:!ring-2 focus:!ring-blue-500 !transition-all"
+                        placeholder="e.g. Balaji Hariharan"
+                        className={`form-input !w-full !bg-slate-50 !border-2 !border-transparent !p-5 !rounded-2xl !text-sm focus:!ring-0 focus:!border-blue-500 !transition-all ${errors.name ? '!border-red-500 !bg-red-50/30' : ''}`}
                       />
+                      {errors.name && <span className="!text-[10px] !text-red-500 !font-bold !mt-2 !block !uppercase !tracking-wider">{errors.name}</span>}
                     </div>
                   </div>
 
                   <div className="form-row !grid !grid-cols-2 !gap-6 max-md:!grid-cols-1">
                     <div className={`form-group ${errors.email ? 'has-error' : ''}`}>
                       <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-600 !mb-3">
-                        <FiMail className="!text-blue-500" /> Digital Address
+                        <FiMail className="!text-blue-500" /> Email Address
                       </label>
                       <input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        placeholder="john@enterprise.com"
-                        className="form-input !w-full !bg-slate-50 !border-0 !p-5 !rounded-2xl !text-sm focus:!ring-2 focus:!ring-blue-500 !transition-all"
+                        placeholder="example@gmail.com"
+                        className={`form-input !w-full !bg-slate-50 !border-2 !border-transparent !p-5 !rounded-2xl !text-sm focus:!ring-0 focus:!border-blue-500 !transition-all ${errors.email ? '!border-red-500 !bg-red-50/30' : ''}`}
                       />
+                      {errors.email && <span className="!text-[10px] !text-red-500 !font-bold !mt-2 !block !uppercase !tracking-wider">{errors.email}</span>}
                     </div>
 
                     <div className={`form-group ${errors.phone ? 'has-error' : ''}`}>
                       <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-600 !mb-3">
-                        <FiPhone className="!text-blue-500" /> Voice Link
+                        <FiPhone className="!text-blue-500" /> Phone Number
                       </label>
                       <input
                         type="tel"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        placeholder="+91 XXXXX XXXXX"
-                        className="form-input !w-full !bg-slate-50 !border-0 !p-5 !rounded-2xl !text-sm focus:!ring-2 focus:!ring-blue-500 !transition-all"
+                        placeholder="10-digit mobile number"
+                        className={`form-input !w-full !bg-slate-50 !border-2 !border-transparent !p-5 !rounded-2xl !text-sm focus:!ring-0 focus:!border-blue-500 !transition-all ${errors.phone ? '!border-red-500 !bg-red-50/30' : ''}`}
                       />
+                      {errors.phone && <span className="!text-[10px] !text-red-500 !font-bold !mt-2 !block !uppercase !tracking-wider">{errors.phone}</span>}
                     </div>
                   </div>
 
                   <div className="form-row">
                     <div className={`form-group ${errors.message ? 'has-error' : ''}`}>
                       <label className="form-label !flex !items-center !gap-2 !text-[10px] !font-black !uppercase !tracking-widest !text-slate-600 !mb-3">
-                        <FiMessageSquare className="!text-blue-500" /> Technical Brief
+                        <FiMessageSquare className="!text-blue-500" /> Message Details
                       </label>
                       <textarea
                         name="message"
                         value={formData.message}
                         onChange={handleChange}
-                        placeholder="Specify your material requirements or logistical challenges..."
-                        className="form-textarea !w-full !bg-slate-50 !border-0 !p-5 !rounded-2xl !text-sm !min-h-[150px] focus:!ring-2 focus:!ring-blue-500 !transition-all"
+                        placeholder="Write your message here... (min 10 characters)"
+                        className={`form-textarea !w-full !bg-slate-50 !border-2 !border-transparent !p-5 !rounded-2xl !text-sm !min-h-[150px] focus:!ring-0 focus:!border-blue-500 !transition-all ${errors.message ? '!border-red-500 !bg-red-50/30' : ''}`}
                       ></textarea>
+                      {errors.message && <span className="!text-[10px] !text-red-500 !font-bold !mt-2 !block !uppercase !tracking-wider">{errors.message}</span>}
                     </div>
                   </div>
 
@@ -248,7 +252,7 @@ const Contact = () => {
                       </>
                     ) : (
                       <>
-                        <FiSend /> Execute Data Packet
+                        <FiSend /> Send Message
                       </>
                     )}
                   </button>
@@ -326,6 +330,16 @@ const Contact = () => {
               referrerPolicy="no-referrer-when-downgrade"
               title="Selvi Enterprise Location"
             ></iframe>
+            <div className="!mt-6 !flex !justify-center">
+              <a
+                href={BUSINESS_CONFIG.location.googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="!bg-amber-500 !text-slate-900 !px-10 !py-4 !rounded-2xl !text-sm !font-black !uppercase !tracking-widest !flex !items-center !gap-3 hover:!bg-white hover:!text-amber-500 !transition-all !shadow-xl !shadow-amber-500/20"
+              >
+                <FiMapPin /> Get Directions on Google Maps
+              </a>
+            </div>
           </div>
         </div>
       </section>

@@ -205,7 +205,7 @@ const Checkout = () => {
                   <FiAlertCircle />
                 </div>
                 <h3 className="!text-2xl !font-black !text-slate-900 !mb-4">Verification Required</h3>
-                <p className="!text-slate-500 !text-sm !leading-relaxed !mb-10">
+                <p className="!text-slate-600 !text-sm !leading-relaxed !mb-10">
                   To ensure secure transactions and order updates, please verify your email address before finalizing your purchase.
                 </p>
                 <div className="verification-gate-email !bg-slate-50 !p-4 !rounded-2xl !inline-flex !items-center !gap-3 !mb-10 !border !border-gray-100">
@@ -246,7 +246,7 @@ const Checkout = () => {
 
                   <div className="!grid !grid-cols-2 !gap-6 !mb-8 max-md:!grid-cols-1">
                     <div className="form-group !flex !flex-col !gap-2">
-                      <label className="!text-[10px] !font-bold !text-gray-400 !uppercase !tracking-widest">Consignee Name</label>
+                      <label className="!text-[10px] !font-bold !text-slate-600 !uppercase !tracking-widest">Consignee Name</label>
                       <div className="!relative">
                         <FiUser className="!absolute !left-5 !top-1/2 !-translate-y-1/2 !text-gray-400" />
                         <input
@@ -261,7 +261,7 @@ const Checkout = () => {
                     </div>
 
                     <div className="form-group !flex !flex-col !gap-2">
-                      <label className="!text-[10px] !font-bold !text-gray-400 !uppercase !tracking-widest">Phone Number</label>
+                      <label className="!text-[10px] !font-bold !text-slate-600 !uppercase !tracking-widest">Phone Number</label>
                       <div className="!relative">
                         <FiPhone className="!absolute !left-5 !top-1/2 !-translate-y-1/2 !text-gray-400" />
                         <input
@@ -279,7 +279,7 @@ const Checkout = () => {
                   </div>
 
                   <div className="form-group !mb-8 !flex !flex-col !gap-2">
-                    <label className="!text-[10px] !font-bold !text-gray-400 !uppercase !tracking-widest">Complete Address</label>
+                    <label className="!text-[10px] !font-bold !text-slate-600 !uppercase !tracking-widest">Complete Address</label>
                     <div className="!relative">
                       <FiMapPin className="!absolute !left-5 !top-5 !text-gray-400" />
                       <textarea
@@ -295,7 +295,7 @@ const Checkout = () => {
 
                   <div className="!grid !grid-cols-3 !gap-4 !mb-10 max-md:!grid-cols-1">
                     <div className="form-group !flex !flex-col !gap-2">
-                      <label className="!text-[10px] !font-bold !text-gray-400 !uppercase">City</label>
+                      <label className="!text-[10px] !font-bold !text-slate-600 !uppercase">City</label>
                       <input
                         type="text"
                         name="city"
@@ -306,7 +306,7 @@ const Checkout = () => {
                       />
                     </div>
                     <div className="form-group !flex !flex-col !gap-2">
-                      <label className="!text-[10px] !font-bold !text-gray-400 !uppercase">State</label>
+                      <label className="!text-[10px] !font-bold !text-slate-600 !uppercase">State</label>
                       <input
                         type="text"
                         name="state"
@@ -317,7 +317,7 @@ const Checkout = () => {
                       />
                     </div>
                     <div className="form-group !flex !flex-col !gap-2">
-                      <label className="!text-[10px] !font-bold !text-gray-400 !uppercase">Pincode</label>
+                      <label className="!text-[10px] !font-bold !text-slate-600 !uppercase">Pincode</label>
                       <input
                         type="text"
                         name="pincode"
@@ -345,7 +345,7 @@ const Checkout = () => {
                           </div>
                           <div>
                             <strong className="!text-sm !block !mb-0.5">Pay on Delivery</strong>
-                            <span className="!text-[10px] !text-gray-400 !uppercase !font-bold">Cash/COD</span>
+                            <span className="!text-[10px] !text-slate-600 !uppercase !font-bold">Cash/COD</span>
                           </div>
                         </div>
                       </div>
@@ -360,7 +360,7 @@ const Checkout = () => {
                           </div>
                           <div>
                             <strong className="!text-sm !block !mb-0.5">Digital Payment</strong>
-                            <span className="!text-[10px] !text-gray-400 !uppercase !font-bold">Card/UPI/Net</span>
+                            <span className="!text-[10px] !text-slate-600 !uppercase !font-bold">Card/UPI/Net</span>
                           </div>
                         </div>
                       </div>
@@ -395,7 +395,7 @@ const Checkout = () => {
                   {creatingPaymentIntent ? (
                     <div className="payment-loading !py-20 !text-center">
                       <FiLoader className="!inline-block !animate-spin !text-blue-600 !mb-4" size={40} />
-                      <p className="!text-sm !font-bold !text-slate-600">Initializing Stripe Gateway...</p>
+                      <p className="!text-sm !font-bold !text-slate-700">Initializing Stripe Gateway...</p>
                     </div>
                   ) : clientSecret ? (
                     <Elements stripe={stripePromise} options={stripeOptions}>
@@ -426,46 +426,46 @@ const Checkout = () => {
           {/* Order Summary - Only show if email is verified */}
           {isEmailVerified && (
             <div className="order-summary-section !w-96 max-md:!w-full">
-              <div className="order-summary !bg-slate-900 !text-white !rounded-3xl !p-8 !shadow-sm !sticky !top-8 max-md:!relative max-md:!top-0">
-                <h3 className="!text-lg !font-black !mb-8">Order Overview</h3>
+              <div className="order-summary !bg-white !rounded-3xl !p-8 !shadow-sm !border !border-gray-100 !sticky !top-8 max-md:!relative max-md:!top-0">
+                <h3 className="!text-lg !font-black !mb-8 !text-slate-900">Order Overview</h3>
 
                 <div className="summary-items !flex !flex-col !gap-6 !mb-8">
                   {(orderCreated ? orderItems : cart).map(item => (
                     <div key={item.product._id} className="summary-item !flex !justify-between !items-start !gap-4">
                       <div className="summary-item-info !flex-1">
-                        <span className="summary-item-name !text-xs !font-bold !block !mb-1 !text-gray-100">{item.product.productName}</span>
-                        <span className="summary-item-qty !text-[10px] !text-gray-500 !font-bold !uppercase">Qty: {item.quantity} {item.product.unit}</span>
+                        <span className="summary-item-name !text-xs !font-bold !block !mb-1 !text-slate-900">{item.product.productName}</span>
+                        <span className="summary-item-qty !text-[10px] !text-slate-500 !font-bold !uppercase">Qty: {item.quantity} {item.product.unit}</span>
                       </div>
-                      <span className="summary-item-price !text-sm !font-black !text-blue-400">
+                      <span className="summary-item-price !text-sm !font-black !text-blue-600">
                         ₹{(item.product.price * item.quantity).toLocaleString()}
                       </span>
                     </div>
                   ))}
                 </div>
 
-                <div className="summary-divider !h-px !bg-slate-800 !mb-8"></div>
+                <div className="summary-divider !h-px !bg-slate-100 !mb-8"></div>
 
                 <div className="!space-y-4 !mb-8">
                   <div className="summary-row !flex !justify-between !items-center !text-sm">
-                    <span className="!text-gray-400 !font-bold">Subtotal</span>
-                    <span className="!font-bold">₹{(orderCreated ? orderTotal : getCartTotal()).toLocaleString()}</span>
+                    <span className="!text-slate-500 !font-bold">Subtotal</span>
+                    <span className="!font-bold !text-slate-900">₹{(orderCreated ? orderTotal : getCartTotal()).toLocaleString()}</span>
                   </div>
 
                   <div className="summary-row !flex !justify-between !items-center !text-sm">
-                    <span className="!text-gray-400 !font-bold">Delivery Fee</span>
+                    <span className="!text-slate-500 !font-bold">Delivery Fee</span>
                     <span className="!text-green-400 !font-black !text-[10px] !uppercase">Free</span>
                   </div>
                 </div>
 
-                <div className="summary-divider !h-px !bg-slate-800 !mb-8"></div>
+                <div className="summary-divider !h-px !bg-slate-100 !mb-8"></div>
 
                 <div className="summary-row total !flex !justify-between !items-end">
-                  <span className="!text-[10px] !font-bold !text-gray-400 !uppercase">Total Payable</span>
-                  <span className="!text-3xl !font-black !text-blue-400">₹{(orderCreated ? orderTotal : getCartTotal()).toLocaleString()}</span>
+                  <span className="!text-[10px] !font-bold !text-slate-500 !uppercase">Total Payable</span>
+                  <span className="!text-3xl !font-black !text-blue-600">₹{(orderCreated ? orderTotal : getCartTotal()).toLocaleString()}</span>
                 </div>
 
                 {paymentMethod === 'online' && !orderCreated && (
-                  <div className="secure-payment-badge !mt-10 !pt-8 !border-t !border-slate-800 !flex !items-center !gap-3 !text-[10px] !text-slate-500 !font-bold !uppercase !tracking-widest">
+                  <div className="secure-payment-badge !mt-10 !pt-8 !border-t !border-slate-100 !flex !items-center !gap-3 !text-[10px] !text-slate-500 !font-bold !uppercase !tracking-widest">
                     <FiCreditCard className="!text-blue-600" />
                     <span>Verified Secure Checkout</span>
                   </div>

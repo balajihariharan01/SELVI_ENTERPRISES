@@ -699,23 +699,14 @@ input, textarea, select {
   color: var(--color-primary-900);
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Global Scrollbar Removal (Functional but Hidden) */
+* {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE/Edge */
 }
 
-::-webkit-scrollbar-track {
-  background: var(--color-secondary-100);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-secondary-300);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-secondary-400);
+*::-webkit-scrollbar {
+  display: none !important; /* Chrome/Safari/Brave */
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

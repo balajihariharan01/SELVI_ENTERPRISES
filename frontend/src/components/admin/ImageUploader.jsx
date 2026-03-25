@@ -48,8 +48,8 @@ const ImageUploader = ({ value, onChange, onUrlChange }) => {
     try {
       const response = await uploadService.uploadImage(file);
       if (response.success) {
-        onChange(response.data.url);
-        if (onUrlChange) onUrlChange(response.data.url);
+        onChange(response.url);
+        if (onUrlChange) onUrlChange(response.url);
         toast.success('Image uploaded successfully');
       }
     } catch (error) {
